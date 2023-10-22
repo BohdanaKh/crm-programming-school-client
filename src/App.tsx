@@ -1,26 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {Navigate, Route, Routes} from 'react-router-dom';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import {MainLayout} from './layouts';
+import {RequiredAuth} from './hoc';
+import {AdminPanel, LoginPage, OrdersPage, UsersPage} from "./pages";
+
+const App = () => {
+    return (
+        <Routes>
+            <Route path={'/'} element={<MainLayout/>}>
+                <Route index element={<Navigate to={'login'}/>}/>
+                <Route path={'login'} element={<LoginPage/>}/>
+                <Route path={'orders'} element={
+                    <RequiredAuth>
+                        <OrdersPage/>
+                    </RequiredAuth>}/>
+                <Route path={'users'} element={
+                    <RequiredAuth>
+                        <UsersPage/>
+                    </RequiredAuth>
+                }/>
+                <Route path={'adminPanel'} element={
+                    <RequiredAuth>
+                        <AdminPanel/>
+                    </RequiredAuth>
+                }/>
+            </Route>
+        </Routes>
+    );
+};
 
 export default App;
