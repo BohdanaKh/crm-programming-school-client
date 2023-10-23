@@ -7,24 +7,25 @@ import {AdminPanel, LoginPage, OrdersPage, UsersPage} from "./pages";
 const App = () => {
     return (
         <Routes>
-            <Route path={'/'} element={<MainLayout/>}>
+            <Route path={'/'} element={<LoginPage/>}>
                 <Route index element={<Navigate to={'login'}/>}/>
-                <Route path={'login'} element={<LoginPage/>}/>
+            </Route>
+                <Route path={'orders'} element={<MainLayout/>}>
+                    <Route index element={<Navigate to={'orders'}/>}/>
                 <Route path={'orders'} element={
-                    <RequiredAuth>
-                        <OrdersPage/>
-                    </RequiredAuth>}/>
+                    // <RequiredAuth>
+                        <OrdersPage/>}/>
+                     {/*</RequiredAuth>}/>*/}
                 <Route path={'users'} element={
-                    <RequiredAuth>
-                        <UsersPage/>
-                    </RequiredAuth>
-                }/>
+                    // <RequiredAuth>
+                        <UsersPage/>}/>
+                     {/*</RequiredAuth>}/>*/}
                 <Route path={'adminPanel'} element={
                     <RequiredAuth>
                         <AdminPanel/>
                     </RequiredAuth>
                 }/>
-            </Route>
+                </Route>
         </Routes>
     );
 };

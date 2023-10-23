@@ -22,13 +22,12 @@ const Header = () => {
             {
                 me ?
                     <div>
-                        <span>{me.username}</span>
+                        <span>{me.email}</span>
                         <button>Logout</button>
                     </div>
                     :
                     <div>
                         <NavLink to={'login'}>Login</NavLink>
-                        <NavLink to={'register'}>Register</NavLink>
                     </div>
             }
         </div>

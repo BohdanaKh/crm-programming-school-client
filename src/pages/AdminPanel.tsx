@@ -8,7 +8,7 @@ const AdminPanel: FC<IProps> = () => {
 
     return (
         <div>
-            AdminPanel
+            <AdminPanel/>
         </div>
     );
 };

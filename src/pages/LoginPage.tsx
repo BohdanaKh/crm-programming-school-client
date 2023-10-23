@@ -1,14 +1,12 @@
-import {FC} from 'react';
+import {LoginForm} from '../components';
+import {useSearchParams} from 'react-router-dom';
 
-interface IProps {
-
-}
-
-const LoginPage: FC<IProps> = () => {
-
+const LoginPage = () => {
+    const [query,] = useSearchParams();
     return (
         <div>
-            LoginPage
+            {query.get('expSession')&&<h1>Session expired... please login again!!!</h1>}
+            <LoginForm/>
         </div>
     );
 };
