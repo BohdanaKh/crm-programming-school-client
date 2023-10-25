@@ -1,6 +1,5 @@
 import {SubmitHandler, useForm} from "react-hook-form";
 import {useNavigate} from "react-router-dom";
-import Modal from 'react-modal';
 
 import {useAppDispatch, useAppSelector} from "../../hooks";
 import { IUser} from "../../interfaces";
@@ -8,7 +7,7 @@ import {userActions} from "../../redux";
 import {useState} from "react";
 
 
-const UserCreateForm = ({ isOpen, onClose, onUpdate }) => {
+const UserCreateForm = () => {
     const dispatch = useAppDispatch();
     const {error} = useAppSelector(state => state.userReducer);
     const navigate = useNavigate();
@@ -16,15 +15,15 @@ const UserCreateForm = ({ isOpen, onClose, onUpdate }) => {
         mode: 'all',
         // resolver: joiResolver(authValidator)
     });
-    const [formData, setFormData] = useState({
-        email: '',
-        name: '',
-        surname: '',
-    });
-    const handleSubmit = () => {
-        onUpdate(formData);
-        onClose();
-    };
+    // const [formData, setFormData] = useState({
+    //     email: '',
+    //     name: '',
+    //     surname: '',
+    // });
+    // const handleSubmit = () => {
+    //     onUpdate(formData);
+    //     onClose();
+    // };
 
     const createUser: SubmitHandler<IUser> = async (user) => {
         const {meta: {requestStatus}} = await dispatch(userActions.create({user}));
@@ -34,7 +33,7 @@ const UserCreateForm = ({ isOpen, onClose, onUpdate }) => {
     };
 
     return (
-        <Modal isOpen={isOpen} onRequestClose={onClose}>
+        // <Modal isOpen={isOpen} onRequestClose={onClose}>
         <form onSubmit={handleSubmit(createUser)}>
             <label>Email</label>
             <input type="text" placeholder={'Email'} {...register('email')}/>
@@ -45,12 +44,12 @@ const UserCreateForm = ({ isOpen, onClose, onUpdate }) => {
             <label>Surname </label>
             <input type="text" placeholder={'Surname'} {...register('surname')}/>
 
-            <button onClick={onClose}>CANCEL</button>
+            {/*<button onClick={onClose}>CANCEL</button>*/}
             <button disabled={!isValid}>CREATE</button>
             {Object.keys(errors).length > 0 && <div>{Object.values(errors)[0].message}</div>}
             {/*{error && <div>{error.username[0]}</div>}*/}
         </form>
-        </Modal>
+        // </Modal>
     );
 };
 

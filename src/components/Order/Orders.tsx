@@ -9,12 +9,13 @@ interface IProps {
 }
 
 const Orders: FC<IProps> = () => {
-    const {orders, trigger} = useAppSelector(state => state.orderReducer);
+    const {orders, trigger, page} = useAppSelector(state => state.orderReducer);
     const dispatch = useAppDispatch();
 
+
     useEffect(() => {
-        dispatch(orderActions.getAll())
-    }, [dispatch, trigger])
+        dispatch(orderActions.getAll(page))
+    }, [dispatch, trigger, page])
 
     return (
         <div>

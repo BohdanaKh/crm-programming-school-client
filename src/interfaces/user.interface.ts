@@ -5,5 +5,6 @@ export interface IUser {
     email: string,
     last_login: Date,
     is_active: boolean,
-    created_at: Date
+    created_at: Date,
+    role: string,
 }

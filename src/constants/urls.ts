@@ -1,4 +1,4 @@
-const baseURL = 'http://localhost:5100/api'
+const baseURL = 'http://localhost:5100'
 
 const auth = '/login'
 const users = '/users'

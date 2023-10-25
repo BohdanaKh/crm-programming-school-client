@@ -27,13 +27,13 @@ const login = createAsyncThunk<IUser, IAuth>(
     }
 )
 
-const me = createAsyncThunk<IUser, void>(
-    'authSlice/me',
-    async () => {
-        const {data} = await authService.me();
-        return data
-    }
-)
+// const me = createAsyncThunk<IUser, void>(
+//     'authSlice/me',
+//     async () => {
+//         const {data} = await authService.me();
+//         return data
+//     }
+// )
 const slice = createSlice({
     name: 'authSlice',
     initialState,
@@ -43,9 +43,9 @@ const slice = createSlice({
             .addCase(login.fulfilled, (state, action) => {
                 state.me = action.payload
             })
-            .addCase(me.fulfilled, (state, action) => {
-                state.me = action.payload
-            })
+            // .addCase(me.fulfilled, (state, action) => {
+            //     state.me = action.payload
+            // })
             .addMatcher(isFulfilled(), state => {
                 state.error = null
             })
@@ -59,7 +59,6 @@ const {actions, reducer: authReducer} = slice;
 const authActions = {
     ...actions,
     login,
-    me
 }
 
 export {

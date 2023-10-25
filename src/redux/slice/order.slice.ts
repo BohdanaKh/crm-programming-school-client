@@ -16,7 +16,7 @@ interface IState {
 
 const initialState: IState = {
     orders: [],
-    page: null,
+    page: 1,
     pages: null,
     totalOrders: null,
     errors: null,
@@ -25,11 +25,11 @@ const initialState: IState = {
 };
 
 
-const getAll = createAsyncThunk<IPagination<IOrder[]>, void>(
+const getAll = createAsyncThunk<IPagination<IOrder[]>, number>(
     'orderSlice/getAll',
-    async (_, {rejectWithValue}) => {
+    async (page, {rejectWithValue}) => {
         try {
-            const {data} = await orderService.getAll();
+            const {data} = await orderService.getAll(page);
             return data
         } catch (e) {
             const err = e as AxiosError

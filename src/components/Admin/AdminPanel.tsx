@@ -10,7 +10,7 @@ const AdminPanel: FC<IProps> = () => {
     return (
         <div>
             AdminPanel
-            <button onClick={<UserCreateForm/>}>CREATE</button>
+            <button>CREATE</button>
         </div>
     );
 };
