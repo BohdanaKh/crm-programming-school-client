@@ -1,43 +1,44 @@
-import {useSearchParams} from "react-router-dom";
-import ReactPaginate from 'react-paginate';
-
+import {FC} from 'react';
 import {useAppSelector} from "../../hooks";
+import {useSearchParams} from "react-router-dom";
+import Pagination from '@mui/material/Pagination';
+import {Box, Container, CssBaseline} from "@mui/material";
 
-const OrderPagination = () => {
+interface IProps {
+
+}
+
+const OrderPagination: FC<IProps> = () => {
     const {page, pages, totalOrders} = useAppSelector(state => state.orderReducer);
-    const [,setQuery] = useSearchParams();
+    const [_, setQuery] = useSearchParams();
+    // const handleChange = ( event: React.ChangeEvent<unknown>, selectedPage: number) => {
+    //     setQuery(prev1 =>( {...prev1, page: selectedPage}));
+    // };
 
-    // const prev = () => {
-    //     setQuery(prev1 => ({...prev1, page:+prev1.get('page')-1}))
-    // }
-    // const next = ()=>{
-    //     setQuery(prev1 => ({...prev1, page:+prev1.get('page')+1}))
-    // }
-    // return (
-    //     <div>
-            {/*<button disabled={(page===1)} onClick={prev}>prev</button>*/}
-            {/*<button disabled={(page===pages)} onClick={next}>next</button>*/}
 
-    // );
+    return  (
 
-    const handleChange = ( event: any) => {
-        setQuery(prev1 =>( {...prev1, page: event.selected}));
-    };
+        <div>
+            <CssBaseline />
+            <Container>
+                <Box py={3} display="flex" justifyContent="center">
+                    <Pagination
+                        count={pages}
+                        page={page}
+                        color="secondary"
+                        variant="outlined"
+                        onChange={(e, value) => setQuery(prev1 =>( {...prev1, page:value}))}
 
-    return (
-        <>
-            <ReactPaginate
-                breakLabel="..."
-                nextLabel=">"
-                onPageChange={handleChange}
-                pageRangeDisplayed={7}
-                marginPagesDisplayed={1}
-                pageCount={pages}
-                previousLabel="<"
-                renderOnZeroPageCount={null}
-            />
-        </>
-    );
+                        siblingCount={2}
+                        boundaryCount={1}
+                        hidePrevButton={page === 1}
+                        hideNextButton={page === pages}
+                    />
+                </Box>
+            </Container>
+            {/*<Pagination count={pages} page={page} onChange={handleChange} variant="outlined" siblingCount={7} boundaryCount={1} />*/}
+        </div>
+    )
 };
 
 export {OrderPagination};

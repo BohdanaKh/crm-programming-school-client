@@ -10,7 +10,7 @@ const App = () => {
             <Route path={'/'} element={<LoginPage/>}>
                 <Route index element={<Navigate to={'login'}/>}/>
             </Route>
-                <Route path={'orders'} element={<MainLayout/>}>
+                <Route path={'/'} element={<MainLayout/>}>
                     {/*<Route index element={<Navigate to={'orders'}/>}/>*/}
                 <Route path={'orders'} element={
                     // <RequiredAuth>
