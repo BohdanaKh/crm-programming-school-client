@@ -6,7 +6,6 @@ import {Header} from '../components';
 const MainLayout: FC = () => {
     return (
         <div>
-            <Header/>
             <Outlet/>
         </div>
     );

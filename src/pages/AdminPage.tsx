@@ -1,10 +1,13 @@
 import {FC} from 'react';
 
+import {AdminPanel} from "../components";
+
+
 interface IProps {
 
 }
 
-const AdminPanel: FC<IProps> = () => {
+const AdminPage: FC<IProps> = () => {
 
     return (
         <div>
@@ -13,4 +16,4 @@ const AdminPanel: FC<IProps> = () => {
     );
 };
 
-export {AdminPanel};
+export {AdminPage};

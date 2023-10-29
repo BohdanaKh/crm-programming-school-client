@@ -11,7 +11,8 @@ interface IState {
     totalOrders: number,
     errors: IError,
     trigger: boolean,
-    orderForUpdate: IOrder
+    orderForUpdate: IOrder,
+    sort: string,
 }
 
 const initialState: IState = {
@@ -21,7 +22,8 @@ const initialState: IState = {
     totalOrders: null,
     errors: null,
     orderForUpdate: null,
-    trigger: false
+    trigger: false,
+    sort: null,
 };
 
 
@@ -67,6 +69,13 @@ const slice = createSlice({
     reducers: {
         setOrderForUpdate: (state, action) => {
             state.orderForUpdate = action.payload
+        },
+
+        setPage: (state, action) => {
+            state.page = action.payload;
+        },
+        setSort: ( state, action) => {
+            state.sort= action.payload;
         }
     },
     extraReducers: builder =>
@@ -98,7 +107,8 @@ const orderActions = {
     ...actions,
     getAll,
     update,
-    deleteOrder
+    deleteOrder,
+
 }
 
 export {

@@ -1,4 +1,4 @@
-import {NavLink} from 'react-router-dom';
+import {NavLink, useNavigate} from 'react-router-dom';
 import {useEffect} from 'react';
 
 import css from './Header.module.css';
@@ -9,6 +9,7 @@ import {authActions} from '../../redux';
 const Header = () => {
     const {me} = useAppSelector(state => state.authReducer);
     console.log(me);
+    const navigate = useNavigate();
     // const dispatch = useAppDispatch();
     //
     // useEffect(() => {
@@ -21,15 +22,13 @@ const Header = () => {
         <div className={css.Header}>
             <div>Logo</div>
             { me.role === 'admin' &&
-            <NavLink to={'adminPanel'}> Admin</NavLink>}
-                    <div>
+                <NavLink to={'adminPanel'}>Admin</NavLink>
+            }
                         <span>{me.email[0]}</span>
-                    </div>
-                    {/*<div>*/}
-                    {/*    <NavLink to={'login'}>Login</NavLink>*/}
-                    {/*</div>*/}
+
+
                 <div>
-                <NavLink to={'logout'}>Logout</NavLink>
+                    <NavLink to={'logout'}>Logout</NavLink>
         </div>
         </div>
     );
