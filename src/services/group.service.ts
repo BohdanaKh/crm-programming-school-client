@@ -4,7 +4,7 @@ import {axiosService} from "./axios.service";
 import {urls} from "../constants";
 
 const groupService = {
-    getAll: ():  IRes<IPagination<IGroup[]>> => axiosService.get(urls.groups.groups),
+    getAll: ():  IRes<IGroup[]> => axiosService.get(urls.groups.groups),
 }
 
 export {

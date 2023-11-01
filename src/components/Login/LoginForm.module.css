@@ -1,0 +1,21 @@
+.LoginForm {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    text-align: center;
+}
+
+.LoginForm body {
+    background: #637d63;
+}
+
+.LoginForm form {
+    max-width: 330px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    padding: 20px;
+    margin: 30px auto 0;
+    border-radius: 8px;
+}

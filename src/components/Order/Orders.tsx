@@ -1,7 +1,7 @@
 import {FC, useEffect, useState} from 'react';
 import { format } from 'date-fns';
 import {DataGrid, GridColDef} from '@mui/x-data-grid';
-import {useSearchParams} from "react-router-dom";
+import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
 
 import {useAppDispatch, useAppSelector} from "../../hooks";
 import {groupActions, orderActions} from "../../redux";
@@ -28,25 +28,34 @@ const datagridSx = {
 };
 
 const Orders: FC = () => {
-    const {orders, trigger, page, sort} = useAppSelector(state => state.orderReducer);
+    const {orders, trigger, page, sort, name} = useAppSelector(state => state.orderReducer);
     const { groups } = useAppSelector(state => state.groupReducer)
     const dispatch = useAppDispatch();
-    const [query, setQuery] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const location = useLocation();
+    const navigate = useNavigate();
+    // const queryParams = new URLSearchParams(location.search);
     // const [sortModel, setSortModel] = useState([{ field: 'created_at', sort: 'desc'}]);
 
     useEffect(() => {
-        setQuery(prev => ({...prev, page: '1'}))
+        setSearchParams(prev => ({...prev, page: '1'}))
     }, [])
 
-
+    // @ts-ignore
+    // console.log(Object.fromEntries([...searchParams]));
     useEffect(() => {
-        dispatch(orderActions.getAll(+query.get('page')))
-    }, [dispatch, query])
+        // @ts-ignore
+        const currentParams = Object.fromEntries([...searchParams]);
+        console.log(currentParams);
+      
+        dispatch(orderActions.getAll(currentParams))
+    }, [dispatch, searchParams]);
+    // }, [dispatch, query])
 
-    useEffect(() => {
-        dispatch(groupActions.getAll())
-    }, [])
-    console.log(groups);
+    // useEffect(() => {
+    //     dispatch(groupActions.getAll())
+    // }, [])
+    // console.log(groups);
 
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'id', sortable: true,  headerClassName: 'orders-header',
@@ -94,7 +103,7 @@ const Orders: FC = () => {
                 // sort === `-${column.field}` ? column.field : `-${column.field}`;
                 sort === column.field ? `-${column.field}` : column.field;
             dispatch(orderActions.setSort(newSort)); // Replace with your actual action and payload
-            setQuery(prev => ({...prev, page: page, sort: newSort}))
+            setSearchParams(prev => ({...prev, page: page, sort: newSort}))
         }
 
     // const handleSortModelChange = (newSortModel:any) => {
@@ -111,61 +120,7 @@ const Orders: FC = () => {
 
     return (
         <Container>
-            <TextField value={'name'} onChange={(event) => setQuery(event.target.value)} />
-            <TextField value={'surname'} onChange={(event) => setQuery(event.target.value)} />
-            <TextField value={'email'} onChange={(event) => setQuery(event.target.value)} />
-            <TextField value={'phone'} onChange={(event) => setQuery(event.target.value)} />
-            <TextField value={'age'} onChange={(event) => setQuery(event.target.value)} />
-            <Autocomplete
-                disablePortal
-                id="combo-box-demo"
-                options={['FS',
-                    'QACX',
-                   ' JCX',
-                    'JSCX',
-                    'FE',
-                    'PCX']}
-                sx={{ width: 200 }}
-                renderInput={(params) => <TextField {...params} label="all courses" />}
-            />
-            <Autocomplete
-                disablePortal
-                id="combo-box-demo"
-                options={[ 'static', 'online']}
-                sx={{ width: 200 }}
-                renderInput={(params) => <TextField {...params} label="all formats" />}
-            />
-            <Autocomplete
-                disablePortal
-                id="combo-box-demo"
-                options={[ 'pro',
-                   'minimal',
-                    'premium',
-                    'incubator',
-                    'vip']}
-                sx={{ width: 200 }}
-                renderInput={(params) => <TextField {...params} label="all types" />}
-            />
-            <Autocomplete
-                disablePortal
-                id="combo-box-demo"
-                options={[ 'In_work',
-                    'New',
-                    'Aggre',
-                    'Disaggre',
-                    'Dubbing',]}
-                sx={{ width: 200 }}
-                renderInput={(params) => <TextField {...params} label="all statuses" />}
-            />
-            {/*<Autocomplete*/}
-            {/*    disablePortal*/}
-            {/*    id="combo-box-demo"*/}
-            {/*    options={all_groups}*/}
-            {/*    sx={{ width: 200 }}*/}
-            {/*    renderInput={(params) => <TextField {...params} label="all groups" />}*/}
-            {/*/>*/}
-
-
+            <OrdersFiltrationForm/>
 
             <div style={{ height: 700, width: "100%" }}>
                 <DataGrid

@@ -9,19 +9,19 @@ interface IProps {
 }
 
 const AdminPanel: FC<IProps> = () => {
-    const { data } = useAppSelector(state => state.adminReducer)
+    const { totalOrdersCount, statusCounts } = useAppSelector(state => state.adminReducer)
   const dispatch = useAppDispatch();
 
 
     useEffect(() => {
      dispatch(adminActions.getAdminPanel())
     }, [dispatch]);
-
- const { totalOrdersCount, statusCounts } = data;
+    console.log(totalOrdersCount);
+    console.log(statusCounts);
     return (
         <div>
             <div>total: {totalOrdersCount}</div>
-            {statusCounts.map( (item) => (<div> key={item.status} <p> `${item.status}: {item._count}`</p></div>))}
+            {statusCounts.map( (item) => (<div key={item.status}> <p> {item.status}: {item._count}</p></div>))}
             <button>CREATE</button>
         </div>
     );

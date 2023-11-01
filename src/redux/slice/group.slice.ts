@@ -21,13 +21,13 @@ const getAll = createAsyncThunk<IGroup[], void> (
     'groupSlice/getAll',
     async (_, {rejectWithValue}) => {
         try {
-            await groupService.getAll()
+            const { data } = await groupService.getAll()
+            return data;
         } catch (e) {
             const err = e as AxiosError
             return rejectWithValue(err.response.data)
         }
     }
-
 )
 
 // const create = createAsyncThunk<void,  IGroup >(
@@ -50,11 +50,11 @@ const slice = createSlice({
     },
     extraReducers: builder =>
         builder
+            .addCase(getAll.fulfilled, (state, action )=> {
+                state.groups = action.payload
+            })
             .addMatcher(isFulfilled(), state => {
                 state.errors = null
-            })
-            .addMatcher(isFulfilled(getAll), (state, action )=> {
-                state.groups = action.payload
             })
             .addMatcher(isRejectedWithValue(), (state, action) => {
                 state.errors = action.payload

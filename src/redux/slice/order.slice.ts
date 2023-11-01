@@ -13,6 +13,16 @@ interface IState {
     trigger: boolean,
     orderForUpdate: IOrder,
     sort: string,
+    name: string,
+    surname: string,
+    email: string,
+    phone: string,
+    age: number,
+    course: string,
+    course_format: string,
+    course_type: string,
+    status: string,
+    group: string,
 }
 
 const initialState: IState = {
@@ -24,14 +34,37 @@ const initialState: IState = {
     orderForUpdate: null,
     trigger: false,
     sort: null,
+    name: null,
+    surname: null,
+    email: null,
+    phone: null,
+    age:  null,
+    course: null,
+    course_format: null,
+    course_type: null,
+    status: null,
+    group: null,
 };
 
 
-const getAll = createAsyncThunk<IPagination<IOrder[]>, number>(
-    'orderSlice/getAll',
-    async (page, {rejectWithValue}) => {
+// const getAll = createAsyncThunk<IPagination<IOrder[]>, number>(
+//     'orderSlice/getAll',
+//     async (page, {rejectWithValue}) => {
+//         try {
+//             const {data} = await orderService.getAll(page);
+//             return data
+//         } catch (e) {
+//             const err = e as AxiosError
+//             return rejectWithValue(err.response.data)
+//         }
+//     }
+// )
+
+const getAll = createAsyncThunk<IPagination<IOrder[]>, any>(
+    'orderSlice/getAllWithFilters',
+    async ({page, ...params}, {rejectWithValue}) => {
         try {
-            const {data} = await orderService.getAll(page);
+            const {data} = await orderService.getAll({page, ...params});
             return data
         } catch (e) {
             const err = e as AxiosError
@@ -76,6 +109,16 @@ const slice = createSlice({
         },
         setSort: ( state, action) => {
             state.sort= action.payload;
+        },
+
+        setName: ( state, action) => {
+            state.name= action.payload;
+        },
+        setSurname: ( state, action) => {
+            state.surname= action.payload;
+        },
+        setCourse: ( state, action) => {
+            state.course= action.payload;
         }
     },
     extraReducers: builder =>

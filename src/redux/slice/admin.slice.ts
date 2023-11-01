@@ -1,4 +1,4 @@
-import {IError, IOrderStats} from "../../interfaces";
+import {IError, IOrderStats, IStatusStats} from "../../interfaces";
 import {createAsyncThunk, createSlice, isFulfilled, isRejectedWithValue} from "@reduxjs/toolkit";
 
 import {AxiosError} from "axios";
@@ -6,13 +6,15 @@ import {adminService} from "../../services";
 
 
 interface IState {
-    data: IOrderStats,
+    totalOrdersCount: number;
+    statusCounts: IStatusStats[];
     errors: IError,
     trigger: boolean,
 }
 
 const initialState: IState = {
-    data: null,
+    totalOrdersCount: null,
+    statusCounts: null,
     errors: null,
     trigger: false
 };
@@ -21,7 +23,8 @@ const getAdminPanel = createAsyncThunk<IOrderStats, void> (
     'adminSlice/getAdminPanel',
     async (_, {rejectWithValue}) => {
         try {
-            await adminService.getAdminPanel()
+           const {data} = await adminService.getAdminPanel();
+           return data;
         } catch (e) {
             const err = e as AxiosError
             return rejectWithValue(err.response.data)
@@ -30,17 +33,6 @@ const getAdminPanel = createAsyncThunk<IOrderStats, void> (
 
 )
 
-// const create = createAsyncThunk<void,  IGroup >(
-//     'commentSlice/create',
-//     async ({group}, {rejectWithValue}) => {
-//         try {
-//             await groupService.create(group)
-//         } catch (e) {
-//             const err = e as AxiosError
-//             return rejectWithValue(err.response.data)
-//         }
-//     }
-// )
 
 
 const slice = createSlice({
@@ -50,11 +42,13 @@ const slice = createSlice({
     },
     extraReducers: builder =>
         builder
+            .addCase(getAdminPanel.fulfilled, (state, action )=> {
+                const { totalOrdersCount, statusCounts} = action.payload
+                state.statusCounts = statusCounts;
+                state.totalOrdersCount = totalOrdersCount;
+            })
             .addMatcher(isFulfilled(), state => {
                 state.errors = null
-            })
-            .addMatcher(isFulfilled(getAdminPanel), (state, action )=> {
-                state.data = action.payload
             })
             .addMatcher(isRejectedWithValue(), (state, action) => {
                 state.errors = action.payload
