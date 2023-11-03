@@ -1,65 +1,126 @@
-import {FC} from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import React from 'react';
+import {FC, useState} from 'react';
+import {SubmitHandler, useForm} from "react-hook-form";
+import {format} from "date-fns";
+import {Box, Button, Collapse, createStyles, TableCell, TableRow, Theme, withStyles} from "@mui/material";
+import styled from "@emotion/styled";
 
-import {IOrder} from "../../interfaces";
-import {useAppDispatch} from "../../hooks";
-import {DataGrid} from "@mui/x-data-grid";
+
+
+import {IComment, IOrder} from "../../interfaces";
+import {useAppDispatch, useAppSelector} from "../../hooks";
+import {commentActions, detailActions} from "../../redux";
+import {Comment} from "../Comment/Comment";
+import { StyledTableCell } from './Orders';
+
+
+
 
 interface IProps {
-order: IOrder
+order: IOrder,
 }
 
-const Order: FC<IProps> = ({order}) => {
-    const {id, name, surname, email, phone, age, course, course_format, course_type, sum, alreadyPaid, group, created_at, status, manager } = order;
+const TableRowStyled = styled(TableRow)`
+  &:nth-of-type(odd) {
+    background-color: #DDDDDD;
+  }
+  &:nth-of-type(even) {
+    background-color: #999999;
+  }
+`;
+
+const Order: FC<IProps> =  ({order}) =>  {
+    const [ open, setOpen ] = useState<boolean>(false);
+
+    // const id = Number(rowId);
+    // const detailOrder = useAppSelector((state) => state.orderReducer.orders.find((item) => item.id === id));
+
+
+
+    // const detailState = useAppSelector((state) => state.detailReducer);
+    const {comment} = useAppSelector(state => state.commentReducer);
+    // const commentManager = useAppSelector((state) => state.userReducer.users.find((user) => user.id === comment.managerId ))
     const dispatch = useAppDispatch();
-    console.log(created_at);
-    // const columns = [
-    //     { field: 'id', headerName: 'id', width:10 , sortable: true },
-    //     { field: 'name', headerName: 'name', width: 10, sortable: true },
-    //     { field: 'surname', headerName: 'surname', width: 10, sortable: true },
-    //     { field: 'email', headerName: 'email', width: 10, sortable: true },
-    //     { field: 'phone', headerName: 'phone', width: 10, sortable: true },
-    //     { field: 'age', headerName: 'age', width:10 , sortable: true },
-    //     { field: 'course', headerName: 'course', width: 10, sortable: true },
-    //     { field: 'course_format', headerName: 'course_format', width:10 , sortable: true },
-    //     { field: 'course_type', headerName: 'course_type', width: 10, sortable: true },
-    //     { field: 'status', headerName: 'status', width: 10, sortable: true },
-    //     { field: 'sum', headerName: 'sum', width:10 , sortable: true },
-    //     { field: 'alreadyPaid', headerName: 'alreadyPaid', width: 10, sortable: true },
-    //     { field: 'group', headerName: 'group', width: 10, sortable: true },
-    //     { field: 'created_a', headerName: 'created_a', width: 10, sortable: true },
-    //     { field: 'manager', headerName: 'manager', width: 10, sortable: true },
-    // ];
+    const {reset, handleSubmit, register, setValue} = useForm<IComment>();
+    const createComment:SubmitHandler<IComment> = async (comment:IComment) => {
+      const newComment =  await dispatch(commentActions.create({orderId: order.id, comment} ));
+       // order.comments.push(newComment);
+       reset();
+    };
+
+    const handleEdit = () => {
+        // open modal form for updating order
+    };
+    // const handleCloseDetail = () => {
+    //     dispatch(detailActions.closeDetail());
+    // }
+    // if (!detailState.open) {
+    //     return null;
+    // }
+
+    // const handleDetailClick = (event:any) => {
+    //     const rowId = event.currentTarget.getAttribute('data-row-id');
+    //     if (expandedRowId === rowId) {
+    //         setExpandedRowId(null); // Close the detail view
+    //     } else {
+    //         setExpandedRowId(rowId); // Open the detail view for the clicked row
+    //     }
+    //     setOpen(!open)
+    // };
+
 
     return (
+     <React.Fragment>
+         <TableRow onClick={() => setOpen(!open)}>
+         <StyledTableCell component="th" scope="row">
+             {order.id}
+         </StyledTableCell>
+         <StyledTableCell align="left">{order.name}</StyledTableCell>
+         <StyledTableCell align="left">{order.surname}</StyledTableCell>
+         <StyledTableCell align="left">{order.email}</StyledTableCell>
+         <StyledTableCell align="left">{order.phone}</StyledTableCell>
+         <StyledTableCell align="left">{order.age}</StyledTableCell>
+         <StyledTableCell align="left">{order.course}</StyledTableCell>
+         <StyledTableCell align="left">{order.course_format}</StyledTableCell>
+         <StyledTableCell align="left">{order.course_type}</StyledTableCell>
+         <StyledTableCell align="left">{order.status}</StyledTableCell>
+         <StyledTableCell align="left">{order.sum}</StyledTableCell>
+         <StyledTableCell align="left">{order.alreadyPaid}</StyledTableCell>
+         <StyledTableCell align="left">{order.group}</StyledTableCell>
+         <StyledTableCell align="left">{format(new Date(order.created_at), 'MMMM dd, yyyy')}</StyledTableCell>
+         <StyledTableCell align="left">{order.manager}</StyledTableCell>
+     </TableRow>
+         <TableRow>
+             <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                 <Collapse in={open} timeout="auto" unmountOnExit>
+                     <Box sx={{ margin: 1 }}>
+    Message:
+            { order.msg &&
+         <div>{order.msg}</div>}
+     utm:
+            { order.utm &&
+            <div>{order.utm} </div>}
+            {  order.comments &&
 
-        // <TableRow
-        //     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-        // >
-        //     {/*<TableCell component="th" scope="row">{id}</TableCell>*/}
-        //     <TableCell align="right">{id}</TableCell>
-        //     <TableCell align="right">{name}</TableCell>
-        //     <TableCell align="right">{surname}</TableCell>
-        //     <TableCell align="right">{email}</TableCell>
-        //     <TableCell align="right">{phone}</TableCell>
-        //     <TableCell align="right">{age}</TableCell>
-        //     <TableCell align="right">{course}</TableCell>
-        //     <TableCell align="right">{course_format}</TableCell>
-        //     <TableCell align="right">{course_type}</TableCell>
-        //     <TableCell align="right">{status}</TableCell>
-        //     <TableCell align="right">{sum}</TableCell>
-        //     <TableCell align="right">{alreadyPaid}</TableCell>
-        //     <TableCell align="right">{group}</TableCell>
-        //     {/*<TableCell align="right">{created_at}</TableCell>*/}
-        //     <TableCell align="right">{manager}</TableCell>
-        // </TableRow>
-        <div></div>
+                order.comments.map((item) => <Comment key={item.id} item={item}/>)}
+            <form onSubmit={handleSubmit(createComment)}>
+                <input type="text" placeholder={'comment'} {...register('comment')} />
+            <Button variant="contained" color="primary" >
+                Submit
+            </Button>
+            </form>
+            <Button variant="contained" color="primary" onClick={handleEdit}>
+                Edit
+            </Button>
+            {/*<Button variant="contained" color="secondary" onClick={handleCloseDetail}>*/}
+            {/*    Close*/}
+            {/*</Button>*/}
+
+                     </Box>
+                 </Collapse>
+             </TableCell>
+         </TableRow>
+     </React.Fragment>
     );
 };
 

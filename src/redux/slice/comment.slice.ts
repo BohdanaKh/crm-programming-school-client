@@ -17,11 +17,11 @@ const initialState: IState = {
 
 
 
-const create = createAsyncThunk<void, { comment: IComment }>(
+const create = createAsyncThunk<void, { orderId: number, comment: IComment }>(
     'commentSlice/create',
-    async ({comment}, {rejectWithValue}) => {
+    async ({orderId, comment}, {rejectWithValue}) => {
         try {
-            await commentService.create(comment)
+            await commentService.create(orderId, comment)
         } catch (e) {
             const err = e as AxiosError
             return rejectWithValue(err.response.data)

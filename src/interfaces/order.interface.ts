@@ -1,4 +1,5 @@
 import {ECourse, ECourseFormat, ECourseType, EStatus} from "./enums";
+import {IComment} from "./comment.interface";
 
 export interface IOrder {
     id: number,
@@ -15,6 +16,9 @@ export interface IOrder {
     alreadyPaid: number,
     group: string,
     created_at: Date,
-    manager: string
+    manager: string,
+    utm: string,
+    msg: string,
+    comments: IComment[]
 
 }

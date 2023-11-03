@@ -8,7 +8,7 @@ interface IProps {
 const OrdersPage: FC<IProps> = () => {
 
     return (
-        <div>
+        <div style={{ display: "flex", flexDirection: "column"}}>
             <Orders/>
             <OrderPagination/>
             <OrderUpdateForm/>

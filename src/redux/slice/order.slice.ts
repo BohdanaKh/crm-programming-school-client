@@ -1,7 +1,7 @@
 import {AxiosError} from "axios";
 import {createAsyncThunk, createSlice, isFulfilled, isRejectedWithValue} from "@reduxjs/toolkit";
 
-import {IError, IOrder, IPagination} from "../../interfaces";
+import {IComment, IError, IOrder, IPagination} from "../../interfaces";
 import {orderService} from "../../services";
 
 interface IState {
@@ -23,6 +23,10 @@ interface IState {
     course_type: string,
     status: string,
     group: string,
+    utm: string,
+    msg: string,
+    comments: IComment[]
+
 }
 
 const initialState: IState = {
@@ -44,6 +48,10 @@ const initialState: IState = {
     course_type: null,
     status: null,
     group: null,
+    utm: null,
+    msg: null,
+    comments: null,
+
 };
 
 
