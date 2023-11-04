@@ -9,11 +9,10 @@ import styled from "@emotion/styled";
 
 import {IComment, IOrder} from "../../interfaces";
 import {useAppDispatch, useAppSelector} from "../../hooks";
-import {commentActions, detailActions} from "../../redux";
+import {commentActions, orderActions, orderModalActions} from "../../redux";
 import {Comment} from "../Comment/Comment";
 import { StyledTableCell } from './Orders';
-
-
+import { OrderEditModal} from "./OrderEditModal";
 
 
 interface IProps {
@@ -32,6 +31,7 @@ const TableRowStyled = styled(TableRow)`
 const Order: FC<IProps> =  ({order}) =>  {
     const [ open, setOpen ] = useState<boolean>(false);
 
+
     // const id = Number(rowId);
     // const detailOrder = useAppSelector((state) => state.orderReducer.orders.find((item) => item.id === id));
 
@@ -48,8 +48,10 @@ const Order: FC<IProps> =  ({order}) =>  {
        reset();
     };
 
-    const handleEdit = () => {
-        // open modal form for updating order
+    const handleEdit = (order: IOrder) => {
+       dispatch(orderActions.setOrderForUpdate(order));
+        dispatch(orderModalActions.openOrderEditModal())
+
     };
     // const handleCloseDetail = () => {
     //     dispatch(detailActions.closeDetail());
@@ -71,7 +73,7 @@ const Order: FC<IProps> =  ({order}) =>  {
 
     return (
      <React.Fragment>
-         <TableRow onClick={() => setOpen(!open)}>
+         <TableRow  hover onClick={() => setOpen(!open)}>
          <StyledTableCell component="th" scope="row">
              {order.id}
          </StyledTableCell>
@@ -109,13 +111,12 @@ const Order: FC<IProps> =  ({order}) =>  {
                 Submit
             </Button>
             </form>
-            <Button variant="contained" color="primary" onClick={handleEdit}>
+            <Button variant="contained" color="primary" onClick={() => handleEdit(order)}>
                 Edit
             </Button>
             {/*<Button variant="contained" color="secondary" onClick={handleCloseDetail}>*/}
             {/*    Close*/}
             {/*</Button>*/}
-
                      </Box>
                  </Collapse>
              </TableCell>

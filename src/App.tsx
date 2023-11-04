@@ -17,15 +17,17 @@ const App = () => {
                     // <RequiredAuth>
                         <OrdersPage/>}/>
                      {/*</RequiredAuth>}/>*/}
-                <Route path={'users'} element={
-                    // <RequiredAuth>
-                        <UsersPage/>}/>
-                     {/*</RequiredAuth>}/>*/}
+
                 <Route path={'adminPanel'} element={
                     // <RequiredAuth>
                         <AdminPage/>
                     // </RequiredAuth>
-                }/>
+                }>
+                    <Route path={'users'} element={
+                        // <RequiredAuth>
+                        <UsersPage/>}/>
+                    {/*</RequiredAuth>}/>*/}
+                </Route>
                         </Route>
                 </Route>
         </Routes>

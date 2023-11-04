@@ -4,9 +4,10 @@ export * from './Login/LoginForm';
 export * from './Order/Orders';
 export * from './Order/Order';
 export * from './Order/OrderPagination';
-export * from './Order/OrderUpdateForm';
+export * from './Order/OrderEditModal';
 export * from './User/Users';
 export * from './User/User';
-export * from './User/UserCreateForm';
+export * from './User/UserCreateModal';
 export * from './User/UserPagination';
+
 

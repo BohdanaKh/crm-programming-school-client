@@ -13,11 +13,14 @@ const urls = {
     },
     users: {
         users,
-        byId: (id:number): string => `${users}/{id}`
+        byId: (id:number): string => `${users}/${id}`,
+        activate: (id:number): string => `${users}/activate/${id}`,
+        ban: (id:number): string => `${users}/ban/${id}`,
+        unban: (id:number): string => `${users}/unban/${id}`
     },
     orders: {
         orders,
-        byId: (id:number): string => `${orders}/{id}`
+        byId: (id:number): string => `${orders}/${id}`
     },
     groups: {
         groups

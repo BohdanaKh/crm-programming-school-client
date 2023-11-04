@@ -11,8 +11,19 @@ interface IProps {
 }
 
 const OrdersFiltrationForm: FC<IProps> = () => {
+    const { name,
+        surname,
+        email,
+        phone,
+        age,
+        course,
+        course_format,
+        course_type,
+        status,
+        group} = useAppSelector(state => state.orderReducer)
     const dispatch=useAppDispatch();
     const [searchParams, setSearchParams] = useSearchParams();
+    const {reset, register, handleSubmit, setValue} = useForm<IOrder>();
     const [queryParams, setQueryParams] = useState({
         sort: null,
         name: null,
@@ -27,17 +38,38 @@ const OrdersFiltrationForm: FC<IProps> = () => {
         group: null,
     });
 
+    useEffect(() => {
+        if (name) {
+            setValue('name', name);
+        }
+        if (surname){
+            setValue('surname', surname)}
+    }, [name, surname, setValue])
+    // const handleInputChange = (event: any) => {
+    //     const { name, value } = event.target;
+    //     setQueryParams((prevParams) => ({
+    //         ...prevParams,
+    //         [name]: value,
+    //     }));
+    //     // @ts-ignore
+    //     const currentParams = Object.fromEntries([...searchParams]);
+    //     setSearchParams({...currentParams, [name]: value} )
+    // };
 
-    const handleInputChange = (event:any) => {
-        const { name, value } = event.target;
+    const handleInputChange = (order: IOrder) => {
         setQueryParams((prevParams) => ({
             ...prevParams,
-            [name]: value,
+           "name": order.name,
         }));
         // @ts-ignore
         const currentParams = Object.fromEntries([...searchParams]);
-        setSearchParams({...currentParams, [name]: value} )
+        setSearchParams({...currentParams, 'name': order.name} )
     };
+
+
+    const clearFilterForm = (e: any) => {
+        reset();
+    }
 
     const queryParamStrings = [];
     for (const key in queryParams) {
@@ -61,8 +93,10 @@ const OrdersFiltrationForm: FC<IProps> = () => {
 
 
     return (
-        <form onSubmit={null}>
-            {/*<input type={"text"} name={'name'} onChange={setFilters}/>*/}
+        // <form onSubmit={null}>
+        <form onSubmit={handleSubmit(handleInputChange)}>
+            <input type={"text"} placeholder={'name'} {...register('name')} onChange={(event) => dispatch(orderActions.setName(event.target.value))}/>
+            <input type={"text"} placeholder={'surname'} {...register('surname')} onChange={(event) => dispatch(orderActions.setSurname(event.target.value))}/>
             {/*<input type={"text"} name={'surname'}/>*/}
             {/*<select name={'course'}>*/}
             {/*    <option value='FS'>FS</option>*/}
@@ -72,64 +106,57 @@ const OrdersFiltrationForm: FC<IProps> = () => {
             {/*    <option value='FE'>FE</option>*/}
             {/*    <option value='PCX'>PCX</option>*/}
             {/*</select>*/}
-            {/*<input type="submit" value={'setSearchParams'}/>*/}
-        {/*<TextField  onChange={(event) => setSearchParams(prev => ({...prev, name: event.target.value}))} />*/}
-    {/*<TextField  onChange={(event) => setQuery(prev => ({...prev, surname: event.target.value}))} />*/}
-    {/*<TextField  onChange={(event) => setQuery(prev => ({...prev, email: event.target.value}))} />*/}
-    {/*<TextField  onChange={(event) => setQuery(prev => ({...prev, phone: event.target.value}))} />*/}
-    {/*<TextField  onChange={(event) => setQuery(prev => ({...prev, age: event.target.value}))} />*/}
-            <TextField placeholder={'name'} name={'name'}  value={queryParams.name}
-                       onChange={handleInputChange}/>
-            <TextField placeholder={'surname'} name={'surname'}  value={queryParams.surname}
-                       onChange={handleInputChange} />
-            {/*<TextField name={'surname'} onChange={(event) => setFilters(event)} />*/}
-    {/*        <TextField name={'email'} onChange={(event) => setFilters(event.target.name, event.target.value)} />*/}
-    {/*        <TextField name={'phone'} onChange={(event) => setFilters(event.target.name, event.target.value)} />*/}
-    {/*        <TextField name={'age'} onChange={(event) => setFilters(event)} />*/}
-    <Autocomplete
-        disablePortal
-        id="combo-box-demo"
-        options={['FS',
-            'QACX',
-            'JCX',
-            'JSCX',
-            'FE',
-            'PCX']}
-        sx={{ width: 200 }}
-            renderInput={(params) => <TextField {...params} label="all courses"  />}
-        value={queryParams.course}
-        onChange={handleInputChange}
-            />
-    <Autocomplete
-        disablePortal
-        id="combo-box-demo"
-        options={[ 'static', 'online']}
-        sx={{ width: 200 }}
-        renderInput={(params) => <TextField {...params} label="all formats" />}
-    />
-    <Autocomplete
-        disablePortal
-        id="combo-box-demo"
-        options={[ 'pro',
-            'minimal',
-            'premium',
-            'incubator',
-            'vip']}
-        sx={{ width: 200 }}
-        renderInput={(params) => <TextField {...params} label="all types" />}
-    />
-    <Autocomplete
-        disablePortal
-        id="combo-box-demo"
-        options={[ 'In_work',
-            'New',
-            'Aggre',
-            'Disaggre',
-            'Dubbing',]}
-        sx={{ width: 200 }}
-        renderInput={(params) => <TextField {...params} label="all statuses" />}
-        // onChange={(event) => setFilters(event) }
-    />
+// two below work
+            {/*<TextField placeholder={'name'} name={'name'}  value={queryParams.name}*/}
+            {/*           // onChange={handleInputChange}/>*/}
+            {/*<TextField placeholder={'surname'} name={'surname'}  value={queryParams.surname}*/}
+            {/*           // onChange={handleInputChange} />*/}
+
+
+    {/*<Autocomplete*/}
+    {/*    disablePortal*/}
+    {/*    id="combo-box-demo"*/}
+    {/*    options={['FS',*/}
+    {/*        'QACX',*/}
+    {/*        'JCX',*/}
+    {/*        'JSCX',*/}
+    {/*        'FE',*/}
+    {/*        'PCX']}*/}
+    {/*    sx={{ width: 200 }}*/}
+    {/*        renderInput={(params) => <TextField {...params} label="all courses"  />}*/}
+    {/*    value={queryParams.course}*/}
+    {/*    // onChange={handleInputChange}*/}
+    {/*        />*/}
+    {/*<Autocomplete*/}
+    {/*    disablePortal*/}
+    {/*    id="combo-box-demo"*/}
+    {/*    options={[ 'static', 'online']}*/}
+    {/*    sx={{ width: 200 }}*/}
+    {/*    renderInput={(params) => <TextField {...params} label="all formats" />}*/}
+    {/*/>*/}
+    {/*<Autocomplete*/}
+    {/*    disablePortal*/}
+    {/*    id="combo-box-demo"*/}
+    {/*    options={[ 'pro',*/}
+    {/*        'minimal',*/}
+    {/*        'premium',*/}
+    {/*        'incubator',*/}
+    {/*        'vip']}*/}
+    {/*    sx={{ width: 200 }}*/}
+    {/*    renderInput={(params) => <TextField {...params} label="all types" />}*/}
+    {/*/>*/}
+    {/*<Autocomplete*/}
+    {/*    disablePortal*/}
+    {/*    id="combo-box-demo"*/}
+    {/*    options={[ 'In_work',*/}
+    {/*        'New',*/}
+    {/*        'Aggre',*/}
+    {/*        'Disaggre',*/}
+    {/*        'Dubbing',]}*/}
+    {/*    sx={{ width: 200 }}*/}
+    {/*    renderInput={(params) => <TextField {...params} label="all statuses" />}*/}
+    {/*    // onChange={(event) => setFilters(event) }*/}
+    {/*/>*/}
     {/*<Autocomplete*/}
     {/*    disablePortal*/}
     {/*    id="combo-box-demo"*/}
@@ -138,6 +165,7 @@ const OrdersFiltrationForm: FC<IProps> = () => {
     {/*    renderInput={(params) => <TextField {...params} label="all groups" />}*/}
     {/*/>*/}
             <input type="submit" value={'setSearchParams'}/>
+            <button type={"button"} onClick={clearFilterForm}>CLEAR</button>
         </form>
 
 );

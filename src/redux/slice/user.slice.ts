@@ -10,7 +10,8 @@ interface IState {
     totalUsers: number,
     error: IError,
     trigger: boolean,
-    userForUpdate: IUser
+    userForUpdate: IUser,
+
 }
 
 const initialState: IState = {
@@ -20,7 +21,7 @@ const initialState: IState = {
     totalUsers: null,
     error: null,
     userForUpdate: null,
-    trigger: false
+    trigger: false,
 };
 
 
@@ -71,6 +72,42 @@ const deleteUser = createAsyncThunk<void, { id: number }>(
         }
     }
 )
+
+const activateUser = createAsyncThunk<void, { id: number }>(
+    'userSlice/activateUser',
+    async ({id}, {rejectWithValue}) => {
+        try {
+            await userService.activateById(id)
+        } catch (e) {
+            const err = e as AxiosError
+            return rejectWithValue(err.response.data)
+        }
+    }
+)
+
+const banUser = createAsyncThunk<void, { id: number }>(
+    'userSlice/banUser',
+    async ({id}, {rejectWithValue}) => {
+        try {
+            await userService.banById(id)
+        } catch (e) {
+            const err = e as AxiosError
+            return rejectWithValue(err.response.data)
+        }
+    }
+)
+
+const unbanUser = createAsyncThunk<void, { id: number }>(
+    'userSlice/unbanUser',
+    async ({id}, {rejectWithValue}) => {
+        try {
+            await userService.unbanById(id)
+        } catch (e) {
+            const err = e as AxiosError
+            return rejectWithValue(err.response.data)
+        }
+    }
+)
 const slice = createSlice({
     name: 'userSlice',
     initialState,
@@ -94,7 +131,7 @@ const slice = createSlice({
             .addMatcher(isFulfilled(), state => {
                 state.error = null
             })
-            .addMatcher(isFulfilled(create, update, deleteUser), state => {
+            .addMatcher(isFulfilled(create, update, deleteUser, activateUser, banUser, unbanUser), state => {
                 state.trigger = !state.trigger
             })
             .addMatcher(isRejectedWithValue(), (state, action) => {
@@ -109,7 +146,10 @@ const userActions = {
     getAll,
     create,
     update,
-    deleteUser
+    deleteUser,
+    activateUser,
+    banUser,
+    unbanUser,
 }
 
 export {

@@ -1,3 +1,5 @@
+import {IOrder} from "./order.interface";
+
 export interface IUser {
     id: number,
     name: string,
@@ -7,4 +9,5 @@ export interface IUser {
     is_active: boolean,
     created_at: Date,
     role: string,
+    orders: IOrder[],
 }

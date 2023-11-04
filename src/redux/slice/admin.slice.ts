@@ -10,13 +10,15 @@ interface IState {
     statusCounts: IStatusStats[];
     errors: IError,
     trigger: boolean,
+    showUsers: boolean,
 }
 
 const initialState: IState = {
     totalOrdersCount: null,
     statusCounts: null,
     errors: null,
-    trigger: false
+    trigger: false,
+    showUsers: false,
 };
 
 const getAdminPanel = createAsyncThunk<IOrderStats, void> (
@@ -39,6 +41,9 @@ const slice = createSlice({
     name: 'adminSlice',
     initialState,
     reducers: {
+        setShowUsers: ( state) => {
+            state.showUsers = !state.showUsers
+        }
     },
     extraReducers: builder =>
         builder

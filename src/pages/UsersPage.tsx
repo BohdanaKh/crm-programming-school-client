@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {UserCreateForm, Users} from "../components";
+import {UserCreateModal, Users} from "../components";
 
 interface IProps {
 
@@ -10,7 +10,7 @@ const UsersPage: FC<IProps> = () => {
     return (
         <div>
             <Users/>
-            <UserCreateForm/>
+            <UserCreateModal/>
         </div>
     );
 };
