@@ -1,50 +1,28 @@
 import {FC, useEffect, useState} from 'react';
 import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
-import {IOrder} from "../../interfaces";
-import {Autocomplete, TextField} from "@mui/material";
-import {orderActions} from "../../redux";
+import {EStatus, IOrder} from "../../interfaces";
+import {groupActions, orderActions} from "../../redux";
 import {useAppDispatch, useAppSelector} from "../../hooks";
+import {IFilter} from "../../interfaces";
+import css from "./Filters.module.css";
+import {DownloadExcel} from "./DownloadExcel";
 
-interface IProps {
 
-}
 
-const OrdersFiltrationForm: FC<IProps> = () => {
-    const { name,
-        surname,
-        email,
-        phone,
-        age,
-        course,
-        course_format,
-        course_type,
-        status,
-        group} = useAppSelector(state => state.orderReducer)
-    const dispatch=useAppDispatch();
+const OrdersFiltrationForm: FC = () => {
+    const {me} = useAppSelector(state => state.authReducer)
+    const {groups} = useAppSelector(state => state.groupReducer)
+    const dispatch = useAppDispatch();
     const [searchParams, setSearchParams] = useSearchParams();
     const {reset, register, handleSubmit, setValue} = useForm<IOrder>();
-    const [queryParams, setQueryParams] = useState({
-        sort: null,
-        name: null,
-        surname: null,
-        email: null,
-        phone: null,
-        age: null,
-        course: null,
-        course_format: null,
-        course_type: null,
-        status: null,
-        group: null,
-    });
+    const [filters, setFilters] = useState([]);
 
     useEffect(() => {
-        if (name) {
-            setValue('name', name);
-        }
-        if (surname){
-            setValue('surname', surname)}
-    }, [name, surname, setValue])
+        dispatch(groupActions.getAll())
+    }, [dispatch])
+    console.log(groups);
+
     // const handleInputChange = (event: any) => {
     //     const { name, value } = event.target;
     //     setQueryParams((prevParams) => ({
@@ -55,119 +33,111 @@ const OrdersFiltrationForm: FC<IProps> = () => {
     //     const currentParams = Object.fromEntries([...searchParams]);
     //     setSearchParams({...currentParams, [name]: value} )
     // };
-
-    const handleInputChange = (order: IOrder) => {
-        setQueryParams((prevParams) => ({
-            ...prevParams,
-           "name": order.name,
-        }));
-        // @ts-ignore
-        const currentParams = Object.fromEntries([...searchParams]);
-        setSearchParams({...currentParams, 'name': order.name} )
+    const filter = (data:IFilter) => {
+        for (const key in data) {
+            // @ts-ignore
+            if (data.hasOwnProperty(key) && !data[key]) {
+                // @ts-ignore
+                delete data[key];
+            }
+        }
+        if (data) {
+        dispatch(orderActions.getAll(data))
+    }
     };
 
+        // const currentParams = Object.fromEntries([...searchParams]);
+        // setSearchParams({...currentParams, 'name': order.name} )
 
-    const clearFilterForm = (e: any) => {
+
+
+    const clearFilterForm = () => {
+        dispatch(orderActions.getAll({page: 1}))
         reset();
+        setSearchParams(prev => ({...prev, 'page': 1}))
     }
 
-    const queryParamStrings = [];
-    for (const key in queryParams) {
-        // @ts-ignore
-        if (queryParams[key]) {
-            // @ts-ignore
-            queryParamStrings.push(`${key}=${encodeURIComponent(queryParams[key])}`);
-        }
-    }
+    // useEffect(() => {
+    //     // @ts-ignore
+    //     const currentParams = Object.fromEntries([...searchParams]);
+    //     dispatch(orderActions.getAll(currentParams))
+    // }, [dispatch, searchParams]);
 
-    // if (queryParamStrings.length > 0) {
-    //     url += `?${queryParamStrings.join('&')}`;
-    // }
+const filterMy = () => {
+        const id = me.id;
+        dispatch(orderActions.getAll({page:1, managerId: id}))
+    setSearchParams(params => { params.set("managerId", id.toString());
+        return params})
 
-
-    useEffect(() => {
-        // @ts-ignore
-        const currentParams = Object.fromEntries([...searchParams]);
-        dispatch(orderActions.getAll(currentParams))
-    }, [dispatch, searchParams]);
-
-
+}
     return (
-        // <form onSubmit={null}>
-        <form onSubmit={handleSubmit(handleInputChange)}>
-            <input type={"text"} placeholder={'name'} {...register('name')} onChange={(event) => dispatch(orderActions.setName(event.target.value))}/>
-            <input type={"text"} placeholder={'surname'} {...register('surname')} onChange={(event) => dispatch(orderActions.setSurname(event.target.value))}/>
-            {/*<input type={"text"} name={'surname'}/>*/}
-            {/*<select name={'course'}>*/}
-            {/*    <option value='FS'>FS</option>*/}
-            {/*    <option value='QACX'>QACX</option>*/}
-            {/*    <option value='JCX'>JCX</option>*/}
-            {/*    <option value='JSCX'>JSCX</option>*/}
-            {/*    <option value='FE'>FE</option>*/}
-            {/*    <option value='PCX'>PCX</option>*/}
-            {/*</select>*/}
-// two below work
-            {/*<TextField placeholder={'name'} name={'name'}  value={queryParams.name}*/}
-            {/*           // onChange={handleInputChange}/>*/}
-            {/*<TextField placeholder={'surname'} name={'surname'}  value={queryParams.surname}*/}
-            {/*           // onChange={handleInputChange} />*/}
+        <div className={css.Filters}>
+        <form onSubmit={handleSubmit(filter)}>
+            <div className={css.formInputs}>
+            <input  className={css.formInut} type={"text"} placeholder={'name'} {...register('name')} onChange={(event) =>  setSearchParams(params => { params.set("name", event.target.value);
+                return params})}/>
+            <input  className={css.formInut} type={"text"} placeholder={'surname'} {...register('surname')} onChange={(event) => setSearchParams(params => { params.set("surname", event.target.value);
+                return params})}/>
+            <input  className={css.formInut} type="text" placeholder={'email'} {...register('email')}/>
 
+            <input  className={css.formInut} type="text"placeholder={'phone'} {...register('phone')}/>
 
-    {/*<Autocomplete*/}
-    {/*    disablePortal*/}
-    {/*    id="combo-box-demo"*/}
-    {/*    options={['FS',*/}
-    {/*        'QACX',*/}
-    {/*        'JCX',*/}
-    {/*        'JSCX',*/}
-    {/*        'FE',*/}
-    {/*        'PCX']}*/}
-    {/*    sx={{ width: 200 }}*/}
-    {/*        renderInput={(params) => <TextField {...params} label="all courses"  />}*/}
-    {/*    value={queryParams.course}*/}
-    {/*    // onChange={handleInputChange}*/}
-    {/*        />*/}
-    {/*<Autocomplete*/}
-    {/*    disablePortal*/}
-    {/*    id="combo-box-demo"*/}
-    {/*    options={[ 'static', 'online']}*/}
-    {/*    sx={{ width: 200 }}*/}
-    {/*    renderInput={(params) => <TextField {...params} label="all formats" />}*/}
-    {/*/>*/}
-    {/*<Autocomplete*/}
-    {/*    disablePortal*/}
-    {/*    id="combo-box-demo"*/}
-    {/*    options={[ 'pro',*/}
-    {/*        'minimal',*/}
-    {/*        'premium',*/}
-    {/*        'incubator',*/}
-    {/*        'vip']}*/}
-    {/*    sx={{ width: 200 }}*/}
-    {/*    renderInput={(params) => <TextField {...params} label="all types" />}*/}
-    {/*/>*/}
-    {/*<Autocomplete*/}
-    {/*    disablePortal*/}
-    {/*    id="combo-box-demo"*/}
-    {/*    options={[ 'In_work',*/}
-    {/*        'New',*/}
-    {/*        'Aggre',*/}
-    {/*        'Disaggre',*/}
-    {/*        'Dubbing',]}*/}
-    {/*    sx={{ width: 200 }}*/}
-    {/*    renderInput={(params) => <TextField {...params} label="all statuses" />}*/}
-    {/*    // onChange={(event) => setFilters(event) }*/}
-    {/*/>*/}
-    {/*<Autocomplete*/}
-    {/*    disablePortal*/}
-    {/*    id="combo-box-demo"*/}
-    {/*    options={all_groups}*/}
-    {/*    sx={{ width: 200 }}*/}
-    {/*    renderInput={(params) => <TextField {...params} label="all groups" />}*/}
-    {/*/>*/}
+            <input  className={css.formInut} type="text" placeholder={'phone'} {...register('age')}/>
+
+        <select className={css.formInut} {...register('course')}>
+            <option value="" selected disabled hidden>all courses</option>
+            <option value='FS'>FS</option>
+            <option value='QACX'>QACX</option>
+            <option value='JCX'>JCX</option>
+            <option value='JSCX'>JSCX</option>
+            <option value='FE'>FE</option>
+            <option value='PCX'>PCX</option>
+        </select>
+
+        <select  className={css.formInut} {...register('course_format')}>
+            <option value="" selected disabled hidden>all formats</option>
+            <option value='static'>static</option>
+            <option value='online'>online</option>
+        </select>
+
+        <select  className={css.formInut} {...register('course_type')}>
+            <option value="" selected disabled hidden>all types</option>
+            <option value='pro'>pro</option>
+            <option value='minimal'>minimal</option>
+            <option value='premium'>premium</option>
+            <option value='incubator'>incubato</option>
+            <option value='vip'>vip</option>
+        </select>
+
+            <select  className={css.formInut} {...register('status')}>
+                <option value="" selected disabled hidden>all statuses</option>
+                <option value={EStatus.In_work}>{EStatus.In_work}</option>
+                <option value={EStatus.New}>{EStatus.New}</option>
+                <option value={EStatus.Aggre}>{EStatus.Aggre}</option>
+                <option value={EStatus.Disaggre}>{EStatus.Disaggre}</option>
+                <option value={EStatus.Dubbing}>{EStatus.Dubbing}</option>
+            </select>
+
+            <select  className={css.formInut} {...register(('group'))}>
+                <option value="" selected disabled hidden>all groups</option>
+                {/*{groups.map((group) => (*/}
+                {/*    <option key={group.id} value={group.id}>*/}
+                {/*        {group.title}*/}
+                {/*    </option>*/}
+                {/*))}*/}
+            </select>
+                <input className={css.formInut}  type="text" placeholder={'Start date'}/>
+                <input  className={css.formInut} type="text" placeholder={'End date'}/>
+
+            </div>
+            <div className={css.formActions}>
             <input type="submit" value={'setSearchParams'}/>
+            <input type={"checkbox"} value={"My"} onClick={filterMy}/>
             <button type={"button"} onClick={clearFilterForm}>CLEAR</button>
+            <DownloadExcel/>
+            </div>
         </form>
-
+        </div>
 );
 };
 

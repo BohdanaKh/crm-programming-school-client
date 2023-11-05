@@ -1,4 +1,4 @@
-.modal-background {
+.modalBackground {
     position: fixed;
     top: 0;
     left: 0;
@@ -10,7 +10,7 @@
     align-items: center;
 }
 
-.modal-content {
+.modalContent {
     background: white;
     padding: 20px;
     border-radius: 4px;
@@ -18,19 +18,19 @@
     max-width: 800px;
 }
 
-.form-container {
+.formContainer {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     gap: 20px;
 }
 
-.form-column {
+.formColumn {
     width: 48%;
 }
 
 
-.form-input {
+.formInput {
     width: 100%;
     padding: 10px;
     margin: 5px 0 15px 0;
@@ -40,7 +40,7 @@
 }
 
 
-.form-button {
+.formButton {
     background-color: #4caf50;
     color: white;
     padding: 12px 20px;
@@ -51,6 +51,6 @@
     margin-top: 10px;
 }
 
-.form-button:hover {
+.formButton:hover {
     background-color: #45a049;
 }

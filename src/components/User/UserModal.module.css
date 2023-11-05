@@ -1,4 +1,4 @@
-.modal-background {
+.modalBackground {
     position: fixed;
     top: 0;
     left: 0;
@@ -10,7 +10,7 @@
     align-items: center;
 }
 
-.modal-content {
+.modalContent {
     background: white;
     padding: 20px;
     border-radius: 4px;
@@ -18,20 +18,20 @@
     width: 300px;
 }
 
-.form-input {
+.formInput {
     width: 90%;
     padding: 10px;
     margin: 10px 0;
     border: 1px solid #ccc;
     border-radius: 4px;
-    font-size: 12px;
+    font-size: 16px;
 }
 
-.form-label {
+.formLabel {
     font-size: 14px;
 }
 
-.form-button {
+.formButton {
     background-color: #4caf50; /* Green color */
     color: white;
     padding: 12px 20px;
@@ -42,6 +42,6 @@
     margin: 10px 5px 0 20px;
 }
 
-.form-button:hover {
+.formButton:hover {
     background-color: #45a049; /* Slightly darker shade when hovered */
 }

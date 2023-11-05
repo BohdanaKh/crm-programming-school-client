@@ -12,11 +12,12 @@ import {
 } from "@mui/material";
 
 import {useAppDispatch, useAppSelector} from "../../hooks";
-import { orderActions} from "../../redux";
+import {groupActions, orderActions} from "../../redux";
 import {OrdersFiltrationForm} from "./OrdersFiltrationForm";
 import { Order} from "./Order";
 import {IOrder} from "../../interfaces";
 import {OrderEditModal} from "./OrderEditModal";
+import {DownloadExcel} from "./DownloadExcel";
 
 
 export const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -115,40 +116,37 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 }
 
 const Orders: FC = () => {
-    const {orders, trigger, page, name} = useAppSelector(state => state.orderReducer);
+    const {orders, page,  trigger} = useAppSelector(state => state.orderReducer);
     const { groups } = useAppSelector(state => state.groupReducer)
     const dispatch = useAppDispatch();
     const [searchParams, setSearchParams] = useSearchParams();
-    const location = useLocation();
-    const navigate = useNavigate();
+    // const location = useLocation();
+    // const navigate = useNavigate();
     // const queryParams = new URLSearchParams(location.search);
     const [sortModel, setSortModel] = useState('');
     const {isOrderEditModalOpen} = useAppSelector(state => state.orderModalReducer);
 
 
-    const [expandedRowId, setExpandedRowId] = useState<number>(null);
-
-    // const getDetailPanelContent = useCallback(
-    //     ({ row }: GridRowParams) => <DetailPanelContent row={row} />,
-    //     [],
-    // );
-
-    // const getDetailPanelHeight = useCallback(() => 240, []);
-
+    // const [expandedRowId, setExpandedRowId] = useState<number>(null);
 
     useEffect(() => {
         setSearchParams(prev => ({...prev, page: '1'}))
     }, [])
 
+    // useEffect(() => {
+    //     setSearchParams(params => { params.set("page", '1');
+    //         return params})
+    // }, [])
+
     useEffect(() => {
+
         // @ts-ignore
         const currentParams = Object.fromEntries([...searchParams]);
-      
         dispatch(orderActions.getAll(currentParams))
+        // console.log(+searchParams.get('page'));
+        // dispatch(orderActions.getAll(+searchParams.get('page')))
+
     }, [dispatch, searchParams]);
-    // }, [dispatch, query])
-
-
 
         const handleHeaderCellClick = ( event: React.MouseEvent<unknown>,
                                         property: keyof IOrder,) => {
@@ -157,9 +155,13 @@ const Orders: FC = () => {
                 // sort === `-${column.field}` ? column.field : `-${column.field}`;
                 sortModel === property ? `-${property}` : property;
            setSortModel(newSort);
-            // @ts-ignore
-            const currentParams = Object.fromEntries([...searchParams]);
-            setSearchParams({...currentParams, sort: newSort} )
+
+            // const currentParams = Object.fromEntries([...searchParams]);
+            // setSearchParams({...currentParams, sort: newSort} )
+
+                setSearchParams(params => { params.set("sort", newSort);
+                    return params})
+
         }
 
     // const handleSortModelChange = (newSortModel:any) => {

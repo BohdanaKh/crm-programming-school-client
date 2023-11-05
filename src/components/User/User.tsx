@@ -1,9 +1,10 @@
 import {FC} from 'react';
-import {EStatus, IUser} from "../../interfaces";
 import {Button, Card, CardActions, CardContent, Typography} from "@mui/material";
+
+import {EStatus, IUser} from "../../interfaces";
 import {useAppDispatch} from "../../hooks";
 import {userActions} from "../../redux";
-
+import css from './Users.module.css';
 interface IProps {
 user: IUser;
 }
@@ -17,8 +18,8 @@ const ordersAgreed = orders.filter(order => order.status === EStatus.Aggre).leng
 
     return (
 
-            <Card sx={{ minWidth: 275 }}>
-                <CardContent>
+            <Card className={css.userBlock}>
+                <CardContent className={css.userInfo}>
                     <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                         id: {id}
                     </Typography>
@@ -39,6 +40,8 @@ const ordersAgreed = orders.filter(order => order.status === EStatus.Aggre).leng
                     <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                         last_login: {last_login}
                     </Typography>
+                </CardContent>
+                <CardContent className={css.userInfo}>
                     <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                         total: {orders.length}
                     </Typography>
@@ -50,10 +53,10 @@ const ordersAgreed = orders.filter(order => order.status === EStatus.Aggre).leng
                     </Typography>
 
                 </CardContent>
-                <CardActions>
-                    <Button size="small" onClick={() => dispatch(userActions.activateUser({id}))}>ACTIVATE</Button>
-                    <Button size="small" onClick={() => dispatch(userActions.banUser({id}))}>BAN</Button>
-                    <Button size="small" onClick={() => dispatch(userActions.unbanUser({id}))}>UNBAN</Button>
+                <CardActions className={css.userActions}>
+                    <Button className={css.userActionButton} size="small" onClick={() => dispatch(userActions.activateUser({id}))}>ACTIVATE</Button>
+                    <Button className={css.userActionButton} size="small" onClick={() => dispatch(userActions.banUser({id}))}>BAN</Button>
+                    <Button className={css.userActionButton} size="small" onClick={() => dispatch(userActions.unbanUser({id}))}>UNBAN</Button>
                 </CardActions>
             </Card>
 

@@ -114,6 +114,9 @@ const slice = createSlice({
     reducers: {
         setUserForUpdate: (state, action) => {
             state.userForUpdate = action.payload
+        },
+        setPage: (state, action) => {
+            state.page = action.payload
         }
     },
     extraReducers: builder =>
@@ -122,7 +125,7 @@ const slice = createSlice({
                 const {page, pages, countItem, entities} = action.payload;
                 state.users = entities
                 state.page = page
-                state.pages = pages
+                state.pages = 10
                 state.totalUsers = countItem
             })
             .addCase(update.fulfilled, state => {

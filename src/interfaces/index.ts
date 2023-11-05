@@ -9,3 +9,4 @@ export * from './token.interface';
 export * from './user.interface';
 export * from './login.res.interface';
 export * from './group.interface';
+export * from './filter.interface';

@@ -19,15 +19,6 @@ interface IProps {
 order: IOrder,
 }
 
-const TableRowStyled = styled(TableRow)`
-  &:nth-of-type(odd) {
-    background-color: #DDDDDD;
-  }
-  &:nth-of-type(even) {
-    background-color: #999999;
-  }
-`;
-
 const Order: FC<IProps> =  ({order}) =>  {
     const [ open, setOpen ] = useState<boolean>(false);
 
@@ -73,7 +64,7 @@ const Order: FC<IProps> =  ({order}) =>  {
 
     return (
      <React.Fragment>
-         <TableRow  hover onClick={() => setOpen(!open)}>
+         <TableRow hover onClick={() => setOpen(!open)}>
          <StyledTableCell component="th" scope="row">
              {order.id}
          </StyledTableCell>

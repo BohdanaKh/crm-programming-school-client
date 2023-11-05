@@ -3,6 +3,7 @@
     padding: 0;
     font-family: sans-serif;
     text-align: center;
+    height: 350px;
 }
 
 .LoginForm body {
@@ -11,7 +12,6 @@
 
 .LoginForm form {
     max-width: 330px;
-    height: 400px;
     display: flex;
     flex-direction: column;
     background: white;

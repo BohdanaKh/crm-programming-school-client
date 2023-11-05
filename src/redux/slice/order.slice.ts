@@ -13,19 +13,19 @@ interface IState {
     trigger: boolean,
     orderForUpdate: IOrder,
     sort: string,
-    name: string,
-    surname: string,
-    email: string,
-    phone: string,
-    age: number,
-    course: string,
-    course_format: string,
-    course_type: string,
-    status: string,
-    group: string,
-    utm: string,
-    msg: string,
-    comments: IComment[]
+    // name: string,
+    // surname: string,
+    // email: string,
+    // phone: string,
+    // age: number,
+    // course: string,
+    // course_format: string,
+    // course_type: string,
+    // status: string,
+    // group: string,
+    // utm: string,
+    // msg: string,
+    // comments: IComment[]
 
 }
 
@@ -38,19 +38,19 @@ const initialState: IState = {
     orderForUpdate: null,
     trigger: false,
     sort: null,
-    name: null,
-    surname: null,
-    email: null,
-    phone: null,
-    age:  null,
-    course: null,
-    course_format: null,
-    course_type: null,
-    status: null,
-    group: null,
-    utm: null,
-    msg: null,
-    comments: null,
+    // name: null,
+    // surname: null,
+    // email: null,
+    // phone: null,
+    // age:  null,
+    // course: null,
+    // course_format: null,
+    // course_type: null,
+    // status: null,
+    // group: null,
+    // utm: null,
+    // msg: null,
+    // comments: null,
 
 };
 
@@ -118,16 +118,19 @@ const slice = createSlice({
         setSort: ( state, action) => {
             state.sort= action.payload;
         },
-
-        setName: ( state, action) => {
-            state.name= action.payload;
-        },
-        setSurname: ( state, action) => {
-            state.surname= action.payload;
-        },
-        setCourse: ( state, action) => {
-            state.course= action.payload;
-        }
+    //     setFilter: (state, action) => {
+    //         state = { ...state, ...action.payload };
+    //     },
+    //
+    //     setName: ( state, action) => {
+    //         state.name= action.payload;
+    //     },
+    //     setSurname: ( state, action) => {
+    //         state.surname= action.payload;
+    //     },
+    //     setCourse: ( state, action) => {
+    //         state.course= action.payload;
+    //     }
     },
     extraReducers: builder =>
         builder

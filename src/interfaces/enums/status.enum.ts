@@ -1,7 +1,7 @@
 export enum EStatus {
-In_work,
-New,
-Aggre,
-Disaggre,
-Dubbing,
+In_work="In work",
+New = "New",
+Aggre = "Aggre",
+Disaggre = "Disaggre",
+Dubbing = "Dubbing",
 }

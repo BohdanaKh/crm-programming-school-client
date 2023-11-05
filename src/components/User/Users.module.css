@@ -1,0 +1,57 @@
+.userContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+
+.userBlock {
+    width: 90%;
+    padding: 15px;
+    background-color: white;
+    border: 2px solid green;
+    border-radius: 10px;
+    margin: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+/*.userRow {*/
+/*    display: flex;*/
+/*    justify-content: space-between;*/
+/*    align-items: center;*/
+/*    margin-bottom: 10px;*/
+/*}*/
+
+
+.userInfo {
+    flex: 1;
+    padding: 0 10px;
+    text-align: left;
+}
+
+
+.userActions {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.userActionButton {
+    flex: 1;
+    padding: 5px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.userActionButton:hover {
+    background-color: #45a049;
+}

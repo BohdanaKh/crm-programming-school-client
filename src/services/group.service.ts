@@ -5,6 +5,9 @@ import {urls} from "../constants";
 
 const groupService = {
     getAll: ():  IRes<IGroup[]> => axiosService.get(urls.groups.groups),
+    create(group: IGroup): IRes<IGroup> {
+        return axiosService.post(urls.groups.groups, group)
+    }
 }
 
 export {

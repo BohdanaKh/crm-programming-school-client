@@ -1,0 +1,24 @@
+.MuiPagination ul {
+    list-style: none;
+    display: flex;
+    gap: 8px;
+}
+
+
+.MuiPagination li {
+    background-color: lightgreen;
+    text-decoration-color: white;
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+
+.MuiPagination li:hover {
+    background-color: green;
+}

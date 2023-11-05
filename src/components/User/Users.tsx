@@ -4,6 +4,8 @@ import {useSearchParams} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../hooks";
 import {userActions} from "../../redux";
 import { User } from './User';
+import css from './Users.module.css';
+import {UserPagination} from "./UserPagination";
 
 interface IProps {
 
@@ -21,10 +23,11 @@ const Users: FC<IProps> = () => {
     }, [dispatch, searchParams, trigger]);
 
     return (
-        <div style={{ display: "flex", flexDirection: "column"}}>
+        <div className={css.userContainer}>
             {
                 users.map(user => <User key={user.id} user={user}/>)
             }
+            <UserPagination/>
         </div>
     );
 };

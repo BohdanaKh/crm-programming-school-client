@@ -5,7 +5,7 @@ import {Modal} from "@mui/material";
 import {useAppDispatch, useAppSelector} from "../../hooks";
 import { IUser} from "../../interfaces";
 import {adminActions, userActions, userModalActions} from "../../redux";
-import './UserModal.css';
+import css from './UserModal.module.css';
 
 
 
@@ -45,30 +45,30 @@ const UserCreateModal = () => {
             onClose={() => dispatch(userModalActions.closeUserCreateModal())}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
-            className="modal-background"
+            className={css.modalBackground}
         >
-            <div className="modal-content">
+            <div className={css.modalContent}>
         <form onSubmit={handleSubmit(createUser)}>
             <div>
 
-            <label className="form-label">Email</label>
-            <input className="form-input" type="text" placeholder={'Email'} {...register('email')}/>
+            <label className={css.formLabel}>Email</label>
+            <input className={css.formInput} type="text" placeholder={'Email'} {...register('email')}/>
             </div>
 <div>
 
-            <label className="form-label">Name</label>
-            <input className="form-input" type="text" placeholder={'Name'} {...register('name')}/>
+            <label className={css.formLabel}>Name</label>
+            <input className={css.formInput} type="text" placeholder={'Name'} {...register('name')}/>
 </div>
 <div>
 
-            <label className="form-label">Surname</label>
-            <input className="form-input" type="text" placeholder={'Surname'} {...register('surname')}/>
+            <label className={css.formLabel}>Surname</label>
+            <input className={css.formInput} type="text" placeholder={'Surname'} {...register('surname')}/>
 </div>
 
-            <button  className="form-button" disabled={!isValid}>CREATE</button>
+            <button  className={css.formButton} disabled={!isValid}>CREATE</button>
             {Object.keys(errors).length > 0 && <div>{Object.values(errors)[0].message}</div>}
             {/*{error && <div>{error.username[0]}</div>}*/}
-            <button  className="form-button" type={"button"} onClick={() => dispatch(userModalActions.closeUserCreateModal())}>CANCEL</button>
+            <button  className={css.formButton} type={"button"} onClick={() => dispatch(userModalActions.closeUserCreateModal())}>CANCEL</button>
         </form>
             </div>
         </Modal>

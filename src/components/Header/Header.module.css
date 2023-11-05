@@ -4,7 +4,7 @@
     align-items: center;
     font-size: 25px;
     color: snow;
-    background-color: blue;
+    background-color: green;
 }
 
 .Header a {
@@ -14,5 +14,5 @@
 }
 
 .Header a[class='active'] {
-    color: red;
+    color: forestgreen;
 }

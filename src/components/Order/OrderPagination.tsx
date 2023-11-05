@@ -1,24 +1,37 @@
-import {FC, useState} from 'react';
-import {useAppDispatch, useAppSelector} from "../../hooks";
+import {FC, useEffect, useState} from 'react';
 import {Link, useLocation, useSearchParams} from "react-router-dom";
 import Pagination from '@mui/material/Pagination';
 import {Box, Container, CssBaseline, PaginationItem} from "@mui/material";
+
+import {useAppDispatch, useAppSelector} from "../../hooks";
 import {orderActions} from "../../redux";
+import css from '../Pagination/Pagination.module.css';
+import {lightGreen} from "@mui/material/colors";
 
 
 const OrderPagination: FC = (props) => {
-    console.log(props);
-    const location = useLocation();
-    console.log(location);
-    const [page, setPage ] = useState<number>(+location.search?.split('=')[1] || 1)
-    const { pages, totalOrders} = useAppSelector(state => state.orderReducer);
+    // console.log(props);
+    // const location = useLocation();
+    // console.log(location);
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    // const [page, setPage ] = useState<number>(+searchParams.get('page') || 1)
+    const { page, pages} = useAppSelector(state => state.orderReducer);
     // const [_, setQuery] = useSearchParams();
-    // const dispatch = useAppDispatch();
-    // const handleChange = ( event: React.ChangeEvent<unknown>, selectedPage: number) => {
-    //     setQuery(prev1 =>( {...prev1, page: selectedPage}));
+    const dispatch = useAppDispatch();
+    // const handleChange = ( num: number) => {
+    //     const selectedPage = num.toString();
+    //     // @ts-ignore
+    //     const currentParams = Object.fromEntries([...searchParams]);
+    //     setSearchParams({ ...currentParams, page: selectedPage} )
+    //
+    //     setPage(num);
+    //
     // };
 
-
+    useEffect(() => {
+        dispatch(orderActions.setPage(+searchParams.get('page') || 1))
+    }, []);
     return  (
 
         <div>
@@ -27,12 +40,11 @@ const OrderPagination: FC = (props) => {
                 <Box py={3} display="flex" justifyContent="center">
                     {!!pages &&
                     <Pagination
+                        className={css.MuiPagination}
                         count={pages}
                         page={page}
-                        color="secondary"
-                        variant="outlined"
                         // onChange={(_, value) => setQuery(prev1 => ({...prev1, page: value}))}
-                        onChange={(_, num) => setPage(num)}
+                        onChange={(_, num) => dispatch(orderActions.setPage(num))}
 
                         siblingCount={2}
                         boundaryCount={1}

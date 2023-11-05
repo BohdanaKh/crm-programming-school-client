@@ -15,8 +15,10 @@ export interface IOrder {
     sum: number,
     alreadyPaid: number,
     group: string,
+    groupId:number,
     created_at: Date,
     manager: string,
+    managerId: number,
     utm: string,
     msg: string,
     comments: IComment[]
