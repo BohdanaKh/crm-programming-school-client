@@ -1,3 +1,4 @@
+export * from './AccountActivationPage';
 export * from './AdminPage';
 export * from './HomePage';
 export * from './LoginPage';

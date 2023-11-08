@@ -1,5 +1,6 @@
 export * from './Header/Header';
 export * from './Admin/AdminPanel';
+export * from './Activation/CreatePasswordForm';
 export * from './Login/LoginForm';
 export * from './Order/Orders';
 export * from './Order/Order';

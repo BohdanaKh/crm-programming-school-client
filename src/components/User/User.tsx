@@ -2,20 +2,29 @@ import {FC} from 'react';
 import {Button, Card, CardActions, CardContent, Typography} from "@mui/material";
 
 import {EStatus, IUser} from "../../interfaces";
-import {useAppDispatch} from "../../hooks";
+import {useAppDispatch, useAppSelector, useCopyToClipboard} from "../../hooks";
 import {userActions} from "../../redux";
 import css from './Users.module.css';
+import {baseURL} from "../../constants";
 interface IProps {
 user: IUser;
 }
 
 const User: FC<IProps> = ({user}) => {
 const { id, name, surname, email, is_active, last_login, orders } = user;
+const { activationToken } = useAppSelector(state => state.userReducer);
 const dispatch = useAppDispatch();
 
 const ordersInWork = orders.filter(order => order.status === EStatus.In_work).length;
 const ordersAgreed = orders.filter(order => order.status === EStatus.Aggre).length;
 
+    const activationUrl = `localhost:3000/activate/${activationToken}`;
+    const {copyToClipboard} = useCopyToClipboard();
+    copyToClipboard(activationUrl);
+// const activate = (id: number): string => {
+//     dispatch(userActions.activateUser({id}));
+//
+// }
     return (
 
             <Card className={css.userBlock}>

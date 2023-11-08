@@ -31,10 +31,12 @@ const Order: FC<IProps> =  ({order}) =>  {
     // const detailState = useAppSelector((state) => state.detailReducer);
     const {comment} = useAppSelector(state => state.commentReducer);
     // const commentManager = useAppSelector((state) => state.userReducer.users.find((user) => user.id === comment.managerId ))
+    const {me} = useAppSelector((state) => state.authReducer)
     const dispatch = useAppDispatch();
     const {reset, handleSubmit, register, setValue} = useForm<IComment>();
     const createComment:SubmitHandler<IComment> = async (comment:IComment) => {
-      const newComment =  await dispatch(commentActions.create({orderId: order.id, comment} ));
+        await dispatch(commentActions.create({orderId: order.id, comment} ));
+        await dispatch(orderActions.setTrigger());
        // order.comments.push(newComment);
        reset();
     };
@@ -93,16 +95,16 @@ const Order: FC<IProps> =  ({order}) =>  {
      utm:
             { order.utm &&
             <div>{order.utm} </div>}
-            {  order.comments &&
 
-                order.comments.map((item) => <Comment key={item.id} item={item}/>)}
+                         { comment && (
+                 <Comment/>)}
             <form onSubmit={handleSubmit(createComment)}>
                 <input type="text" placeholder={'comment'} {...register('comment')} />
-            <Button variant="contained" color="primary" >
+            <Button type={"submit"} variant="contained" color="primary" disabled={order.manager && order.managerId !== me.id}>
                 Submit
             </Button>
             </form>
-            <Button variant="contained" color="primary" onClick={() => handleEdit(order)}>
+            <Button variant="contained" color="primary" disabled={order.manager && order.managerId !== me.id} onClick={() => handleEdit(order)}>
                 Edit
             </Button>
             {/*<Button variant="contained" color="secondary" onClick={handleCloseDetail}>*/}

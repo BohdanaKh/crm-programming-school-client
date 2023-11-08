@@ -7,20 +7,18 @@ import { User } from './User';
 import css from './Users.module.css';
 import {UserPagination} from "./UserPagination";
 
-interface IProps {
 
-}
 
-const Users: FC<IProps> = () => {
+const Users: FC = () => {
     const { users, trigger } = useAppSelector(state => state.userReducer);
     const dispatch = useAppDispatch();
     const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
-        // @ts-ignore
-        const currentParams = Object.fromEntries([...searchParams]);
+        // // @ts-ignore
+        // const currentParams = Object.fromEntries([...searchParams]);
         dispatch(userActions.getAll())
-    }, [dispatch, searchParams, trigger]);
+    }, [dispatch, trigger]);
 
     return (
         <div className={css.userContainer}>

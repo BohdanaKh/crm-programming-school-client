@@ -118,13 +118,13 @@ const slice = createSlice({
         setSort: ( state, action) => {
             state.sort= action.payload;
         },
-    //     setFilter: (state, action) => {
-    //         state = { ...state, ...action.payload };
-    //     },
+        // setFilter: (state, action) => {
+        //     state = { ...state, ...action.payload };
+        // },
     //
-    //     setName: ( state, action) => {
-    //         state.name= action.payload;
-    //     },
+        setTrigger: ( state) => {
+            state.trigger= !state.trigger;
+        },
     //     setSurname: ( state, action) => {
     //         state.surname= action.payload;
     //     },

@@ -1,4 +1,4 @@
-import {IError, IPagination, IUser} from "../../interfaces";
+import {IError, IPagination, IPass, IUser} from "../../interfaces";
 import {userService} from "../../services";
 import {createAsyncThunk, createSlice, isFulfilled, isRejectedWithValue} from "@reduxjs/toolkit";
 import {AxiosError} from "axios";
@@ -11,6 +11,7 @@ interface IState {
     error: IError,
     trigger: boolean,
     userForUpdate: IUser,
+    activationToken: string,
 
 }
 
@@ -22,6 +23,7 @@ const initialState: IState = {
     error: null,
     userForUpdate: null,
     trigger: false,
+    activationToken: null,
 };
 
 
@@ -61,6 +63,18 @@ const update = createAsyncThunk<void, { user: IUser, id: number }>(
     }
 )
 
+const activateAccount = createAsyncThunk<void, {activationToken:string, data: IPass}>(
+    'userSlice/activateAccount',
+    async ({activationToken, data}, {rejectWithValue}) => {
+        try {
+            await userService.activate(activationToken, data)
+        } catch (e) {
+            const err = e as AxiosError
+            return rejectWithValue(err.response.data)
+        }
+    }
+)
+
 const deleteUser = createAsyncThunk<void, { id: number }>(
     'userSlice/deleteUser',
     async ({id}, {rejectWithValue}) => {
@@ -73,11 +87,12 @@ const deleteUser = createAsyncThunk<void, { id: number }>(
     }
 )
 
-const activateUser = createAsyncThunk<void, { id: number }>(
+const activateUser = createAsyncThunk<string, { id: number }>(
     'userSlice/activateUser',
     async ({id}, {rejectWithValue}) => {
         try {
-            await userService.activateById(id)
+            const {data} = await userService.activateById(id);
+            return data;
         } catch (e) {
             const err = e as AxiosError
             return rejectWithValue(err.response.data)
@@ -131,10 +146,13 @@ const slice = createSlice({
             .addCase(update.fulfilled, state => {
                 state.userForUpdate = null
             })
+            .addCase(activateUser.fulfilled, (state, action) => {
+                state.activationToken = action.payload;
+            })
             .addMatcher(isFulfilled(), state => {
                 state.error = null
             })
-            .addMatcher(isFulfilled(create, update, deleteUser, activateUser, banUser, unbanUser), state => {
+            .addMatcher(isFulfilled(create, update, deleteUser, activateUser, banUser, unbanUser, activateAccount), state => {
                 state.trigger = !state.trigger
             })
             .addMatcher(isRejectedWithValue(), (state, action) => {
@@ -153,6 +171,7 @@ const userActions = {
     activateUser,
     banUser,
     unbanUser,
+    activateAccount,
 }
 
 export {

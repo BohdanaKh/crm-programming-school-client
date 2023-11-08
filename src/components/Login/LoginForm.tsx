@@ -6,6 +6,8 @@ import {authActions} from "../../redux";
 import {IAuth} from "../../interfaces";
 import {useAppDispatch} from "../../hooks";
 import css from "./LoginForm.module.css"
+import {joiResolver} from "@hookform/resolvers/joi";
+import {authValidator} from "../../validators";
 
 
 
@@ -13,8 +15,8 @@ const LoginForm = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const {handleSubmit, formState: {isValid}, control} = useForm<IAuth>({
-        mode: "all",
-        // shouldUseNativeValidation: true
+        // mode: 'all',
+        // resolver: joiResolver(authValidator)
     });
 
     const login: SubmitHandler<IAuth> = async (data) => {
@@ -65,7 +67,7 @@ const LoginForm = () => {
                 )}
             />
 
-            <Button type='submit'  variant="contained" color="success" sx={{marginTop: '30px'}}>
+            <Button type='submit'  variant="contained" color="success" sx={{marginTop: '30px'}} disabled={!isValid}>
                LOGIN
             </Button>
         </form>

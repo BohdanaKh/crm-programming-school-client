@@ -17,10 +17,10 @@ class AuthService {
     async refresh(): Promise<void> {
         const refreshToken = this.getRefreshToken();
         if (!refreshToken) {
-            throw new Error("Refresh token isn't exists")
+            throw new Error("Refresh token doesn't exist")
         }
-        const {data}: AxiosResponse<ITokens> = await axiosService.post(urls.auth.refresh, {refresh: refreshToken});
-        this.setTokens(data)
+        const {data}: AxiosResponse<ITokens> = await axiosService.post(urls.auth.refresh, {refreshToken});
+        this.setTokens({accessToken: data.accessToken, refreshToken:data.refreshToken})
     }
 
     // me(): IRes<IUser> {

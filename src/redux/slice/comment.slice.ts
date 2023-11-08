@@ -17,11 +17,12 @@ const initialState: IState = {
 
 
 
-const create = createAsyncThunk<void, { orderId: number, comment: IComment }>(
+const create = createAsyncThunk<IComment, { orderId: number, comment: IComment }>(
     'commentSlice/create',
     async ({orderId, comment}, {rejectWithValue}) => {
         try {
-            await commentService.create(orderId, comment)
+           const {data} = await commentService.create(orderId, comment);
+           return data;
         } catch (e) {
             const err = e as AxiosError
             return rejectWithValue(err.response.data)
@@ -37,6 +38,9 @@ const slice = createSlice({
     },
     extraReducers: builder =>
         builder
+            .addCase(create.fulfilled, (state, action) => {
+                state.comment = action.payload;
+            })
             .addMatcher(isFulfilled(), state => {
                 state.errors = null
             })

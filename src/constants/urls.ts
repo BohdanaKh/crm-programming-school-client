@@ -9,14 +9,15 @@ const comments = '/comments'
 const urls = {
     auth: {
         login: auth,
-        refresh: `${auth}/refresh`,
+        refresh: '/refresh',
     },
     users: {
         users,
         byId: (id:number): string => `${users}/${id}`,
         activate: (id:number): string => `${users}/activate/${id}`,
         ban: (id:number): string => `${users}/ban/${id}`,
-        unban: (id:number): string => `${users}/unban/${id}`
+        unban: (id:number): string => `${users}/unban/${id}`,
+        activateAccount: (activationToken:string): string =>  `/activate/${activationToken}`,
     },
     orders: {
         orders,
@@ -29,7 +30,8 @@ const urls = {
         adminPanel
     },
     comments: {
-        comments
+        comments,
+        create: (orderId: number): string => `${comments}/${orderId}`,
     }
 
 

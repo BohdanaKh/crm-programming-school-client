@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 
 import {useAppDispatch, useAppSelector} from "../../hooks";
-import {groupActions, orderActions} from "../../redux";
+import {groupActions, orderActions, userActions} from "../../redux";
 import {OrdersFiltrationForm} from "./OrdersFiltrationForm";
 import { Order} from "./Order";
 import {IOrder} from "../../interfaces";
@@ -137,6 +137,10 @@ const Orders: FC = () => {
     //     setSearchParams(params => { params.set("page", '1');
     //         return params})
     // }, [])
+
+    useEffect(() => {
+        dispatch(groupActions.getAll())
+    }, [dispatch])
 
     useEffect(() => {
 

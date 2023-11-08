@@ -4,7 +4,7 @@ import {axiosService} from './axios.service';
 import {urls} from '../constants';
 
 const commentService = {
-    create: (orderId: number, comment: IComment): IRes<IComment> => axiosService.post(urls.comments.comments, {orderId, comment}),
+    create: (orderId: number, comment: IComment): IRes<IComment> => axiosService.post(urls.comments.create(orderId),  comment),
 }
 
 export {

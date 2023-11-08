@@ -1,7 +1,7 @@
 import {FC, useEffect, useState} from 'react';
 import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
-import {EStatus, IOrder} from "../../interfaces";
+import {ECourse, ECourseFormat, ECourseType, EStatus, IOrder} from "../../interfaces";
 import {groupActions, orderActions} from "../../redux";
 import {useAppDispatch, useAppSelector} from "../../hooks";
 import {IFilter} from "../../interfaces";
@@ -18,11 +18,8 @@ const OrdersFiltrationForm: FC = () => {
     const {reset, register, handleSubmit, setValue} = useForm<IOrder>();
     const [filters, setFilters] = useState([]);
 
-    useEffect(() => {
-        dispatch(groupActions.getAll())
-    }, [dispatch])
-    console.log(groups);
 
+    console.log(groups);
     // const handleInputChange = (event: any) => {
     //     const { name, value } = event.target;
     //     setQueryParams((prevParams) => ({
@@ -78,39 +75,46 @@ const filterMy = () => {
                 return params})}/>
             <input  className={css.formInut} type={"text"} placeholder={'surname'} {...register('surname')} onChange={(event) => setSearchParams(params => { params.set("surname", event.target.value);
                 return params})}/>
-            <input  className={css.formInut} type="text" placeholder={'email'} {...register('email')}/>
+            <input  className={css.formInut} type="text" placeholder={'email'} {...register('email')}onChange={(event) => setSearchParams(params => { params.set('email', event.target.value);
+                return params})}/>
 
-            <input  className={css.formInut} type="text"placeholder={'phone'} {...register('phone')}/>
+            <input  className={css.formInut} type="text"placeholder={'phone'} {...register('phone')}onChange={(event) => setSearchParams(params => { params.set('phone', event.target.value);
+                return params})}/>
 
-            <input  className={css.formInut} type="text" placeholder={'phone'} {...register('age')}/>
+            <input  className={css.formInut} type="text" placeholder={'age'} {...register('age')}onChange={(event) => setSearchParams(params => { params.set('age', event.target.value);
+                return params})}/>
 
-        <select className={css.formInut} {...register('course')}>
-            <option value="" selected disabled hidden>all courses</option>
-            <option value='FS'>FS</option>
-            <option value='QACX'>QACX</option>
-            <option value='JCX'>JCX</option>
-            <option value='JSCX'>JSCX</option>
-            <option value='FE'>FE</option>
-            <option value='PCX'>PCX</option>
+        <select className={css.formInut} {...register('course')}onChange={(event) => setSearchParams(params => { params.set('course', event.target.value);
+                return params})}>
+            <option defaultValue="" >all courses</option>
+            <option value={ECourse.FS}>{ECourse.FS}</option>
+            <option value={ECourse.QACX}>{ECourse.QACX}</option>
+            <option value={ECourse.JCX}>{ECourse.JCX}</option>
+            <option value={ECourse.JSCX}>{ECourse.JSCX}</option>
+            <option value={ECourse.FE}>{ECourse.FE}</option>
+            <option value={ECourse.PCX}>{ECourse.PCX}</option>
         </select>
 
-        <select  className={css.formInut} {...register('course_format')}>
-            <option value="" selected disabled hidden>all formats</option>
-            <option value='static'>static</option>
-            <option value='online'>online</option>
+        <select  className={css.formInut} {...register('course_format')}onChange={(event) => setSearchParams(params => { params.set('course_format', event.target.value);
+                return params})}>
+            <option defaultValue="">all formats</option>
+            <option value={ECourseFormat.static}>{ECourseFormat.static}</option>
+            <option value={ECourseFormat.online}>{ECourseFormat.online}</option>
         </select>
 
-        <select  className={css.formInut} {...register('course_type')}>
-            <option value="" selected disabled hidden>all types</option>
-            <option value='pro'>pro</option>
-            <option value='minimal'>minimal</option>
-            <option value='premium'>premium</option>
-            <option value='incubator'>incubato</option>
-            <option value='vip'>vip</option>
+        <select  className={css.formInut} {...register('course_type')}onChange={(event) => setSearchParams(params => { params.set('course_type', event.target.value);
+                return params})}>
+            <option defaultValue="">all types</option>
+            <option value={ECourseType.pro}>{ECourseType.pro}</option>
+            <option value={ECourseType.minimal}>{ECourseType.minimal}</option>
+            <option value={ECourseType.premium}>{ECourseType.premium}</option>
+            <option value={ECourseType.incubator}>{ECourseType.incubator}</option>
+            <option value={ECourseType.vip}>{ECourseType.vip}</option>
         </select>
 
-            <select  className={css.formInut} {...register('status')}>
-                <option value="" selected disabled hidden>all statuses</option>
+            <select  className={css.formInut} {...register('status')} onChange={(event) => setSearchParams(params => { params.set('status', event.target.value);
+                return params})}>
+                <option defaultValue="all statuses">all statuses</option>
                 <option value={EStatus.In_work}>{EStatus.In_work}</option>
                 <option value={EStatus.New}>{EStatus.New}</option>
                 <option value={EStatus.Aggre}>{EStatus.Aggre}</option>
@@ -118,13 +122,15 @@ const filterMy = () => {
                 <option value={EStatus.Dubbing}>{EStatus.Dubbing}</option>
             </select>
 
-            <select  className={css.formInut} {...register(('group'))}>
-                <option value="" selected disabled hidden>all groups</option>
-                {/*{groups.map((group) => (*/}
-                {/*    <option key={group.id} value={group.id}>*/}
-                {/*        {group.title}*/}
-                {/*    </option>*/}
-                {/*))}*/}
+            <select  className={css.formInut} {...register('group')} onChange={(event) => setSearchParams(params => { params.set('group', event.target.value);
+                return params})}>
+                <option defaultValue="">all groups</option>
+                { groups && (
+                    groups.map((group) => (
+                    <option key={group.id} value={group.id}>
+                        {group.title}
+                    </option>
+                    )))}
             </select>
                 <input className={css.formInut}  type="text" placeholder={'Start date'}/>
                 <input  className={css.formInut} type="text" placeholder={'End date'}/>
@@ -132,7 +138,7 @@ const filterMy = () => {
             </div>
             <div className={css.formActions}>
             <input type="submit" value={'setSearchParams'}/>
-            <input type={"checkbox"} value={"My"} onClick={filterMy}/>
+            <input type={"checkbox"} name={'My'} value={"My"} onClick={filterMy}/>
             <button type={"button"} onClick={clearFilterForm}>CLEAR</button>
             <DownloadExcel/>
             </div>
