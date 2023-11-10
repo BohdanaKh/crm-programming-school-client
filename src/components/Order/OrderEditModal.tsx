@@ -7,12 +7,13 @@ import { EStatus, ECourse, ECourseFormat, ECourseType} from "../../interfaces";
 import {useAppDispatch, useAppSelector} from "../../hooks";
 import {groupActions, orderActions, orderModalActions} from "../../redux";
 import css from './OrderModal.module.css';
+import {number} from "joi";
 
 
 
 const OrderEditModal: FC = () => {
 
-    const { handleSubmit, register, setValue} = useForm<IOrder>();
+    const { handleSubmit, register, setValue} = useForm();
     const dispatch = useAppDispatch();
     const {orderForUpdate} = useAppSelector(state => state.orderReducer);
     console.log(orderForUpdate);
@@ -39,13 +40,13 @@ const OrderEditModal: FC = () => {
     }, [orderForUpdate, setValue])
 
     const update: SubmitHandler<IOrder> = async (order) => {
-        dispatch(orderActions.update({id: orderForUpdate.id, order}))
-        dispatch(groupActions.setTrigger())
-        dispatch(orderModalActions.closeOrderEditModal())
+       await dispatch(orderActions.update({id: orderForUpdate.id, order}));
+        dispatch(orderModalActions.closeOrderEditModal());
+        console.log(order);
     };
 
     const createGroup:SubmitHandler<IGroup>  = async (group) => {
-        dispatch(groupActions.create(group))
+        await dispatch(groupActions.create({group}))
     }
 
     return (
@@ -57,28 +58,37 @@ const OrderEditModal: FC = () => {
             aria-describedby="modal-modal-description"
         >
             <div className={css.modalContent}>
+                {/*<form onSubmit={handleSubmit(createGroup)}>*/}
+                {/*    <input type="text" placeholder={'enter new group name'} {...register("title")}/>*/}
+                {/*    <Button type={"submit"} variant="contained"*/}
+                {/*            size="small"*/}
+                {/*            sx={{width: '49%', maxHeight: '20px', backgroundColor: "green"}}> ADD GROUP</Button>*/}
+                {/*</form>*/}
         <form onSubmit={handleSubmit(update)}>
             <div className={css.formContainer}>
                 <div className={css.formColumn}>
 
                     <label>Group</label>
-                        {isInputVisible ? (
-                    <form onSubmit={handleSubmit(createGroup)}>
-                                <input  className={css.formInput} type="text"  {...register('group')}/>
-                            <Button variant="contained" size="small" sx={{ width: '49%', maxHeight: '20px',  backgroundColor: "green"}}>
-                                'CREATE GROUP'
-                            </Button>
-                    </form>
-                        ) : (
+            {/*            {isInputVisible ? (*/}
+            {/*                <><input className={css.formInput} type="text" placeholder={'enter new group name'}{...register('title')} />*/}
+            {/*                /!*    <Button*!/*/}
+            {/*                /!*    variant="contained"*!/*/}
+            {/*                /!*    size="small"*!/*/}
+            {/*                /!*    sx={{width: '49%', maxHeight: '20px', backgroundColor: "green"}}*!/*/}
+            {/*                /!*    onClick={() => handleSubmit(createGroup)}>*!/*/}
+            {/*                /!*    CREATE GROUP*!/*/}
+            {/*                /!*</Button>*!/*/}
+            {/*                </>*/}
+            {/*            ) : (*/}
             <select className={css.formInput} {...register("group")}>
-                <option value=""></option>
+                {/*<option value=""></option>*/}
                 {groups.map((group) => (
-                    <option key={group.id} value={group.id}>
+                    <option key={group.id} value={group.title}>
                         {group.title}
                     </option>
                 ))}
             </select>
-                        )}
+                        {/*)}*/}
 
                     <Button variant="contained" size="small" sx={{ width: '49%', maxHeight: '20px',  backgroundColor: "green"}} onClick={() => setInputVisible(!isInputVisible)}>
                         {isInputVisible ? 'SELECT' : 'ADD GROUP'}
@@ -94,64 +104,74 @@ const OrderEditModal: FC = () => {
                     <label>Phone</label>
             <input  className={css.formInput} type="text" {...register('phone')}/>
                     <label>Age</label>
-            <input  className={css.formInput} type="text"  {...register('age')}/>
+            <input  className={css.formInput} {...register('age', {
+                valueAsNumber: true
+            })}/>
                 </div>
                 <div className={css.formColumn}>
                     <label>Status</label>
             <select className={css.formInput}  name={'status'}>
-                <option value=''></option>
                 <option value={EStatus.In_work}>{EStatus.In_work}</option>
                 <option value={EStatus.New}>{EStatus.New}</option>
                 <option value={EStatus.Aggre}>{EStatus.Aggre}</option>
                 <option value={EStatus.Disaggre}>{EStatus.Disaggre}</option>
                 <option value={EStatus.Dubbing}>{EStatus.Dubbing}</option>
+                <option value={EStatus.empty}>{EStatus.empty}</option>
             </select>
                     <label>Sum</label>
-            <input  className={css.formInput} type="text"  {...register('sum')}/>
+            <input  className={css.formInput} type="text"  {...register('sum',{
+                valueAsNumber: true
+            } )}/>
                     <label>Already paid</label>
-            <input  className={css.formInput} type="text"  {...register('alreadyPaid')}/>
+            <input  className={css.formInput} type="text"  {...register('alreadyPaid',{
+                valueAsNumber: true
+            } )}/>
                     <label>Course</label>
             <select  className={css.formInput} name={'course'}>
-                <option value='FS'>FS</option>
-                <option value='QACX'>QACX</option>
-                <option value='JCX'>JCX</option>
-                <option value='JSCX'>JSCX</option>
-                <option value='FE'>FE</option>
-                <option value='PCX'>PCX</option>
+                {/*<option value=''></option>*/}
+                <option value={ECourse.FS}>{ECourse.FS}</option>
+                <option value={ECourse.QACX}>{ECourse.QACX}</option>
+                <option value={ECourse.JCX}>{ECourse.JCX}</option>
+                <option value={ECourse.JSCX}>{ECourse.JSCX}</option>
+                <option value={ECourse.FE}>{ECourse.FE}</option>
+                <option value={ECourse.PCX}>{ECourse.PCX}</option>
             </select>
                     <label>Course format</label>
             <select  className={css.formInput} name={'course_format'}>
-                <option value='static'>static</option>
-                <option value='online'>online</option>
+                {/*<option value=''></option>*/}
+                <option value={ECourseFormat.static}>{ECourseFormat.static}</option>
+                <option value={ECourseFormat.online}>{ECourseFormat.online}</option>
 
             </select>
                     <label>Course type</label>
             <select  className={css.formInput} name={'course_type'}>
-                <option value='pro'>pro</option>
-                <option value='minimal'>minimal</option>
-                <option value='premium'>premium</option>
-                <option value='incubator'>incubato</option>
-                <option value='vip'>vip</option>
+                {/*<option value=''></option>*/}
+                <option value={ECourseType.pro}>{ECourseType.pro}</option>
+                <option value={ECourseType.minimal}>{ECourseType.minimal}</option>
+                <option value={ECourseType.premium}>{ECourseType.premium}</option>
+                <option value={ECourseType.incubator}>{ECourseType.incubator}</option>
+                <option value={ECourseType.vip}>{ECourseType.vip}</option>
             </select>
 
             <Button
+                type={"submit"}
                 className={css.formButton}
                 variant="contained"
                 color="primary"
             >
                 SUBMIT
             </Button>
-            <Button
-                className={css.formButton}
-                variant="contained"
-                color="secondary"
-                onClick={() => dispatch(orderModalActions.closeOrderEditModal())}
-            >
-                CLOSE
-            </Button>
                 </div>
             </div>
         </form>
+                <Button
+                    className={css.formButton}
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => dispatch(orderModalActions.closeOrderEditModal())}
+                >
+                    CLOSE
+                </Button>
             </div>
         </Modal>
     );

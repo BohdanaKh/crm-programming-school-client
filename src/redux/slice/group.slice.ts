@@ -31,11 +31,11 @@ const getAll = createAsyncThunk<IGroup[], void> (
     }
 )
 
-const create = createAsyncThunk<void,  IGroup >(
-    'commentSlice/create',
-    async (group, {rejectWithValue}) => {
+const create = createAsyncThunk<void, { group: IGroup } >(
+    'groupSlice/create',
+    async ({group}, {rejectWithValue}) => {
         try {
-            await groupService.create(group)
+            await groupService.create(group);
         } catch (e) {
             const err = e as AxiosError
             return rejectWithValue(err.response.data)

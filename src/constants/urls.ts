@@ -10,6 +10,7 @@ const urls = {
     auth: {
         login: auth,
         refresh: '/refresh',
+        logout: '/logout',
     },
     users: {
         users,

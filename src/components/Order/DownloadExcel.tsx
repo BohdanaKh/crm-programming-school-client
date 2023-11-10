@@ -37,9 +37,13 @@ const { orders } = useAppSelector(state => state.orderReducer);
         XLSX.writeFile(workbook, "Orders.xlsx", { compression: true });
     };
     return (
-        <div>
-            <button onClick={handleDownload}>DOWNLOAD EXCEL</button>
-        </div>
+        <button onClick={handleDownload} style={{backgroundColor: "green"}}>
+            <i className="fas fa-file-excel" style={{color: "white"}}></i>
+        </button>
+        // <div>
+        //     <i class="fas fa-file-excel" style={{color: "#2fc624",}} onClick={handleDownload} />
+        //     <button onClick={handleDownload}>DOWNLOAD EXCEL</button>
+        // </div>
     );
 };
 

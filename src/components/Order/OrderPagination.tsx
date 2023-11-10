@@ -9,29 +9,40 @@ import css from '../Pagination/Pagination.module.css';
 import {lightGreen} from "@mui/material/colors";
 
 
-const OrderPagination: FC = (props) => {
-    // console.log(props);
-    // const location = useLocation();
-    // console.log(location);
+const OrderPagination: FC = () => {
+
     const [searchParams, setSearchParams] = useSearchParams();
 
-    // const [page, setPage ] = useState<number>(+searchParams.get('page') || 1)
-    const { page, pages} = useAppSelector(state => state.orderReducer);
-    // const [_, setQuery] = useSearchParams();
-    const dispatch = useAppDispatch();
-    // const handleChange = ( num: number) => {
-    //     const selectedPage = num.toString();
-    //     // @ts-ignore
-    //     const currentParams = Object.fromEntries([...searchParams]);
-    //     setSearchParams({ ...currentParams, page: selectedPage} )
-    //
-    //     setPage(num);
-    //
-    // };
 
-    useEffect(() => {
-        dispatch(orderActions.setPage(+searchParams.get('page') || 1))
-    }, []);
+    const { page, pages} = useAppSelector(state => state.orderReducer);
+
+    const dispatch = useAppDispatch();
+    const handleChange = ( num: number) => {
+        // setSearchParams(params => { params.set("page", num.toString());
+        //     console.log(params);
+        //     return params})
+         // @ts-ignore
+        const currentParams = Object.fromEntries([...searchParams]);
+        // console.log(currentParams);
+        // setSearchParams({ page: num.toString(), ...currentParams} )
+        currentParams.page = num.toString();
+        currentParams.sort = searchParams.get('sort');
+        console.log(currentParams);
+        setSearchParams(currentParams);
+    };
+
+    const getTo = (num: number) => {
+        dispatch(orderActions.setPage(num));
+        searchParams.set('page', num.toString());
+        console.log(searchParams);
+        return { search: searchParams.toString() };
+    };
+
+
+    // useEffect(() => {
+    //     dispatch(orderActions.setPage(+searchParams.get('page') || 1))
+    // }, []);
+
     return  (
 
         <div>
@@ -43,8 +54,9 @@ const OrderPagination: FC = (props) => {
                         className={css.MuiPagination}
                         count={pages}
                         page={page}
-                        // onChange={(_, value) => setQuery(prev1 => ({...prev1, page: value}))}
-                        onChange={(_, num) => dispatch(orderActions.setPage(num))}
+                        // onChange={(_, num:number) => handleChange(num)}
+                        onChange={(_, num:number) => getTo(num)}
+                        // onChange={(_, num) => dispatch(orderActions.setPage(num))}
 
                         siblingCount={2}
                         boundaryCount={1}
@@ -62,7 +74,6 @@ const OrderPagination: FC = (props) => {
                         }
                 </Box>
             </Container>
-            {/*<Pagination count={pages} page={page} onChange={handleChange} variant="outlined" siblingCount={7} boundaryCount={1} />*/}
         </div>
     )
 };

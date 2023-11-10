@@ -13,6 +13,7 @@ interface IState {
     trigger: boolean,
     orderForUpdate: IOrder,
     sort: string,
+    params: any,
     // name: string,
     // surname: string,
     // email: string,
@@ -38,6 +39,7 @@ const initialState: IState = {
     orderForUpdate: null,
     trigger: false,
     sort: null,
+    params: null,
     // name: null,
     // surname: null,
     // email: null,
@@ -118,16 +120,16 @@ const slice = createSlice({
         setSort: ( state, action) => {
             state.sort= action.payload;
         },
-        // setFilter: (state, action) => {
-        //     state = { ...state, ...action.payload };
-        // },
+        setFilters: (state, action) => {
+            state = { ...state, ...action.payload };
+        },
     //
         setTrigger: ( state) => {
             state.trigger= !state.trigger;
         },
-    //     setSurname: ( state, action) => {
-    //         state.surname= action.payload;
-    //     },
+        setParams: ( state, action) => {
+            state.params= action.payload;
+        },
     //     setCourse: ( state, action) => {
     //         state.course= action.payload;
     //     }

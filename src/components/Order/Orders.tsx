@@ -12,12 +12,12 @@ import {
 } from "@mui/material";
 
 import {useAppDispatch, useAppSelector} from "../../hooks";
-import {groupActions, orderActions, userActions} from "../../redux";
+import {groupActions, orderActions } from "../../redux";
 import {OrdersFiltrationForm} from "./OrdersFiltrationForm";
 import { Order} from "./Order";
 import {IOrder} from "../../interfaces";
 import {OrderEditModal} from "./OrderEditModal";
-import {DownloadExcel} from "./DownloadExcel";
+
 
 
 export const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -30,13 +30,9 @@ export const StyledTableCell = styled(TableCell)(({ theme }) => ({
     },
 }));
 
+
 interface EnhancedTableProps {
-    // numSelected: number;
     onRequestSort: (event: React.MouseEvent<unknown>, property: keyof IOrder) => void;
-    // onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    // order: Order;
-    // orderBy: string;
-    // rowCount: number;
 }
 interface HeadCell {
     id: keyof IOrder;
@@ -91,10 +87,9 @@ const headCells: readonly HeadCell[] = [
 ];
 
 function EnhancedTableHead(props: EnhancedTableProps) {
-    const { onRequestSort } =
-        props;
+    const { onRequestSort } = props;
     const createSortHandler =
-        (property: keyof IOrder) => (event: React.MouseEvent<unknown>) => {
+        (property: keyof IOrder) => (event: React.MouseEvent<HTMLTableCellElement>) => {
             onRequestSort(event, property);
         };
 
@@ -116,82 +111,89 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 }
 
 const Orders: FC = () => {
-    const {orders, page,  trigger} = useAppSelector(state => state.orderReducer);
+    const {orders, page,  trigger, params} = useAppSelector(state => state.orderReducer);
     const { groups } = useAppSelector(state => state.groupReducer)
     const dispatch = useAppDispatch();
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams({page: '1'});
+
     // const location = useLocation();
     // const navigate = useNavigate();
     // const queryParams = new URLSearchParams(location.search);
-    const [sortModel, setSortModel] = useState('');
+    // const [sortModel, setSortModel] = useState('');
     const {isOrderEditModalOpen} = useAppSelector(state => state.orderModalReducer);
 
-
-    // const [expandedRowId, setExpandedRowId] = useState<number>(null);
 
     useEffect(() => {
         setSearchParams(prev => ({...prev, page: '1'}))
     }, [])
 
-    // useEffect(() => {
-    //     setSearchParams(params => { params.set("page", '1');
-    //         return params})
-    // }, [])
 
     useEffect(() => {
         dispatch(groupActions.getAll())
     }, [dispatch])
 
+    // useEffect(() => {
+    //     // @ts-ignore
+    //     const currentParams = Object.fromEntries([...searchParams]);
+    //     dispatch(orderActions.getAll(currentParams))
+    //
+    // }, [dispatch, searchParams]);
+
     useEffect(() => {
+        dispatch(orderActions.getAll({page, ...params}))
+    }, [dispatch, page, params])
 
-        // @ts-ignore
-        const currentParams = Object.fromEntries([...searchParams]);
-        dispatch(orderActions.getAll(currentParams))
-        // console.log(+searchParams.get('page'));
-        // dispatch(orderActions.getAll(+searchParams.get('page')))
 
-    }, [dispatch, searchParams]);
 
-        const handleHeaderCellClick = ( event: React.MouseEvent<unknown>,
-                                        property: keyof IOrder,) => {
-           setSortModel(property);
-            const newSort =
-                // sort === `-${column.field}` ? column.field : `-${column.field}`;
-                sortModel === property ? `-${property}` : property;
-           setSortModel(newSort);
 
-            // const currentParams = Object.fromEntries([...searchParams]);
-            // setSearchParams({...currentParams, sort: newSort} )
-
-                setSearchParams(params => { params.set("sort", newSort);
-                    return params})
-
-        }
-
-    // const handleSortModelChange = (newSortModel:any) => {
-    //     setSortModel(newSortModel);
-    //     const sortParam = sortModel.map((sort) => {
-    //         const prefix = sort.sort === 'asc' ? '' : '-';
-    //         return `${prefix}${sort.field}`;
-    //     }).join(',');
-    //     console.log(sortParam);
-        // setQuery(prev1 => ({...prev1, sort: sortParam}))
+        // const handleHeaderCellClick = ( event: React.MouseEvent<HTMLTableCellElement>,
+        //                                 property: keyof IOrder,) => {
+        //    setSortModel(property);
+        //     const newSort =
+        //         // sort === `-${column.field}` ? column.field : `-${column.field}`;
+        //         sortModel === property ? `-${property}` : property;
+        //    setSortModel(newSort);
+        //
+        //     // // @ts-ignore
+        //     // const currentParams = Object.fromEntries([...searchParams]);
+        //     // setSearchParams({...currentParams, sort: newSort} )
+        //
+        //         setSearchParams(params => { params.set("sort", newSort);
+        //             return params})
+        //
+        //
         // }
 
-    // const handleDetailClick = (event:any) => {
-    //     const rowId = event.currentTarget.getAttribute('data-row-id');
-    //     if (expandedRowId === rowId) {
-    //         setExpandedRowId(null); // Close the detail view
-    //     } else {
-    //         setExpandedRowId(rowId); // Open the detail view for the clicked row
-    //     }
-    //     setOpen(!open)
-    // };
+
+
+    const handleHeaderCellClick =  ( event: React.MouseEvent<HTMLTableCellElement>,
+                                    property: keyof IOrder,) => {
+     dispatch(orderActions.setParams({sort: property}));
+       if ( params ) {
+            const newSort =
+                params.sort === property ? `-${property}` : property;
+            dispatch(orderActions.setParams({sort: newSort})
+    )
+        ;
+        // // @ts-ignore
+        // const currentParams = Object.fromEntries([...searchParams]);
+        // setSearchParams({...currentParams, sort: newSort} )
+
+        setSearchParams(params => {
+            params.set("sort", newSort);
+            return params
+        });
+    }
+
+
+    }
+
+
 
     return (
             <TableContainer component={Paper}>
                 <OrdersFiltrationForm/>
-                <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+                <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table" >
     {/*// @ts-ignore*/}
                     <EnhancedTableHead  onRequestSort={handleHeaderCellClick}>
                         {/*<TableRow>*/}

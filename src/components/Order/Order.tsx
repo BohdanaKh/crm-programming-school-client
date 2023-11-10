@@ -2,8 +2,8 @@ import React from 'react';
 import {FC, useState} from 'react';
 import {SubmitHandler, useForm} from "react-hook-form";
 import {format} from "date-fns";
-import {Box, Button, Collapse, createStyles, TableCell, TableRow, Theme, withStyles} from "@mui/material";
-import styled from "@emotion/styled";
+import {Box, Button, Collapse, createStyles, styled, TableCell, TableRow, Theme, withStyles} from "@mui/material";
+
 
 
 
@@ -18,6 +18,16 @@ import { OrderEditModal} from "./OrderEditModal";
 interface IProps {
 order: IOrder,
 }
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+        backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    '&:last-child td, &:last-child th': {
+        border: 0,
+    },
+}));
 
 const Order: FC<IProps> =  ({order}) =>  {
     const [ open, setOpen ] = useState<boolean>(false);
@@ -36,7 +46,7 @@ const Order: FC<IProps> =  ({order}) =>  {
     const {reset, handleSubmit, register, setValue} = useForm<IComment>();
     const createComment:SubmitHandler<IComment> = async (comment:IComment) => {
         await dispatch(commentActions.create({orderId: order.id, comment} ));
-        await dispatch(orderActions.setTrigger());
+        dispatch(orderActions.setTrigger());
        // order.comments.push(newComment);
        reset();
     };

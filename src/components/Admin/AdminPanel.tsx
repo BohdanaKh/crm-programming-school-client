@@ -32,7 +32,9 @@ const AdminPanel: FC<IProps> = () => {
     return (
         <div>
             <div>total: {totalOrdersCount}</div>
-            {statusCounts.map( (item) => (<div key={item.status}> <p> {item.status}: {item._count}</p></div>))}
+            { statusCounts && (
+            statusCounts.map( (item) => (<div key={item.status}> <p> {item.status}: {item._count}</p></div>))
+                )}
             <button type={"button"} onClick={() => dispatch(userModalActions.openUserCreateModal())}>CREATE</button>
             <button onClick={() => dispatch(adminActions.setShowUsers())}>Managers</button>
             {showUsers && <Users />}

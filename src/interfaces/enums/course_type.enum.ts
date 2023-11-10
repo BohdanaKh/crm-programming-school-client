@@ -1,7 +1,7 @@
 export enum ECourseType {
-    pro,
-minimal,
-premium,
-incubator,
-vip,
+    pro="pro",
+minimal="minimal",
+premium="premium",
+incubator="incubator",
+vip="vip",
 }

@@ -1,25 +1,32 @@
 import {FC, useEffect, useState} from 'react';
 import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRotateRight, faCheck } from '@fortawesome/free-solid-svg-icons';
+
+
 import {ECourse, ECourseFormat, ECourseType, EStatus, IOrder} from "../../interfaces";
-import {groupActions, orderActions} from "../../redux";
+import { orderActions} from "../../redux";
 import {useAppDispatch, useAppSelector} from "../../hooks";
 import {IFilter} from "../../interfaces";
 import css from "./Filters.module.css";
 import {DownloadExcel} from "./DownloadExcel";
+import {Autocomplete, TextField} from "@mui/material";
+
 
 
 
 const OrdersFiltrationForm: FC = () => {
+    const { params} = useAppSelector(state => state.orderReducer)
     const {me} = useAppSelector(state => state.authReducer)
     const {groups} = useAppSelector(state => state.groupReducer)
     const dispatch = useAppDispatch();
     const [searchParams, setSearchParams] = useSearchParams();
-    const {reset, register, handleSubmit, setValue} = useForm<IOrder>();
-    const [filters, setFilters] = useState([]);
+    const {reset, register, handleSubmit, control} = useForm<IOrder>();
+    // const [filters, setFilters] = useState([]);
 
 
-    console.log(groups);
+
     // const handleInputChange = (event: any) => {
     //     const { name, value } = event.target;
     //     setQueryParams((prevParams) => ({
@@ -39,7 +46,12 @@ const OrdersFiltrationForm: FC = () => {
             }
         }
         if (data) {
-        dispatch(orderActions.getAll(data))
+            const delay = setTimeout(() => {
+                dispatch(orderActions.getAll(data))
+            }, 500);
+            return () => {
+                clearTimeout(delay);
+            };
     }
     };
 
@@ -49,20 +61,16 @@ const OrdersFiltrationForm: FC = () => {
 
 
     const clearFilterForm = () => {
-        dispatch(orderActions.getAll({page: 1}))
+        dispatch(orderActions.setParams(null));
+        // dispatch(orderActions.getAll({page: 1}))
         reset();
         setSearchParams(prev => ({...prev, 'page': 1}))
     }
 
-    // useEffect(() => {
-    //     // @ts-ignore
-    //     const currentParams = Object.fromEntries([...searchParams]);
-    //     dispatch(orderActions.getAll(currentParams))
-    // }, [dispatch, searchParams]);
-
 const filterMy = () => {
         const id = me.id;
-        dispatch(orderActions.getAll({page:1, managerId: id}))
+    dispatch(orderActions.setParams({managerId: id}));
+        // dispatch(orderActions.getAll({page:1, managerId: id}))
     setSearchParams(params => { params.set("managerId", id.toString());
         return params})
 
@@ -86,7 +94,7 @@ const filterMy = () => {
 
         <select className={css.formInut} {...register('course')}onChange={(event) => setSearchParams(params => { params.set('course', event.target.value);
                 return params})}>
-            <option defaultValue="" >all courses</option>
+            <option value={""}>all courses</option>
             <option value={ECourse.FS}>{ECourse.FS}</option>
             <option value={ECourse.QACX}>{ECourse.QACX}</option>
             <option value={ECourse.JCX}>{ECourse.JCX}</option>
@@ -95,16 +103,29 @@ const filterMy = () => {
             <option value={ECourse.PCX}>{ECourse.PCX}</option>
         </select>
 
-        <select  className={css.formInut} {...register('course_format')}onChange={(event) => setSearchParams(params => { params.set('course_format', event.target.value);
+                {/*<Controller*/}
+                {/*    name="course_format"*/}
+                {/*    control={control}*/}
+                {/*    // defaultValue={}*/}
+                {/*    render={({ field }) => (*/}
+                {/*        <Autocomplete*/}
+                {/*            {...field}*/}
+                {/*            {...register('course_format')}*/}
+                {/*            options={[ECourseFormat.static, ECourseFormat.online]}*/}
+                {/*            renderInput={(params) => <TextField {...params}  label="all formats"/>}*/}
+                {/*        />*/}
+                {/*    )}*/}
+                {/*/>*/}
+        <select  className={css.formInut} {...register('course_format')} onChange={(event) => setSearchParams(params => { params.set('course_format', event.target.value);
                 return params})}>
-            <option defaultValue="">all formats</option>
+            <option value={""} >all formats</option>
             <option value={ECourseFormat.static}>{ECourseFormat.static}</option>
             <option value={ECourseFormat.online}>{ECourseFormat.online}</option>
         </select>
 
         <select  className={css.formInut} {...register('course_type')}onChange={(event) => setSearchParams(params => { params.set('course_type', event.target.value);
                 return params})}>
-            <option defaultValue="">all types</option>
+            <option value={""} >all types</option>
             <option value={ECourseType.pro}>{ECourseType.pro}</option>
             <option value={ECourseType.minimal}>{ECourseType.minimal}</option>
             <option value={ECourseType.premium}>{ECourseType.premium}</option>
@@ -114,7 +135,7 @@ const filterMy = () => {
 
             <select  className={css.formInut} {...register('status')} onChange={(event) => setSearchParams(params => { params.set('status', event.target.value);
                 return params})}>
-                <option defaultValue="all statuses">all statuses</option>
+                <option value={""} >all statuses</option>
                 <option value={EStatus.In_work}>{EStatus.In_work}</option>
                 <option value={EStatus.New}>{EStatus.New}</option>
                 <option value={EStatus.Aggre}>{EStatus.Aggre}</option>
@@ -124,7 +145,7 @@ const filterMy = () => {
 
             <select  className={css.formInut} {...register('group')} onChange={(event) => setSearchParams(params => { params.set('group', event.target.value);
                 return params})}>
-                <option defaultValue="">all groups</option>
+                <option value={""} >all groups</option>
                 { groups && (
                     groups.map((group) => (
                     <option key={group.id} value={group.id}>
@@ -137,12 +158,19 @@ const filterMy = () => {
 
             </div>
             <div className={css.formActions}>
-            <input type="submit" value={'setSearchParams'}/>
-            <input type={"checkbox"} name={'My'} value={"My"} onClick={filterMy}/>
-            <button type={"button"} onClick={clearFilterForm}>CLEAR</button>
-            <DownloadExcel/>
+            <button type="submit" style={{backgroundColor: "green"}}>
+                <FontAwesomeIcon icon={faCheck} style={{color: "#f7f7f8",}} />
+            </button>
             </div>
         </form>
+            <div className={css.formActions}>
+            <label>My</label>
+            <input type={"checkbox"} name={'My'} value={"My"} onClick={filterMy}style={{marginLeft: "1px"}}/>
+            <button onClick={clearFilterForm} style={{backgroundColor: "green"}}>
+                <FontAwesomeIcon icon={faRotateRight} style={{color: "#fafafa",}} />
+            </button>
+            <DownloadExcel/>
+            </div>
         </div>
 );
 };

@@ -14,6 +14,11 @@ class AuthService {
         return data.user
     }
 
+    async logout(): Promise<void> {
+       await axiosService.post(urls.auth.logout);
+        this.deleteTokens();
+    }
+
     async refresh(): Promise<void> {
         const refreshToken = this.getRefreshToken();
         if (!refreshToken) {
