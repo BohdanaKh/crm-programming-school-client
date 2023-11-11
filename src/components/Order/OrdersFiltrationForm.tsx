@@ -46,8 +46,9 @@ const OrdersFiltrationForm: FC = () => {
             }
         }
         if (data) {
+            console.log(data);
             const delay = setTimeout(() => {
-                dispatch(orderActions.getAll(data))
+                dispatch(orderActions.setParams(data))
             }, 500);
             return () => {
                 clearTimeout(delay);
@@ -62,7 +63,7 @@ const OrdersFiltrationForm: FC = () => {
 
     const clearFilterForm = () => {
         dispatch(orderActions.setParams(null));
-        // dispatch(orderActions.getAll({page: 1}))
+        dispatch(orderActions.setPage(1))
         reset();
         setSearchParams(prev => ({...prev, 'page': 1}))
     }
@@ -148,7 +149,7 @@ const filterMy = () => {
                 <option value={""} >all groups</option>
                 { groups && (
                     groups.map((group) => (
-                    <option key={group.id} value={group.id}>
+                    <option key={group.id} value={group.title}>
                         {group.title}
                     </option>
                     )))}

@@ -8,13 +8,13 @@ import {groupService} from "../../services";
 interface IState {
    groups: IGroup[],
     errors: IError,
-    trigger: boolean,
+    trigger1: boolean,
 }
 
 const initialState: IState = {
     groups: null,
     errors: null,
-    trigger: false
+    trigger1: false
 };
 
 const getAll = createAsyncThunk<IGroup[], void> (
@@ -49,7 +49,7 @@ const slice = createSlice({
     initialState,
     reducers: {
         setTrigger : (state) => {
-            state.trigger = !state.trigger
+            state.trigger1 = !state.trigger1
         }
     },
     extraReducers: builder =>
@@ -61,7 +61,7 @@ const slice = createSlice({
                 state.errors = null
             })
             .addMatcher(isFulfilled(create), state => {
-                state.trigger = !state.trigger
+                state.trigger1 = !state.trigger1
             })
             .addMatcher(isRejectedWithValue(), (state, action) => {
                 state.errors = action.payload

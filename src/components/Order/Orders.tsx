@@ -111,8 +111,8 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 }
 
 const Orders: FC = () => {
-    const {orders, page,  trigger, params} = useAppSelector(state => state.orderReducer);
-    const { groups } = useAppSelector(state => state.groupReducer)
+    const {orders, page,trigger,  params} = useAppSelector(state => state.orderReducer);
+    const { groups, trigger1 } = useAppSelector(state => state.groupReducer)
     const dispatch = useAppDispatch();
     const [searchParams, setSearchParams] = useSearchParams({page: '1'});
 
@@ -130,7 +130,7 @@ const Orders: FC = () => {
 
     useEffect(() => {
         dispatch(groupActions.getAll())
-    }, [dispatch])
+    }, [dispatch, trigger])
 
     // useEffect(() => {
     //     // @ts-ignore
@@ -141,7 +141,7 @@ const Orders: FC = () => {
 
     useEffect(() => {
         dispatch(orderActions.getAll({page, ...params}))
-    }, [dispatch, page, params])
+    }, [dispatch, page, params, trigger])
 
 
 
@@ -168,6 +168,10 @@ const Orders: FC = () => {
 
     const handleHeaderCellClick =  ( event: React.MouseEvent<HTMLTableCellElement>,
                                     property: keyof IOrder,) => {
+        setSearchParams((prev) => {
+            prev.set("sort", property);
+            return prev
+        });
      dispatch(orderActions.setParams({sort: property}));
        if ( params ) {
             const newSort =
@@ -179,10 +183,10 @@ const Orders: FC = () => {
         // const currentParams = Object.fromEntries([...searchParams]);
         // setSearchParams({...currentParams, sort: newSort} )
 
-        setSearchParams(params => {
-            params.set("sort", newSort);
-            return params
-        });
+           setSearchParams((prev) => {
+               prev.set("sort", newSort);
+               return prev
+           });
     }
 
 

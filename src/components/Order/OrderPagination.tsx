@@ -33,9 +33,13 @@ const OrderPagination: FC = () => {
 
     const getTo = (num: number) => {
         dispatch(orderActions.setPage(num));
-        searchParams.set('page', num.toString());
-        console.log(searchParams);
-        return { search: searchParams.toString() };
+        setSearchParams((prev) => {
+            prev.set("page", num.toString());
+            return prev
+        });
+        // searchParams.set('page', num.toString());
+        // console.log(searchParams);
+        // return { search: searchParams.toString() };
     };
 
 
