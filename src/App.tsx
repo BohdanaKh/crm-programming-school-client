@@ -1,5 +1,6 @@
 import {Navigate, Route, Routes} from 'react-router-dom';
 
+import  './App.css';
 import {MainLayout} from './layouts';
 import {RequiredAuth} from './hoc';
 import {AccountActivationPage, AdminPage, LoginPage, OrdersPage, UserPage, UsersPage, LogoutPage, HomePage} from "./pages";

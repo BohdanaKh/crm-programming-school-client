@@ -21,18 +21,18 @@ const Header = () => {
 
     return (
         <div className={css.Header}>
-            <div>Logo</div>
+            <div className={css.logo}>
+                <Link to={'orders'}>
+                Logo
+                </Link>
+                </div>
+            <div className={css.user}>
             { me.role === 'admin' &&
                 <Link to={'adminPanel'}>Admin</Link>
             }
-            <div>
                 <Link to={`users/${me.id}`} >
                     <FontAwesomeIcon icon={faUser} style={{color: "#f4f6fb",}} />
                 </Link>
-            </div>
-
-
-                <div>
                     <Link to={'logout'}>
                         <button onClick={() => authService.logout()} style={{backgroundColor:"green", width: "50px", height: "60px", border: "none"}}>
                         <FontAwesomeIcon icon={faRightFromBracket} style={{color: "#f7f7f8"}} />

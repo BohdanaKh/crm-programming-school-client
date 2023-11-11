@@ -2,10 +2,12 @@
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+    justify-content: center;
+    align-items: center;
 }
 
 
-.userBlock {
+.userContainer .userBlock {
     width: 90%;
     padding: 15px;
     background-color: white;
@@ -28,23 +30,23 @@
 /*}*/
 
 
-.userInfo {
+.userContainer .userInfo {
     flex: 1;
     padding: 0 10px;
     text-align: left;
 }
 
 
-.userActions {
+.userContainer .userActions {
     display: flex;
     justify-content: space-between;
 }
 
 
-.userActionButton {
+.userContainer .userActionButton {
     flex: 1;
     padding: 5px;
-    background-color: #4caf50;
+    background-color: green;
     color: white;
     border: none;
     border-radius: 5px;
@@ -52,6 +54,6 @@
     transition: background-color 0.3s;
 }
 
-.userActionButton:hover {
-    background-color: #45a049;
+.userContainer .userActionButton:hover {
+    background-color: darkgreen;
 }

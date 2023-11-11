@@ -1,37 +1,44 @@
+.Filters {
+    height: 15vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 6px;
+}
+
 .Filters form{
-    width: 95%;
-    height: 100px;
-    margin: 5px;
+    width: 91%;
+    height: 100%;
+    margin: 2px;
+}
+.Filters .formInputs {
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-around;
     align-items: center;
 }
-.Filters .formInputs {
-    width: 80%;
-    height: 100%;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-}
-.Filters .formInut {
+.Filters .formInput {
     width: 16%;
     height: 47%;
-    margin: 1px;
     border-radius: 5px;
-    background-color: lightgray;
+    background-color: lightgrey;
     border: none;
 }
 
 .Filters .formActions {
-    width: 5%;
+    width: 9%;
     height: 100%;
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: space-around;
     align-items: center;
+}
+
+.Filters .formAction {
+
+
 }

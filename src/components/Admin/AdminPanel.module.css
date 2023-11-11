@@ -1,0 +1,47 @@
+.AdminPanel {
+display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding-left: 20px;
+}
+.AdminPanel h3 {
+    margin: 10px 45%;
+}
+.AdminPanel .statsWrapCol {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.AdminPanel .statsWrapRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.AdminPanel .stats {
+    margin: 5px;
+    padding: 5px;
+    font-size: 16px;
+}
+
+.AdminPanel .adminActions {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.AdminPanel .adminActionButton {
+    margin: 5px;
+    background-color: #4caf50;
+    color: white;
+    width: 80px;
+    height: 50px;
+    border: none;
+    border-radius: 5px;
+}

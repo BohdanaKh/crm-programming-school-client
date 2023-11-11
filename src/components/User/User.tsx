@@ -42,7 +42,7 @@ const ordersAgreed = orders.filter(order => order.status === EStatus.Aggre).leng
                         surname: {surname}
                     </Typography>
 
-                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                    <Typography sx={{ fontSize: 14 }} color= {is_active ? "text.success" : "text.secondary"} gutterBottom>
                         is_active: {is_active ? 'true' : 'false'}
                     </Typography>
                     {/*// @ts-ignore*/}
