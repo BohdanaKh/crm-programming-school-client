@@ -1,10 +1,10 @@
 import React, {FC, useEffect, useState} from 'react';
-import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
-import {Controller, SubmitHandler, useForm} from "react-hook-form";
+import { useSearchParams} from "react-router-dom";
+import { useForm} from "react-hook-form";
 import { useDebounce } from "use-debounce";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRotateRight, faCheck } from '@fortawesome/free-solid-svg-icons';
-
+import {joiResolver} from "@hookform/resolvers/joi";
 
 import {ECourse, ECourseFormat, ECourseType, EStatus, IOrder} from "../../interfaces";
 import { orderActions} from "../../redux";
@@ -12,18 +12,22 @@ import {useAppDispatch, useAppSelector} from "../../hooks";
 import {IFilter} from "../../interfaces";
 import css from "./Filters.module.css";
 import {DownloadExcel} from "./DownloadExcel";
+import {ordersValidator} from "../../validators";
 
 
 
 
 const OrdersFiltrationForm: FC = () => {
-    const { params} = useAppSelector(state => state.orderReducer)
+
     const {me} = useAppSelector(state => state.authReducer)
     const {groups} = useAppSelector(state => state.groupReducer)
     const dispatch = useAppDispatch();
     const [searchTerm, setSearchTerm] = useState<IFilter>();
     const [searchParams, setSearchParams] = useSearchParams();
-    const {reset, register, handleSubmit} = useForm<IOrder>();
+    const {reset, register, handleSubmit} = useForm<IOrder>({
+        mode: 'all',
+        resolver: joiResolver(ordersValidator)
+    });
 
     const [debouncedText] = useDebounce(searchTerm, 3000, { leading: true });
 
@@ -33,57 +37,17 @@ const OrdersFiltrationForm: FC = () => {
         };
     }, [debouncedText]);
 
-
-
-
-
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value } = event.target;
+        const {name, value} = event.target;
         // setSearchTerm({[name]: value})
-        setSearchParams(params => { params.set(name, value);
-            return params})
+        setSearchParams(params => {
+            params.set(name, value);
+            return params
+        })
         // @ts-ignore
         const currentParams = Object.fromEntries([...searchParams]);
         setSearchTerm(currentParams)
-
-        // setSearchParams((prevParams) => ({
-        //     ...prevParams,
-        //     [name]: value,
-        // }));
-        // dispatch(orderActions.setParams({[name]: value}))
-
-
-
-        // @ts-ignore
-        // const currentParams = Object.fromEntries([...searchParams]);
-        // setSearchParams({...currentParams, [name]: value} )
-    };
-
-
-
-    // const filter = (data:IFilter) => {
-    //     for (const key in data) {
-    //         // @ts-ignore
-    //         if (data.hasOwnProperty(key) && !data[key]) {
-    //             // @ts-ignore
-    //             delete data[key];
-    //         }
-    //     }
-    //     if (data) {
-    //         console.log(data);
-    //         const delay = setTimeout(() => {
-    //             dispatch(orderActions.setParams(data))
-    //         }, 500);
-    //         return () => {
-    //             clearTimeout(delay);
-    //         };
-    // }
-    // };
-
-        // const currentParams = Object.fromEntries([...searchParams]);
-        // setSearchParams({...currentParams, 'name': order.name} )
-
-
+    }
 
     const clearFilterForm = () => {
         dispatch(orderActions.setParams(null));
@@ -98,7 +62,6 @@ const filterMy = () => {
         // dispatch(orderActions.getAll({page:1, managerId: id}))
     setSearchParams(params => { params.set("managerId", id.toString());
         return params})
-
 }
     return (
         <div className={css.Filters}>
@@ -111,7 +74,7 @@ const filterMy = () => {
             <input  className={css.formInput} type="text" placeholder={'email'} {...register('email')}onChange={(event) => setSearchParams(params => { params.set('email', event.target.value);
                 return params})}/>
 
-            <input  className={css.formInput} type="text"placeholder={'phone'} {...register('phone')}onChange={(event) => setSearchParams(params => { params.set('phone', event.target.value);
+            <input  className={css.formInput} type="text" placeholder={'phone'} {...register('phone')}onChange={(event) => setSearchParams(params => { params.set('phone', event.target.value);
                 return params})}/>
 
             <input  className={css.formInput} type="text" placeholder={'age'} {...register('age')}onChange={(event) => setSearchParams(params => { params.set('age', event.target.value);
@@ -179,11 +142,7 @@ const filterMy = () => {
             </select>
                 <input className={css.formInput}  type="text" placeholder={'Start date'}/>
                 <input  className={css.formInput} type="text" placeholder={'End date'}/>
-
             </div>
-            {/*<button type="submit" style={{backgroundColor: "green"}}>*/}
-            {/*    <FontAwesomeIcon icon={faCheck} style={{color: "#f7f7f8",}} />*/}
-            {/*</button>*/}
         </form>
             <div className={css.formActions}>
             <label className={css.formAction}>My</label>
