@@ -1,19 +1,11 @@
-import {FC} from 'react';
+import type { FC } from "react";
+import { useParams } from "react-router-dom";
 
-import {CreatePasswordForm} from "../components";
-import {useAppLocation} from "../hooks";
-import {useParams} from "react-router-dom";
-
+import { CreatePasswordForm } from "../components";
 
 const AccountActivationPage: FC = () => {
- const params = useParams();
-    return (
-        <div>
-            { params.activationToken && (
-      <CreatePasswordForm/>
-            )  }
-        </div>
-    );
+  const params = useParams();
+  return <div>{params.activationToken && <CreatePasswordForm />}</div>;
 };
 
-export {AccountActivationPage};
+export { AccountActivationPage };

@@ -22,14 +22,6 @@
 }
 
 
-/*.userRow {*/
-/*    display: flex;*/
-/*    justify-content: space-between;*/
-/*    align-items: center;*/
-/*    margin-bottom: 10px;*/
-/*}*/
-
-
 .userContainer .userInfo {
     flex: 1;
     padding: 0 10px;

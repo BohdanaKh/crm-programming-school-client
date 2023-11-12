@@ -1,20 +1,5 @@
-import {FC} from 'react';
+import type { FC } from "react";
 
-import {User} from "../components";
-import {useAppSelector} from "../hooks";
+const UserPage: FC = () => <div>User Account</div>;
 
-interface IProps {
-
-}
-
-const UserPage: FC<IProps> = () => {
-    const {me}= useAppSelector(state => state.authReducer);
-
-    return (
-        <div>
-        User Account
-        </div>
-    );
-};
-
-export {UserPage};
+export { UserPage };

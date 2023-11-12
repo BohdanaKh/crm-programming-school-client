@@ -1,86 +1,118 @@
-import React, {FC, useEffect, useState} from 'react';
-import { useSearchParams} from "react-router-dom";
-import { useForm} from "react-hook-form";
-import { useDebounce } from "use-debounce";
+import { faRotateRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRotateRight, faCheck } from '@fortawesome/free-solid-svg-icons';
-import {joiResolver} from "@hookform/resolvers/joi";
+import { joiResolver } from "@hookform/resolvers/joi";
+import type { FC } from "react";
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useSearchParams } from "react-router-dom";
+import { useDebounce } from "use-debounce";
 
-import {ECourse, ECourseFormat, ECourseType, EStatus, IOrder} from "../../interfaces";
-import { orderActions} from "../../redux";
-import {useAppDispatch, useAppSelector} from "../../hooks";
-import {IFilter} from "../../interfaces";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import type { IFilter, IOrder } from "../../interfaces";
+import { ECourse, ECourseFormat, ECourseType, EStatus } from "../../interfaces";
+import { orderActions } from "../../redux";
+import { ordersValidator } from "../../validators";
+import { DownloadExcel } from "./DownloadExcel";
 import css from "./Filters.module.css";
-import {DownloadExcel} from "./DownloadExcel";
-import {ordersValidator} from "../../validators";
-
-
-
 
 const OrdersFiltrationForm: FC = () => {
+  const { me } = useAppSelector((state) => state.authReducer);
+  const { groups } = useAppSelector((state) => state.groupReducer);
+  const dispatch = useAppDispatch();
+  const [searchTerm, setSearchTerm] = useState<IFilter>();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { reset, register } = useForm<IOrder>({
+    mode: "all",
+    resolver: joiResolver(ordersValidator),
+  });
 
-    const {me} = useAppSelector(state => state.authReducer)
-    const {groups} = useAppSelector(state => state.groupReducer)
-    const dispatch = useAppDispatch();
-    const [searchTerm, setSearchTerm] = useState<IFilter>();
-    const [searchParams, setSearchParams] = useSearchParams();
-    const {reset, register, handleSubmit} = useForm<IOrder>({
-        mode: 'all',
-        resolver: joiResolver(ordersValidator)
+  const [debouncedText] = useDebounce(searchTerm, 3000, { leading: true });
+
+  useEffect(() => {
+    if (debouncedText) {
+      dispatch(orderActions.setParams(debouncedText));
+    }
+  }, [debouncedText]);
+
+  const handleInputChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    const { name, value } = event.target;
+    setSearchParams((params) => {
+      params.set(name, value);
+      return params;
     });
 
-    const [debouncedText] = useDebounce(searchTerm, 3000, { leading: true });
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    const currentParams = Object.fromEntries([...searchParams]);
+    setSearchTerm(currentParams);
+  };
 
-    useEffect(() => {
-        if (debouncedText) {
-            dispatch(orderActions.setParams(debouncedText))
-        };
-    }, [debouncedText]);
+  const clearFilterForm = () => {
+    dispatch(orderActions.setParams(null));
+    dispatch(orderActions.setPage(1));
+    reset();
+    setSearchParams((prev) => ({ ...prev, page: 1 }));
+  };
 
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const {name, value} = event.target;
-        // setSearchTerm({[name]: value})
-        setSearchParams(params => {
-            params.set(name, value);
-            return params
-        })
-        // @ts-ignore
-        const currentParams = Object.fromEntries([...searchParams]);
-        setSearchTerm(currentParams)
-    }
+  const filterMy = () => {
+    const id = me.id;
+    dispatch(orderActions.setParams({ managerId: id }));
+    setSearchParams((params) => {
+      params.set("managerId", id.toString());
+      return params;
+    });
+  };
+  return (
+    <div className={css.Filters}>
+      <form>
+        <div className={css.formInputs}>
+          <input
+            className={css.formInput}
+            type={"text"}
+            placeholder={"name"}
+            {...register("name")}
+            onChange={handleInputChange}
+          />
+          <input
+            className={css.formInput}
+            type={"text"}
+            placeholder={"surname"}
+            {...register("surname")}
+            onChange={handleInputChange}
+          />
+          <input
+            className={css.formInput}
+            type="text"
+            placeholder={"email"}
+            {...register("email")}
+            onChange={handleInputChange}
+          />
 
-    const clearFilterForm = () => {
-        dispatch(orderActions.setParams(null));
-        dispatch(orderActions.setPage(1))
-        reset();
-        setSearchParams(prev => ({...prev, 'page': 1}))
-    }
+          <input
+            className={css.formInput}
+            type="text"
+            placeholder={"phone"}
+            {...register("phone")}
+            onChange={handleInputChange}
+          />
 
-const filterMy = () => {
-        const id = me.id;
-    dispatch(orderActions.setParams({managerId: id}));
-        // dispatch(orderActions.getAll({page:1, managerId: id}))
-    setSearchParams(params => { params.set("managerId", id.toString());
-        return params})
-}
-    return (
-        <div className={css.Filters}>
-        <form>
-            <div className={css.formInputs}>
-                <input  className={css.formInput} type={"text"} placeholder={'name'} {...register('name')} onChange={handleInputChange}/>
-            {/*<input  className={css.formInput} type={"text"} placeholder={'name'} {...register('name')} onChange={(event) =>  setSearchParams(params => { params.set("name", event.target.value);*/}
-            {/*    return params})}/>*/}
-            <input  className={css.formInput} type={"text"} placeholder={'surname'} {...register('surname')} onChange={handleInputChange}/>
-            <input  className={css.formInput} type="text" placeholder={'email'} {...register('email')}onChange={(event) => setSearchParams(params => { params.set('email', event.target.value);
-                return params})}/>
+          <input
+            className={css.formInput}
+            type="text"
+            placeholder={"age"}
+            {...register("age")}
+            onChange={handleInputChange}
+          />
 
-            <input  className={css.formInput} type="text" placeholder={'phone'} {...register('phone')}onChange={(event) => setSearchParams(params => { params.set('phone', event.target.value);
-                return params})}/>
-
-            <input  className={css.formInput} type="text" placeholder={'age'} {...register('age')}onChange={(event) => setSearchParams(params => { params.set('age', event.target.value);
-                return params})}/>
-
-        <select className={css.formInput} {...register('course')} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleInputChange(e)}>
+          <select
+            className={css.formInput}
+            {...register("course")}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+              handleInputChange(e);
+            }}
+          >
             <option value={""}>all courses</option>
             <option value={ECourse.FS}>{ECourse.FS}</option>
             <option value={ECourse.QACX}>{ECourse.QACX}</option>
@@ -88,72 +120,98 @@ const filterMy = () => {
             <option value={ECourse.JSCX}>{ECourse.JSCX}</option>
             <option value={ECourse.FE}>{ECourse.FE}</option>
             <option value={ECourse.PCX}>{ECourse.PCX}</option>
-        </select>
-
-                {/*<Controller*/}
-                {/*    name="course_format"*/}
-                {/*    control={control}*/}
-                {/*    // defaultValue={}*/}
-                {/*    render={({ field }) => (*/}
-                {/*        <Autocomplete*/}
-                {/*            {...field}*/}
-                {/*            {...register('course_format')}*/}
-                {/*            options={[ECourseFormat.static, ECourseFormat.online]}*/}
-                {/*            renderInput={(params) => <TextField {...params}  label="all formats"/>}*/}
-                {/*        />*/}
-                {/*    )}*/}
-                {/*/>*/}
-        <select  className={css.formInput} {...register('course_format')} onChange={(event) => setSearchParams(params => { params.set('course_format', event.target.value);
-                return params})}>
-            <option value={""} >all formats</option>
+          </select>
+          <select
+            className={css.formInput}
+            {...register("course_format")}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+              handleInputChange(e);
+            }}
+          >
+            <option value={""}>all formats</option>
             <option value={ECourseFormat.static}>{ECourseFormat.static}</option>
             <option value={ECourseFormat.online}>{ECourseFormat.online}</option>
-        </select>
+          </select>
 
-        <select  className={css.formInput} {...register('course_type')}onChange={(event) => setSearchParams(params => { params.set('course_type', event.target.value);
-                return params})}>
-            <option value={""} >all types</option>
+          <select
+            className={css.formInput}
+            {...register("course_type")}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+              handleInputChange(e);
+            }}
+          >
+            <option value={""}>all types</option>
             <option value={ECourseType.pro}>{ECourseType.pro}</option>
             <option value={ECourseType.minimal}>{ECourseType.minimal}</option>
             <option value={ECourseType.premium}>{ECourseType.premium}</option>
-            <option value={ECourseType.incubator}>{ECourseType.incubator}</option>
+            <option value={ECourseType.incubator}>
+              {ECourseType.incubator}
+            </option>
             <option value={ECourseType.vip}>{ECourseType.vip}</option>
-        </select>
+          </select>
 
-            <select  className={css.formInput} {...register('status')} onChange={(event) => setSearchParams(params => { params.set('status', event.target.value);
-                return params})}>
-                <option value={""} >all statuses</option>
-                <option value={EStatus.In_work}>{EStatus.In_work}</option>
-                <option value={EStatus.New}>{EStatus.New}</option>
-                <option value={EStatus.Aggre}>{EStatus.Aggre}</option>
-                <option value={EStatus.Disaggre}>{EStatus.Disaggre}</option>
-                <option value={EStatus.Dubbing}>{EStatus.Dubbing}</option>
-            </select>
+          <select
+            className={css.formInput}
+            {...register("status")}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+              handleInputChange(e);
+            }}
+          >
+            <option value={""}>all statuses</option>
+            <option value={EStatus.In_work}>{EStatus.In_work}</option>
+            <option value={EStatus.New}>{EStatus.New}</option>
+            <option value={EStatus.Aggre}>{EStatus.Aggre}</option>
+            <option value={EStatus.Disaggre}>{EStatus.Disaggre}</option>
+            <option value={EStatus.Dubbing}>{EStatus.Dubbing}</option>
+          </select>
 
-            <select  className={css.formInput} {...register('group')} onChange={(event) => setSearchParams(params => { params.set('group', event.target.value);
-                return params})}>
-                <option value={""} >all groups</option>
-                { groups && (
-                    groups.map((group) => (
-                    <option key={group.id} value={group.title}>
-                        {group.title}
-                    </option>
-                    )))}
-            </select>
-                <input className={css.formInput}  type="text" placeholder={'Start date'}/>
-                <input  className={css.formInput} type="text" placeholder={'End date'}/>
-            </div>
-        </form>
-            <div className={css.formActions}>
-            <label className={css.formAction}>My</label>
-            <input className={css.formAction} type={"checkbox"} name={'My'} value={"My"} onClick={filterMy}style={{marginLeft: "1px"}}/>
-            <button className={css.formAction} onClick={clearFilterForm} style={{backgroundColor: "green"}}>
-                <FontAwesomeIcon icon={faRotateRight} style={{color: "#fafafa",}} />
-            </button>
-            <DownloadExcel/>
-            </div>
+          <select
+            className={css.formInput}
+            {...register("group")}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+              handleInputChange(e);
+            }}
+          >
+            <option value={""}>all groups</option>
+            {groups?.map((group) => (
+              <option key={group.id} value={group.title}>
+                {group.title}
+              </option>
+            ))}
+          </select>
+          <input
+            className={css.formInput}
+            type="text"
+            placeholder={"Start date"}
+          />
+          <input
+            className={css.formInput}
+            type="text"
+            placeholder={"End date"}
+          />
         </div>
-);
+      </form>
+      <div className={css.formActions}>
+        <label className={css.formAction}>My</label>
+        <input
+          className={css.formAction}
+          type={"checkbox"}
+          name={"My"}
+          value={"My"}
+          onClick={filterMy}
+          style={{ marginLeft: "1px" }}
+        />
+        <button
+          className={css.formAction}
+          onClick={clearFilterForm}
+          style={{ backgroundColor: "green" }}
+        >
+          <FontAwesomeIcon icon={faRotateRight} style={{ color: "#fafafa" }} />
+        </button>
+        <DownloadExcel />
+      </div>
+    </div>
+  );
 };
 
-export {OrdersFiltrationForm};
+export { OrdersFiltrationForm };

@@ -1,29 +1,26 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
+
 interface IState {
-    isUserCreateModalOpen: boolean,
+  isUserCreateModalOpen: boolean;
 }
 const initialState: IState = {
-    isUserCreateModalOpen: false
-
-}
+  isUserCreateModalOpen: false,
+};
 
 const slice = createSlice({
-    name: 'userCreateModal',
-    initialState,
-    reducers: {
-        openUserCreateModal: (state) => {
-            state.isUserCreateModalOpen = true;
-        },
-        closeUserCreateModal: (state) => {
-            state.isUserCreateModalOpen = false;
-        },
+  name: "userCreateModal",
+  initialState,
+  reducers: {
+    openUserCreateModal: (state) => {
+      state.isUserCreateModalOpen = true;
     },
+    closeUserCreateModal: (state) => {
+      state.isUserCreateModalOpen = false;
+    },
+  },
 });
-const { actions, reducer: userModalReducer} = slice;
+const { actions, reducer: userModalReducer } = slice;
 const userModalActions = {
-    ...actions,
-}
-export {
-    userModalActions,
-    userModalReducer,
-}
+  ...actions,
+};
+export { userModalActions, userModalReducer };

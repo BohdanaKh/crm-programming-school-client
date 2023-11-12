@@ -1,47 +1,70 @@
-import {Navigate, Route, Routes} from 'react-router-dom';
+import "./App.css";
 
-import  './App.css';
-import {MainLayout} from './layouts';
-import {RequiredAuth} from './hoc';
-import {AccountActivationPage, AdminPage, LoginPage, OrdersPage, UserPage, UsersPage, LogoutPage, HomePage} from "./pages";
+import { Navigate, Route, Routes } from "react-router-dom";
 
+import { RequiredAuth } from "./hoc";
+import { MainLayout } from "./layouts";
+import {
+  AccountActivationPage,
+  AdminPage,
+  HomePage,
+  LoginPage,
+  LogoutPage,
+  OrdersPage,
+  UserPage,
+  UsersPage,
+} from "./pages";
 
-const App = () => {
-    return (
-        <Routes>
-            <Route path={'/'} element={<MainLayout/>}>
-                <Route index element={<Navigate to={'login'}/>}/>
-            <Route path="/login" element={<LoginPage />}></Route>
-                <Route path={'activate/:activationToken'} element={<AccountActivationPage/>}></Route>
-                <Route path={'logout'} element={<LogoutPage/>}></Route>
-                    <Route path={'/'} element={<HomePage/>}>
-                        <Route index element={<Navigate to={'orders'}/>}/>
-                <Route path={'orders'} element={
-                    // <RequiredAuth>
-                        <OrdersPage/>}/>
-                     {/*</RequiredAuth>}/>*/}
+const App = () => (
+  <Routes>
+    <Route path={"/"} element={<MainLayout />}>
+      <Route index element={<Navigate to={"login"} />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route
+        path={"activate/:activationToken"}
+        element={<AccountActivationPage />}
+      />
+      <Route path={"logout"} element={<LogoutPage />} />
+      <Route path={"/"} element={<HomePage />}>
+        <Route index element={<Navigate to={"orders"} />} />
+        <Route
+          path={"orders"}
+          element={
+            // <RequiredAuth>
+            <OrdersPage />
+          }
+        />
+        {/* </RequiredAuth>}/> */}
 
-                        <Route path={'users/:id'} element={
-                            // <RequiredAuth>
-                            <UserPage/>
-                            // </RequiredAuth>
-                        }/>
+        <Route
+          path={"users/:id"}
+          element={
+            // <RequiredAuth>
+            <UserPage />
+            // </RequiredAuth>
+          }
+        />
 
-                <Route path={'adminPanel'} element={
-                    // <RequiredAuth>
-                        <AdminPage/>
-                    // </RequiredAuth>
-                }>
-                    <Route path={'users'} element={
-                        // <RequiredAuth>
-                        <UsersPage/>
-                    // </RequiredAuth>
-                    }/>
-                </Route>
-                        </Route>
-                </Route>
-        </Routes>
-    );
-};
+        <Route
+          path={"adminPanel"}
+          element={
+            // <RequiredAuth>
+            <AdminPage />
+            // </RequiredAuth>
+          }
+        >
+          <Route
+            path={"users"}
+            element={
+              // <RequiredAuth>
+              <UsersPage />
+              // </RequiredAuth>
+            }
+          />
+        </Route>
+      </Route>
+    </Route>
+  </Routes>
+);
 
 export default App;

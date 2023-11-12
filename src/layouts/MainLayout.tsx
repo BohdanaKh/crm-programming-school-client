@@ -1,14 +1,10 @@
-import {FC} from 'react';
-import {Outlet} from 'react-router-dom';
+import type { FC } from "react";
+import { Outlet } from "react-router-dom";
 
-import {Header} from '../components';
+const MainLayout: FC = () => (
+  <div>
+    <Outlet />
+  </div>
+);
 
-const MainLayout: FC = () => {
-    return (
-        <div>
-            <Outlet/>
-        </div>
-    );
-};
-
-export {MainLayout};
+export { MainLayout };

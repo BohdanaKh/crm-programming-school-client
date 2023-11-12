@@ -1,12 +1,15 @@
-import {IRes} from '../types';
-import {IComment} from '../interfaces';
-import {axiosService} from './axios.service';
-import {urls} from '../constants';
+import type { AxiosResponse } from "axios";
+
+import { urls } from "../constants";
+import type { IComment } from "../interfaces";
+import { axiosService } from "./axios.service";
 
 const commentService = {
-    create: (orderId: number, comment: IComment): IRes<IComment> => axiosService.post(urls.comments.create(orderId),  comment),
-}
+  create: async (
+    orderId: number,
+    comment: IComment,
+  ): Promise<AxiosResponse<IComment>> =>
+    await axiosService.post(urls.comments.create(orderId), comment),
+};
 
-export {
-    commentService
-}
+export { commentService };

@@ -1,30 +1,26 @@
-import { createSlice } from '@reduxjs/toolkit';
-import {IOrder} from "../../interfaces";
+import { createSlice } from "@reduxjs/toolkit";
+
 interface IState {
-  isOrderEditModalOpen: boolean,
+  isOrderEditModalOpen: boolean;
 }
 const initialState: IState = {
-    isOrderEditModalOpen: false
-
-}
+  isOrderEditModalOpen: false,
+};
 
 const slice = createSlice({
-    name: 'orderEditModal',
-    initialState,
-    reducers: {
-        openOrderEditModal: (state) => {
-            state.isOrderEditModalOpen = true;
-        },
-        closeOrderEditModal: (state) => {
-            state.isOrderEditModalOpen = false;
-        },
+  name: "orderEditModal",
+  initialState,
+  reducers: {
+    openOrderEditModal: (state) => {
+      state.isOrderEditModalOpen = true;
     },
+    closeOrderEditModal: (state) => {
+      state.isOrderEditModalOpen = false;
+    },
+  },
 });
- const { actions, reducer: orderModalReducer} = slice;
+const { actions, reducer: orderModalReducer } = slice;
 const orderModalActions = {
-    ...actions,
-}
-export {
-    orderModalActions,
-    orderModalReducer,
-}
+  ...actions,
+};
+export { orderModalActions, orderModalReducer };

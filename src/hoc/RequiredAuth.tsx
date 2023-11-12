@@ -1,20 +1,20 @@
-import {FC, ReactElement} from 'react';
-import {authService} from '../services';
-import {Navigate} from 'react-router-dom';
-import {useAppSelector} from '../hooks';
+import type { FC, ReactElement } from "react";
+import { Navigate } from "react-router-dom";
+
+import { authService } from "../services";
 
 interface IProps {
-    children: ReactElement
+  children: ReactElement;
 }
 
-const RequiredAuth: FC<IProps> = ({children}) => {
-    const accessToken = authService.getAccessToken();
+const RequiredAuth: FC<IProps> = ({ children }) => {
+  const accessToken = authService.getAccessToken();
 
-    if (!accessToken) {
-        return <Navigate to={'/login'}/>
-    }
+  if (!accessToken) {
+    return <Navigate to={"/login"} />;
+  }
 
-    return children
+  return children;
 };
 
-export {RequiredAuth};
+export { RequiredAuth };

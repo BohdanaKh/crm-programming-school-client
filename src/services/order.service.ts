@@ -1,27 +1,22 @@
-import {IRes} from '../types';
-import {IOrder, IPagination} from '../interfaces';
-import {axiosService} from './axios.service';
-import {urls} from '../constants';
-// const params = {
-//     page: '1',
-//     sort: '',
-//     name: '',
-//     surname: '',
-//     email: '',
-//     phone: '',
-//     age: '',
-//     course: '',
-//     course_format: '',
-//     course_type: '',
-//     status: '',
-//     group: '',
-// }
-const orderService = {
-    getAll: ({page, ...params}:any):  IRes<IPagination<IOrder[]>> => axiosService.get(urls.orders.orders, {params:{page, ...params}}),
-    updateById: (id: number, order: IOrder): IRes<IOrder> => axiosService.put(urls.orders.byId(id), order),
-    deleteById: (id: number): IRes<void> => axiosService.delete(urls.orders.byId(id))
-}
+import type { AxiosResponse } from "axios";
 
-export {
-    orderService
-}
+import { urls } from "../constants";
+import type { IOrder, IPagination } from "../interfaces";
+import { axiosService } from "./axios.service";
+
+const orderService = {
+  getAll: async ({
+    page,
+    ...params
+  }: any): Promise<AxiosResponse<IPagination<IOrder[]>>> =>
+    await axiosService.get(urls.orders.orders, { params: { page, ...params } }),
+  updateById: async (
+    id: number,
+    order: IOrder,
+  ): Promise<AxiosResponse<IOrder>> =>
+    await axiosService.put(urls.orders.byId(id), order),
+  deleteById: async (id: number): Promise<AxiosResponse<void>> =>
+    await axiosService.delete(urls.orders.byId(id)),
+};
+
+export { orderService };

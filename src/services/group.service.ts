@@ -1,14 +1,14 @@
-import {IRes} from "../types";
-import {IGroup} from "../interfaces";
-import {axiosService} from "./axios.service";
-import {urls} from "../constants";
+import type { AxiosResponse } from "axios";
 
+import { urls } from "../constants";
+import type { IGroup } from "../interfaces";
+import { axiosService } from "./axios.service";
 
 const groupService = {
-    getAll: ():  IRes<IGroup[]> => axiosService.get(urls.groups.groups),
-    create: (group: IGroup ): IRes<IGroup> => axiosService.post(urls.groups.groups, group),
-}
+  getAll: async (): Promise<AxiosResponse<IGroup[]>> =>
+    await axiosService.get(urls.groups.groups),
+  create: async (group: IGroup): Promise<AxiosResponse<IGroup>> =>
+    await axiosService.post(urls.groups.groups, group),
+};
 
-export {
-    groupService
-}
+export { groupService };

@@ -1,13 +1,12 @@
+import type { AxiosResponse } from "axios";
 
-import {axiosService} from "./axios.service";
-import {urls} from "../constants";
-import {IOrderStats} from "../interfaces";
-import {IRes} from "../types";
+import { urls } from "../constants";
+import type { IOrderStats } from "../interfaces";
+import { axiosService } from "./axios.service";
 
 const adminService = {
-    getAdminPanel: ():IRes<IOrderStats> => axiosService.get(urls.adminPanel.adminPanel),
-}
+  getAdminPanel: async (): Promise<AxiosResponse<IOrderStats>> =>
+    await axiosService.get(urls.adminPanel.adminPanel),
+};
 
-export {
-    adminService
-}
+export { adminService };

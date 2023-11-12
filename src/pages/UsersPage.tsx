@@ -1,17 +1,11 @@
-import {FC} from 'react';
-import { Users} from "../components";
+import type { FC } from "react";
 
-interface IProps {
+import { Users } from "../components";
 
-}
+const UsersPage: FC = () => (
+  <div>
+    <Users />
+  </div>
+);
 
-const UsersPage: FC<IProps> = () => {
-
-    return (
-        <div>
-            <Users/>
-        </div>
-    );
-};
-
-export {UsersPage};
+export { UsersPage };
