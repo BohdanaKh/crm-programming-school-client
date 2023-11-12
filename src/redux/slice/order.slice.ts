@@ -88,7 +88,10 @@ const slice = createSlice({
       state.trigger = !state.trigger;
     },
     setParams: (state, action) => {
-      state.params = action.payload;
+      state.params = { ...state.params, ...action.payload };
+    },
+    setNullParams: (state) => {
+      state.params = null;
     },
   },
   extraReducers: (builder) =>
@@ -111,6 +114,7 @@ const slice = createSlice({
       })
       .addMatcher(isRejectedWithValue(), (state, action) => {
         state.errors = action.payload;
+        state.orders = null;
       }),
 });
 

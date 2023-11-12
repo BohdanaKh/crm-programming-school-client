@@ -18,6 +18,7 @@ import type { IOrder } from "../../interfaces";
 import { groupActions, orderActions } from "../../redux";
 import { Order } from "./Order";
 import { OrderEditModal } from "./OrderEditModal";
+import { OrderPagination } from "./OrderPagination";
 import { OrdersFiltrationForm } from "./OrdersFiltrationForm";
 
 export const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -113,21 +114,20 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 }
 
 const Orders: FC = () => {
-  const { orders, page, trigger, params } = useAppSelector(
+  const { orders, page, trigger, params, errors } = useAppSelector(
     (state) => state.orderReducer,
   );
 
   const dispatch = useAppDispatch();
-  const [setSearchParams] = useSearchParams({ page: "1" });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, setSearchParams] = useSearchParams({ page: "1" });
 
   const { isOrderEditModalOpen } = useAppSelector(
     (state) => state.orderModalReducer,
   );
 
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    setSearchParams((prev) => ({ ...prev, page: "1" }));
+    setSearchParams((prev: URLSearchParams) => ({ ...prev, page: "1" }));
   }, []);
 
   useEffect(() => {
@@ -142,8 +142,6 @@ const Orders: FC = () => {
     event: React.MouseEvent<unknown, MouseEvent>,
     property: keyof IOrder,
   ) => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
     setSearchParams((prev) => {
       prev.set("sort", property);
       return prev;
@@ -152,29 +150,28 @@ const Orders: FC = () => {
     if (params) {
       const newSort = params.sort === property ? `-${property}` : property;
       dispatch(orderActions.setParams({ sort: newSort }));
-
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      setSearchParams((prev) => {
-        prev.set("sort", newSort);
-        return prev;
+      setSearchParams((params) => {
+        params.set("sort", newSort);
+        return params;
       });
     }
   };
 
   return (
-    <TableContainer component={Paper}>
-      <OrdersFiltrationForm />
-      <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-        <EnhancedTableHead onRequestSort={handleHeaderCellClick} />
-        <TableBody>
-          {orders.map((order) => (
-            <Order key={order.id} order={order} />
-          ))}
-        </TableBody>
-      </Table>
-      {isOrderEditModalOpen && <OrderEditModal />}
-    </TableContainer>
+    <>
+      <TableContainer component={Paper}>
+        <OrdersFiltrationForm />
+        <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+          <EnhancedTableHead onRequestSort={handleHeaderCellClick} />
+          <TableBody>
+            {errors && <p>Error: {errors.message}</p>}
+            {orders?.map((order) => <Order key={order.id} order={order} />)}
+          </TableBody>
+        </Table>
+        {isOrderEditModalOpen && <OrderEditModal />}
+      </TableContainer>
+      {orders && <OrderPagination />}
+    </>
   );
 };
 

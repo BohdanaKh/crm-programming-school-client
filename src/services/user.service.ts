@@ -5,8 +5,8 @@ import type { IPagination, IPass, IUser } from "../interfaces";
 import { axiosService } from "./axios.service";
 
 const userService = {
-  getAll: async (): Promise<AxiosResponse<IPagination<IUser[]>>> =>
-    await axiosService.get(urls.users.users),
+  getAll: async (page: number): Promise<AxiosResponse<IPagination<IUser[]>>> =>
+    await axiosService.get(urls.users.users, { params: { page } }),
   create: async (user: IUser): Promise<AxiosResponse<IUser>> =>
     await axiosService.post(urls.users.users, user),
   updateById: async (id: number, user: IUser): Promise<AxiosResponse<IUser>> =>

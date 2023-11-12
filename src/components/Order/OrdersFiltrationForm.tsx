@@ -17,9 +17,11 @@ import css from "./Filters.module.css";
 
 const OrdersFiltrationForm: FC = () => {
   const { me } = useAppSelector((state) => state.authReducer);
+  const { params } = useAppSelector((state) => state.orderReducer);
   const { groups } = useAppSelector((state) => state.groupReducer);
   const dispatch = useAppDispatch();
   const [searchTerm, setSearchTerm] = useState<IFilter>();
+  const [isChecked, setIsChecked] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const { reset, register } = useForm<IOrder>({
     mode: "all",
@@ -50,19 +52,30 @@ const OrdersFiltrationForm: FC = () => {
   };
 
   const clearFilterForm = () => {
-    dispatch(orderActions.setParams(null));
+    dispatch(orderActions.setNullParams());
     dispatch(orderActions.setPage(1));
     reset();
     setSearchParams((prev) => ({ ...prev, page: 1 }));
   };
 
   const filterMy = () => {
-    const id = me.id;
-    dispatch(orderActions.setParams({ managerId: id }));
-    setSearchParams((params) => {
-      params.set("managerId", id.toString());
-      return params;
-    });
+    setIsChecked(!isChecked);
+    if (!isChecked) {
+      const id = me.id;
+      dispatch(orderActions.setParams({ managerId: id }));
+      setSearchParams((params) => {
+        params.set("managerId", id.toString());
+        return params;
+      });
+    } else {
+      dispatch(orderActions.setParams({ ...params, managerId: null }));
+      // dispatch(orderActions.setPage(1));
+      reset();
+      setSearchParams((params) => {
+        params.delete("managerId");
+        return params;
+      });
+    }
   };
   return (
     <div className={css.Filters}>
@@ -198,7 +211,8 @@ const OrdersFiltrationForm: FC = () => {
           type={"checkbox"}
           name={"My"}
           value={"My"}
-          onClick={filterMy}
+          checked={isChecked}
+          onChange={filterMy}
           style={{ marginLeft: "1px" }}
         />
         <button

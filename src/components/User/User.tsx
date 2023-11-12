@@ -26,8 +26,6 @@ const User: FC<IProps> = ({ user }) => {
   const { activationToken } = useAppSelector((state) => state.userReducer);
   const dispatch = useAppDispatch();
 
-  const lastLogin = last_login;
-
   const ordersInWork = orders.filter(
     (order) => order.status === EStatus.In_work,
   ).length;
@@ -57,7 +55,6 @@ const User: FC<IProps> = ({ user }) => {
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           surname: {surname}
         </Typography>
-
         <Typography
           sx={{ fontSize: 14 }}
           color={is_active ? "text.success" : "text.secondary"}
@@ -65,8 +62,8 @@ const User: FC<IProps> = ({ user }) => {
         >
           is_active: {is_active ? "true" : "false"}
         </Typography>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          last login: lastLogin
+        <Typography variant="body2" color="text.secondary">
+          last_login: {last_login}
         </Typography>
       </CardContent>
       <CardContent className={css.userInfo}>

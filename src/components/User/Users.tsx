@@ -8,12 +8,12 @@ import { UserPagination } from "./UserPagination";
 import css from "./Users.module.css";
 
 const Users: FC = () => {
-  const { users, trigger } = useAppSelector((state) => state.userReducer);
+  const { users, trigger, page } = useAppSelector((state) => state.userReducer);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(userActions.getAll());
-  }, [dispatch, trigger]);
+    dispatch(userActions.getAll({ page }));
+  }, [dispatch, trigger, page]);
 
   return (
     <div className={css.userContainer}>

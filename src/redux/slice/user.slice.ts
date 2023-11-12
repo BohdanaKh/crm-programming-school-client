@@ -31,11 +31,11 @@ const initialState: IState = {
   activationToken: null,
 };
 
-const getAll = createAsyncThunk<IPagination<IUser[]>, void>(
+const getAll = createAsyncThunk<IPagination<IUser[]>, { page: number }>(
   "userSlice/getAll",
-  async (_, { rejectWithValue }) => {
+  async ({ page }, { rejectWithValue }) => {
     try {
-      const { data } = await userService.getAll();
+      const { data } = await userService.getAll(page);
       return data;
     } catch (e) {
       const err = e as AxiosError;

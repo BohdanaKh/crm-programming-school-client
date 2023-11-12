@@ -1,5 +1,5 @@
 export interface IError {
-  detail?: string;
+  message?: string;
 }
 export interface IErrorAuth extends IError {
   email: string[];

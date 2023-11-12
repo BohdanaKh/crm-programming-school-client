@@ -8,17 +8,16 @@ import { orderActions } from "../../redux";
 import css from "../Pagination/Pagination.module.css";
 
 const OrderPagination: FC = () => {
-  const [setSearchParams] = useSearchParams();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, setSearchParams] = useSearchParams();
 
   const { page, pages } = useAppSelector((state) => state.orderReducer);
 
   const dispatch = useAppDispatch();
   const getTo = (num: number) => {
     dispatch(orderActions.setPage(num));
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
     setSearchParams((prev) => {
-      prev.set("page", num.toString());
+      prev.append("page", num.toString());
       return prev;
     });
   };

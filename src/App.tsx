@@ -22,43 +22,61 @@ const App = () => (
       <Route path="/login" element={<LoginPage />} />
       <Route
         path={"activate/:activationToken"}
-        element={<AccountActivationPage />}
+        element={
+          <RequiredAuth>
+            <AccountActivationPage />
+          </RequiredAuth>
+        }
       />
-      <Route path={"logout"} element={<LogoutPage />} />
-      <Route path={"/"} element={<HomePage />}>
+      <Route
+        path={"logout"}
+        element={
+          <RequiredAuth>
+            <LogoutPage />
+          </RequiredAuth>
+        }
+      />
+      <Route
+        path={"/"}
+        element={
+          <RequiredAuth>
+            <HomePage />
+          </RequiredAuth>
+        }
+      >
         <Route index element={<Navigate to={"orders"} />} />
         <Route
           path={"orders"}
           element={
-            // <RequiredAuth>
-            <OrdersPage />
+            <RequiredAuth>
+              <OrdersPage />
+            </RequiredAuth>
           }
         />
-        {/* </RequiredAuth>}/> */}
 
         <Route
           path={"users/:id"}
           element={
-            // <RequiredAuth>
-            <UserPage />
-            // </RequiredAuth>
+            <RequiredAuth>
+              <UserPage />
+            </RequiredAuth>
           }
         />
 
         <Route
           path={"adminPanel"}
           element={
-            // <RequiredAuth>
-            <AdminPage />
-            // </RequiredAuth>
+            <RequiredAuth>
+              <AdminPage />
+            </RequiredAuth>
           }
         >
           <Route
             path={"users"}
             element={
-              // <RequiredAuth>
-              <UsersPage />
-              // </RequiredAuth>
+              <RequiredAuth>
+                <UsersPage />
+              </RequiredAuth>
             }
           />
         </Route>

@@ -6,11 +6,11 @@ import {
 } from "@reduxjs/toolkit";
 import type { AxiosError } from "axios";
 
-import type { IAuth, IErrorAuth, IUser } from "../../interfaces";
+import type { IAuth, IError, IUser } from "../../interfaces";
 import { authService } from "../../services";
 
 interface IState {
-  error: IErrorAuth;
+  error: IError;
   me: IUser;
 }
 
@@ -44,7 +44,7 @@ const slice = createSlice({
         state.error = null;
       })
       .addMatcher(isRejectedWithValue(), (state, action) => {
-        state.error = action.payload as IErrorAuth;
+        state.error = action.payload;
       }),
 });
 
