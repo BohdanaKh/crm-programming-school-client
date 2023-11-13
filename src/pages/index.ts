@@ -6,3 +6,4 @@ export * from "./LogoutPage";
 export * from "./OrdersPage";
 export * from "./UserPage";
 export * from "./UsersPage";
+export * from "./RecoveryPasswordPage";

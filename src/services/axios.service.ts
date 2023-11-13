@@ -1,11 +1,14 @@
 import type { AxiosError } from "axios";
 import axios from "axios";
 
+// import {createBrowserHistory} from 'history';
 import { baseURL, urls } from "../constants";
 import { authService } from "./auth.service";
 
 const axiosService = axios.create({ baseURL });
 let isRefreshing = false;
+const waitList: IWaitList[] = [];
+// const history = createBrowserHistory({window});
 
 axiosService.interceptors.request.use((config) => {
   const access = authService.getAccessToken();
@@ -16,6 +19,7 @@ axiosService.interceptors.request.use((config) => {
 
   return config;
 });
+
 axiosService.interceptors.response.use(
   (res) => res,
   async (error: AxiosError) => {
@@ -26,20 +30,47 @@ axiosService.interceptors.response.use(
         try {
           await authService.refresh();
           isRefreshing = false;
-          return await axiosService(originalRequest);
+          afterRefresh();
+          return axiosService(originalRequest);
         } catch (e) {
           authService.deleteTokens();
           isRefreshing = false;
-          throw error;
+          // history.replace('/login?expSession=true')
+          return Promise.reject(error);
         }
       }
 
       if (originalRequest.url === urls.auth.refresh) {
-        throw error;
+        return Promise.reject(error);
       }
+
+      return new Promise((resolve) => {
+        subscribeToWaitList(() => {
+          resolve(axiosService(originalRequest));
+        });
+        // const myFunc = ()=>{
+        //     resolve(axiosService(originalRequest))
+        // }
+        // subscribeToWaitList(myFunc)
+      });
     }
-    throw error;
+    return Promise.reject(error);
   },
 );
 
-export { axiosService };
+type IWaitList = () => void;
+const subscribeToWaitList = (cb: IWaitList): void => {
+  waitList.push(cb);
+};
+
+const afterRefresh = () => {
+  while (waitList.length) {
+    const cb = waitList.pop();
+    cb();
+  }
+};
+
+export {
+  axiosService,
+  // history
+};

@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks";
 import type { IComment, IOrder } from "../../interfaces";
 import { commentActions, orderActions, orderModalActions } from "../../redux";
 import { Comment } from "../Comment/Comment";
+import css from "./Details.module.css";
 import { StyledTableCell } from "./Orders";
 
 interface IProps {
@@ -65,31 +66,37 @@ const Order: FC<IProps> = ({ order }) => {
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box sx={{ margin: 1 }}>
-              Message:
-              {order.msg && <div>{order.msg}</div>}
-              utm:
-              {order.utm && <div>{order.utm} </div>}
-              {comment && <Comment />}
-              <form onSubmit={handleSubmit(createComment)}>
-                <input
-                  type="text"
-                  placeholder={"comment"}
-                  {...register("comment")}
-                />
-                <Button
-                  type={"submit"}
-                  variant="contained"
-                  color="primary"
-                  disabled={order.manager && order.managerId !== me.id}
-                >
-                  Submit
-                </Button>
-              </form>
+            <Box className={css.detailsBlock} sx={{ margin: 1 }}>
+              <div className={css.message}>
+                Message:
+                {order.msg && <div>{order.msg}</div>}
+              </div>
+              <div className={css.utm}>
+                utm:
+                {order.utm && <div>{order.utm} </div>}
+              </div>
+              <div className={css.comment}>
+                {comment && <Comment />}
+                <form onSubmit={handleSubmit(createComment)}>
+                  <input
+                    type="text"
+                    placeholder={"comment"}
+                    {...register("comment")}
+                  />
+                  <Button
+                    type={"submit"}
+                    variant="contained"
+                    color="success"
+                    disabled={order.manager && order.managerId !== me?.id}
+                  >
+                    Submit
+                  </Button>
+                </form>
+              </div>
               <Button
                 variant="contained"
-                color="primary"
-                disabled={order.manager && order.managerId !== me.id}
+                color="success"
+                disabled={order.manager && order.managerId !== me?.id}
                 onClick={() => {
                   handleEdit(order);
                 }}

@@ -15,6 +15,8 @@ const userService = {
     await axiosService.delete(urls.users.byId(id)),
   activateById: async (id: number): Promise<AxiosResponse<string>> =>
     await axiosService.post(urls.users.activate(id)),
+  recoverPassById: async (id: number): Promise<AxiosResponse<string>> =>
+    await axiosService.post(urls.users.recoverPass(id)),
   banById: async (id: number): Promise<AxiosResponse<void>> =>
     await axiosService.post(urls.users.ban(id)),
   unbanById: async (id: number): Promise<AxiosResponse<void>> =>
@@ -24,6 +26,11 @@ const userService = {
     data: IPass,
   ): Promise<AxiosResponse<void>> =>
     await axiosService.put(urls.users.activateAccount(activationToken), data),
+  recoveryByUser: async (
+    recoveryToken: string,
+    data: IPass,
+  ): Promise<AxiosResponse<void>> =>
+    await axiosService.put(urls.users.recoveryPassByUser(recoveryToken), data),
 };
 
 export { userService };

@@ -1,0 +1,24 @@
+.detailsBlock {
+    /*margin: 10px;*/
+    width: 100vw;
+    height: 200px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    position: relative;
+}
+.message {
+position: absolute;
+    left: 0;
+    top: 40px;
+}
+
+.utm {
+    position: absolute;
+    left: 0;
+    bottom: 40px;
+}
+.comment {
+margin-left: 58%;
+}

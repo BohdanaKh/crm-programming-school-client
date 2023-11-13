@@ -25,24 +25,21 @@ class AuthService {
     this.deleteTokens();
   }
 
-  async refresh(): Promise<void> {
+  async refresh(): Promise<IUser> {
     const refreshToken = this.getRefreshToken();
     if (!refreshToken) {
       throw new Error("Refresh token doesn't exist");
     }
-    const { data }: AxiosResponse<ITokens> = await axiosService.post(
+    const { data }: AxiosResponse<ILoginRes> = await axiosService.post(
       urls.auth.refresh,
       { refreshToken },
     );
     this.setTokens({
-      accessToken: data.accessToken,
-      refreshToken: data.refreshToken,
+      accessToken: data.token.accessToken,
+      refreshToken: data.token.refreshToken,
     });
+    return data.user;
   }
-
-  // me(): IRes<IUser> {
-  //     return axiosService.get(urls.auth.me)
-  // }
 
   private setTokens({ accessToken, refreshToken }: ITokens): void {
     localStorage.setItem(this.accessKey, accessToken);

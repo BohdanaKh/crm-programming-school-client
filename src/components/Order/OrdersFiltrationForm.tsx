@@ -61,7 +61,7 @@ const OrdersFiltrationForm: FC = () => {
   const filterMy = () => {
     setIsChecked(!isChecked);
     if (!isChecked) {
-      const id = me.id;
+      const id = me?.id;
       dispatch(orderActions.setParams({ managerId: id }));
       setSearchParams((params) => {
         params.set("managerId", id.toString());

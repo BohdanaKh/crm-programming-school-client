@@ -16,10 +16,13 @@ const urls = {
     users,
     byId: (id: number): string => `${users}/${id}`,
     activate: (id: number): string => `${users}/activate/${id}`,
+    recoverPass: (id: number): string => `${users}/recovery/${id}`,
     ban: (id: number): string => `${users}/ban/${id}`,
     unban: (id: number): string => `${users}/unban/${id}`,
     activateAccount: (activationToken: string): string =>
       `/activate/${activationToken}`,
+    recoveryPassByUser: (recoveryToken: string): string =>
+      `/recovery/${recoveryToken}`,
   },
   orders: {
     orders,

@@ -59,34 +59,35 @@ const OrderEditModal: FC = () => {
         <form onSubmit={handleSubmit(update)}>
           <div className={css.formContainer}>
             <div className={css.formColumn}>
-              <label>Group</label>
-              {isInputVisible ? (
-                <Groups />
-              ) : (
-                <select className={css.formInput} {...register("group")}>
-                  {groups?.map((group) => (
-                    <option key={group.id} value={group.title}>
-                      {group.title}
-                    </option>
-                  ))}
-                </select>
-              )}
+              <div className={css.groupsBlock}>
+                <label>Group</label>
+                {isInputVisible ? (
+                  <Groups />
+                ) : (
+                  <select className={css.formInput} {...register("group")}>
+                    {groups?.map((group) => (
+                      <option key={group.id} value={group.title}>
+                        {group.title}
+                      </option>
+                    ))}
+                  </select>
+                )}
 
-              <Button
-                variant="contained"
-                size="small"
-                sx={{
-                  width: "49%",
-                  maxHeight: "20px",
-                  backgroundColor: "green",
-                }}
-                onClick={() => {
-                  setInputVisible(!isInputVisible);
-                }}
-              >
-                {isInputVisible ? "SELECT" : "ADD GROUP"}
-              </Button>
-
+                <Button
+                  variant="contained"
+                  size="small"
+                  sx={{
+                    width: "49%",
+                    maxHeight: "20px",
+                    backgroundColor: "green",
+                  }}
+                  onClick={() => {
+                    setInputVisible(!isInputVisible);
+                  }}
+                >
+                  {isInputVisible ? "SELECT" : "ADD GROUP"}
+                </Button>
+              </div>
               <label>Name</label>
               <input
                 className={css.formInput}
@@ -178,13 +179,7 @@ const OrderEditModal: FC = () => {
                 </option>
                 <option value={ECourseType.vip}>{ECourseType.vip}</option>
               </select>
-
-              <Button
-                type={"submit"}
-                className={css.formButton}
-                variant="contained"
-                color="primary"
-              >
+              <Button type={"submit"} variant="contained" color="success">
                 SUBMIT
               </Button>
             </div>
@@ -193,7 +188,7 @@ const OrderEditModal: FC = () => {
         <Button
           className={css.formButton}
           variant="contained"
-          color="secondary"
+          color="success"
           onClick={() => dispatch(orderModalActions.closeOrderEditModal())}
         >
           CLOSE

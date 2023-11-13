@@ -23,7 +23,9 @@ interface IProps {
 
 const User: FC<IProps> = ({ user }) => {
   const { id, name, surname, email, is_active, last_login, orders } = user;
-  const { activationToken } = useAppSelector((state) => state.userReducer);
+  const { activationToken, recoveryToken } = useAppSelector(
+    (state) => state.userReducer,
+  );
   const dispatch = useAppDispatch();
 
   const ordersInWork = orders.filter(
@@ -32,14 +34,20 @@ const User: FC<IProps> = ({ user }) => {
   const ordersAgreed = orders.filter(
     (order) => order.status === EStatus.Aggre,
   ).length;
-
-  const activationUrl = `localhost:3000/activate/${activationToken}`;
   const { copyToClipboard } = useCopyToClipboard();
-  copyToClipboard(activationUrl);
-  // const activate = (id: number): string => {
-  //     dispatch(userActions.activateUser({id}));
-  //
-  // }
+
+  const activate = async (id: number) => {
+    await dispatch(userActions.activateUser({ id }));
+    const activationUrl = `localhost:3000/activate/${activationToken}`;
+    copyToClipboard(activationUrl);
+  };
+
+  const recovery = async (id: number) => {
+    await dispatch(userActions.recovery({ id }));
+    const recoveryUrl = `localhost:3000/recovery/${recoveryToken}`;
+    copyToClipboard(recoveryUrl);
+  };
+
   return (
     <Card className={css.userBlock}>
       <CardContent className={css.userInfo}>
@@ -78,13 +86,27 @@ const User: FC<IProps> = ({ user }) => {
         </Typography>
       </CardContent>
       <CardActions className={css.userActions}>
-        <Button
-          className={css.userActionButton}
-          size="small"
-          onClick={async () => await dispatch(userActions.activateUser({ id }))}
-        >
-          ACTIVATE
-        </Button>
+        {!is_active ? (
+          <Button
+            className={css.userActionButton}
+            size="small"
+            onClick={() => {
+              activate(id);
+            }}
+          >
+            ACTIVATE
+          </Button>
+        ) : (
+          <Button
+            className={css.userActionButton}
+            size="small"
+            onClick={() => {
+              recovery(id);
+            }}
+          >
+            RECOVERY PASSWORD
+          </Button>
+        )}
         <Button
           className={css.userActionButton}
           size="small"

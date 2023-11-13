@@ -1,23 +1,21 @@
-import { Box, Container, CssBaseline, PaginationItem } from "@mui/material";
+import { Box, Container, CssBaseline } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 import type { FC } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
-import { useAppDispatch, useAppSelector } from "../../hooks";
-import { orderActions } from "../../redux";
+import { useAppSelector } from "../../hooks";
 import css from "../Pagination/Pagination.module.css";
 
 const OrderPagination: FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams({ page: "1" });
 
-  const { page, pages } = useAppSelector((state) => state.orderReducer);
+  const { pages } = useAppSelector((state) => state.orderReducer);
 
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
   const getTo = (num: number) => {
-    dispatch(orderActions.setPage(num));
+    // dispatch(orderActions.setPage(num));
     setSearchParams((prev) => {
-      prev.append("page", num.toString());
+      prev.set("page", num.toString());
       return prev;
     });
   };
@@ -31,21 +29,21 @@ const OrderPagination: FC = () => {
             <Pagination
               className={css.MuiPagination}
               count={pages}
-              page={page}
+              page={+searchParams.get("page")}
               onChange={(_, num: number) => {
                 getTo(num);
               }}
               siblingCount={2}
               boundaryCount={1}
-              hidePrevButton={page === 1}
-              hideNextButton={page === pages}
-              renderItem={(item) => (
-                <PaginationItem
-                  component={Link}
-                  to={`/orders?page=${item.page}`}
-                  {...item}
-                />
-              )}
+              hidePrevButton={+searchParams.get("page") === 1}
+              hideNextButton={+searchParams.get("page") === pages}
+              // renderItem={(item) => (
+              //   <PaginationItem
+              //     component={Link}
+              //     to={`/orders?page=${item.page}`}
+              //     {...item}
+              //   />
+              // )}
             />
           )}
         </Box>

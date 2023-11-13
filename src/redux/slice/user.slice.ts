@@ -18,6 +18,7 @@ interface IState {
   trigger: boolean;
   userForUpdate: IUser;
   activationToken: string;
+  recoveryToken: string;
 }
 
 const initialState: IState = {
@@ -29,6 +30,7 @@ const initialState: IState = {
   userForUpdate: null,
   trigger: false,
   activationToken: null,
+  recoveryToken: null,
 };
 
 const getAll = createAsyncThunk<IPagination<IUser[]>, { page: number }>(
@@ -82,6 +84,21 @@ const activateAccount = createAsyncThunk<
   },
 );
 
+const recoveryPasswordByUser = createAsyncThunk<
+  void,
+  { recoveryToken: string; data: IPass }
+>(
+  "userSlice/recoveryPasswordByUser",
+  async ({ recoveryToken, data }, { rejectWithValue }) => {
+    try {
+      await userService.recoveryByUser(recoveryToken, data);
+    } catch (e) {
+      const err = e as AxiosError;
+      return rejectWithValue(err.response.data);
+    }
+  },
+);
+
 const deleteUser = createAsyncThunk<void, { id: number }>(
   "userSlice/deleteUser",
   async ({ id }, { rejectWithValue }) => {
@@ -99,6 +116,19 @@ const activateUser = createAsyncThunk<string, { id: number }>(
   async ({ id }, { rejectWithValue }) => {
     try {
       const { data } = await userService.activateById(id);
+      return data;
+    } catch (e) {
+      const err = e as AxiosError;
+      return rejectWithValue(err.response.data);
+    }
+  },
+);
+
+const recovery = createAsyncThunk<string, { id: number }>(
+  "userSlice/recoveryUserPass",
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const { data } = await userService.recoverPassById(id);
       return data;
     } catch (e) {
       const err = e as AxiosError;
@@ -156,6 +186,9 @@ const slice = createSlice({
       .addCase(activateUser.fulfilled, (state, action) => {
         state.activationToken = action.payload;
       })
+      .addCase(recovery.fulfilled, (state, action) => {
+        state.recoveryToken = action.payload;
+      })
       .addMatcher(isFulfilled(), (state) => {
         state.error = null;
       })
@@ -165,9 +198,11 @@ const slice = createSlice({
           update,
           deleteUser,
           activateUser,
+          recovery,
           banUser,
           unbanUser,
           activateAccount,
+          recoveryPasswordByUser,
         ),
         (state) => {
           state.trigger = !state.trigger;
@@ -187,9 +222,11 @@ const userActions = {
   update,
   deleteUser,
   activateUser,
+  recovery,
   banUser,
   unbanUser,
   activateAccount,
+  recoveryPasswordByUser,
 };
 
 export { userActions, userReducer };

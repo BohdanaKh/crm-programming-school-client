@@ -114,13 +114,13 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 }
 
 const Orders: FC = () => {
-  const { orders, page, trigger, params, errors } = useAppSelector(
+  const { orders, trigger, params, errors } = useAppSelector(
     (state) => state.orderReducer,
   );
 
   const dispatch = useAppDispatch();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_, setSearchParams] = useSearchParams({ page: "1" });
+
+  const [searchParams, setSearchParams] = useSearchParams({ page: "1" });
 
   const { isOrderEditModalOpen } = useAppSelector(
     (state) => state.orderModalReducer,
@@ -135,8 +135,10 @@ const Orders: FC = () => {
   }, [dispatch, trigger]);
 
   useEffect(() => {
-    dispatch(orderActions.getAll({ page, ...params }));
-  }, [dispatch, page, params, trigger]);
+    dispatch(
+      orderActions.getAll({ page: +searchParams.get("page"), ...params }),
+    );
+  }, [dispatch, searchParams.get("page"), params, trigger]);
 
   const handleHeaderCellClick = (
     event: React.MouseEvent<unknown, MouseEvent>,

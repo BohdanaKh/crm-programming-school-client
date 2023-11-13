@@ -10,16 +10,55 @@
 }
 
 .Header .logo {
-    margin-left: 20px;
+    margin: 10px 0 0 20px;
     position: absolute;
     left: 0;
+    top: 0;
     font-weight: bold;
+    border: none;
+    background-color: green;
+    color: white;
+    font-size: larger;
+    transition: transform 0.3s ease;
+}
+.Header .logo:hover {
+    transform: scale(1.2);
+}
+
+.Header .buttonsWrapper {
+    position: absolute;
+    right: 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+
+}
+.Header .admin {
+font-size: medium;
+    padding-top: 10px;
+    transition: transform 0.3s ease;
+}
+.Header .admin:hover {
+    transform: scale(1.2);
 }
 
 .Header .user {
-    position: absolute;
-    right: 0;
+    background-color: green;
+    border: none;
+    transition: transform 0.3s ease;
 }
+.Header .user:hover {
+    transform: scale(1.2);
+}
+.Header .logout {
+    background-color: green;
+    border: none;
+    transition: transform 0.3s ease;
+}
+.Header .logout:hover {
+    transform: scale(1.2);
+}
+
 
 .Header a {
     text-decoration: none;

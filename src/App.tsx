@@ -11,6 +11,7 @@ import {
   LoginPage,
   LogoutPage,
   OrdersPage,
+  RecoveryPasswordPage,
   UserPage,
   UsersPage,
 } from "./pages";
@@ -22,11 +23,11 @@ const App = () => (
       <Route path="/login" element={<LoginPage />} />
       <Route
         path={"activate/:activationToken"}
-        element={
-          <RequiredAuth>
-            <AccountActivationPage />
-          </RequiredAuth>
-        }
+        element={<AccountActivationPage />}
+      />
+      <Route
+        path={"recovery/:recoveryToken"}
+        element={<RecoveryPasswordPage />}
       />
       <Route
         path={"logout"}
