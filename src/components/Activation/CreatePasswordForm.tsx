@@ -15,7 +15,7 @@ const CreatePasswordForm: FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const params = useParams<string>();
-  const { activationToken } = params;
+  // const { activationToken } = params;
   const {
     handleSubmit,
     formState: { isValid },
@@ -26,12 +26,27 @@ const CreatePasswordForm: FC = () => {
   });
 
   const setPassword: SubmitHandler<IPass> = async (data) => {
-    const {
-      meta: { requestStatus },
-    } = await dispatch(userActions.activateAccount({ activationToken, data }));
+    if (params.activationToken) {
+      const { activationToken } = params;
+      const {
+        meta: { requestStatus },
+      } = await dispatch(
+        userActions.activateAccount({ activationToken, data }),
+      );
+      if (requestStatus === "fulfilled") {
+        navigate("/login");
+      }
+    } else if (params.recoveryToken) {
+      const { recoveryToken } = params;
 
-    if (requestStatus === "fulfilled") {
-      navigate("/login");
+      const {
+        meta: { requestStatus },
+      } = await dispatch(
+        userActions.recoveryPasswordByUser({ recoveryToken, data }),
+      );
+      if (requestStatus === "fulfilled") {
+        navigate("/login");
+      }
     }
   };
 
@@ -80,7 +95,7 @@ const CreatePasswordForm: FC = () => {
           sx={{ marginTop: "30px" }}
           disabled={!isValid}
         >
-          ACTIVATE
+          {params.activationToken ? "ACTIVATE" : "RECOVER PASSWORD"}
         </Button>
       </form>
     </div>

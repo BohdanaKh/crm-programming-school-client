@@ -30,14 +30,26 @@
 
 
 .userContainer .userActions {
+    width: 400px;
+    height: 100%;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    justify-content: right;
+    align-items: center;
+}
+
+.userContainer .userButton {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: flex-start;
 }
 
 
 .userContainer .userActionButton {
-    flex: 1;
     padding: 5px;
+    margin: 5px;
     background-color: green;
     color: white;
     border: none;
@@ -48,4 +60,9 @@
 
 .userContainer .userActionButton:hover {
     background-color: darkgreen;
+}
+
+.userContainer .text {
+width: 100%;
+    font-size: 12px;
 }

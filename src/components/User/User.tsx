@@ -6,6 +6,7 @@ import {
   Typography,
 } from "@mui/material";
 import type { FC } from "react";
+import { useEffect, useState } from "react";
 
 import {
   useAppDispatch,
@@ -26,6 +27,7 @@ const User: FC<IProps> = ({ user }) => {
   const { activationToken, recoveryToken } = useAppSelector(
     (state) => state.userReducer,
   );
+  const [showText, setShowText] = useState(false);
   const dispatch = useAppDispatch();
 
   const ordersInWork = orders.filter(
@@ -38,15 +40,29 @@ const User: FC<IProps> = ({ user }) => {
 
   const activate = async (id: number) => {
     await dispatch(userActions.activateUser({ id }));
-    const activationUrl = `localhost:3000/activate/${activationToken}`;
-    copyToClipboard(activationUrl);
+    if (activationToken) {
+      const activationUrl = `localhost:3000/activate/${activationToken}`;
+      copyToClipboard(activationUrl);
+      setShowText(true);
+    }
   };
 
   const recovery = async (id: number) => {
     await dispatch(userActions.recovery({ id }));
-    const recoveryUrl = `localhost:3000/recovery/${recoveryToken}`;
-    copyToClipboard(recoveryUrl);
+    if (recoveryToken) {
+      const recoveryUrl = `localhost:3000/recovery/${recoveryToken}`;
+      copyToClipboard(recoveryUrl);
+      setShowText(true);
+    }
   };
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setShowText(false);
+    }, 1000); // Hide the message after 1 second
+
+    return () => clearTimeout(timeoutId);
+  }, [showText]);
 
   return (
     <Card className={css.userBlock}>
@@ -86,41 +102,44 @@ const User: FC<IProps> = ({ user }) => {
         </Typography>
       </CardContent>
       <CardActions className={css.userActions}>
-        {!is_active ? (
+        <div className={css.userButtons}>
+          {!is_active ? (
+            <Button
+              className={css.userActionButton}
+              size="small"
+              onClick={() => {
+                activate(id);
+              }}
+            >
+              ACTIVATE
+            </Button>
+          ) : (
+            <Button
+              className={css.userActionButton}
+              size="small"
+              onClick={() => {
+                recovery(id);
+              }}
+            >
+              RECOVERY PASSWORD
+            </Button>
+          )}
           <Button
             className={css.userActionButton}
             size="small"
-            onClick={() => {
-              activate(id);
-            }}
+            onClick={async () => await dispatch(userActions.banUser({ id }))}
           >
-            ACTIVATE
+            BAN
           </Button>
-        ) : (
           <Button
             className={css.userActionButton}
             size="small"
-            onClick={() => {
-              recovery(id);
-            }}
+            onClick={async () => await dispatch(userActions.unbanUser({ id }))}
           >
-            RECOVERY PASSWORD
+            UNBAN
           </Button>
-        )}
-        <Button
-          className={css.userActionButton}
-          size="small"
-          onClick={async () => await dispatch(userActions.banUser({ id }))}
-        >
-          BAN
-        </Button>
-        <Button
-          className={css.userActionButton}
-          size="small"
-          onClick={async () => await dispatch(userActions.unbanUser({ id }))}
-        >
-          UNBAN
-        </Button>
+        </div>
+        {showText && <p className={css.text}>Link copied to clipboard</p>}
       </CardActions>
     </Card>
   );
