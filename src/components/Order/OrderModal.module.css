@@ -16,7 +16,6 @@
     border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     max-width: 800px;
-    position: relative;
 }
 
 .formContainer {
@@ -40,15 +39,4 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 16px;
-}
-
-
-.formButton {
-    position: absolute;
-    right: 30px;
-    bottom: 20px;
-}
-
-.formButton:hover {
-    background-color: #45a049;
 }

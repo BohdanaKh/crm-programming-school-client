@@ -2,9 +2,12 @@ import { format } from "date-fns";
 import type { FC } from "react";
 
 import { useAppSelector } from "../../hooks";
+import type { IComment } from "../../interfaces";
 
-const Comment: FC = () => {
-  const { comment: item } = useAppSelector((state) => state.commentReducer);
+interface IProps {
+  item: IComment;
+}
+const Comment: FC<IProps> = ({ item }) => {
   const { comment, created_at } = item;
 
   const { me } = useAppSelector((state) => state.authReducer);

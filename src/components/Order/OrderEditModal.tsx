@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks";
 import type { IOrder } from "../../interfaces";
 import { ECourse, ECourseFormat, ECourseType, EStatus } from "../../interfaces";
 import { groupActions, orderActions, orderModalActions } from "../../redux";
-import { Groups } from "../Groups/Groups";
+import { GroupCreateForm } from "../Group/GroupCreateForm";
 import css from "./OrderModal.module.css";
 
 const OrderEditModal: FC = () => {
@@ -62,9 +62,10 @@ const OrderEditModal: FC = () => {
               <div className={css.groupsBlock}>
                 <label>Group</label>
                 {isInputVisible ? (
-                  <Groups />
+                  <GroupCreateForm />
                 ) : (
                   <select className={css.formInput} {...register("group")}>
+                    <option value={undefined} />
                     {groups?.map((group) => (
                       <option key={group.id} value={group.title}>
                         {group.title}
@@ -124,12 +125,12 @@ const OrderEditModal: FC = () => {
             <div className={css.formColumn}>
               <label>Status</label>
               <select className={css.formInput} {...register("status")}>
+                <option value={undefined} />
                 <option value={EStatus.In_work}>{EStatus.In_work}</option>
                 <option value={EStatus.New}>{EStatus.New}</option>
                 <option value={EStatus.Aggre}>{EStatus.Aggre}</option>
                 <option value={EStatus.Disaggre}>{EStatus.Disaggre}</option>
                 <option value={EStatus.Dubbing}>{EStatus.Dubbing}</option>
-                <option value={EStatus.empty}>{EStatus.empty}</option>
               </select>
               <label>Sum</label>
               <input
@@ -149,6 +150,7 @@ const OrderEditModal: FC = () => {
               />
               <label>Course</label>
               <select className={css.formInput} {...register("course")}>
+                <option value={undefined} />
                 <option value={ECourse.FS}>{ECourse.FS}</option>
                 <option value={ECourse.QACX}>{ECourse.QACX}</option>
                 <option value={ECourse.JCX}>{ECourse.JCX}</option>
@@ -158,6 +160,7 @@ const OrderEditModal: FC = () => {
               </select>
               <label>Course format</label>
               <select className={css.formInput} {...register("course_format")}>
+                <option value={undefined} />
                 <option value={ECourseFormat.static}>
                   {ECourseFormat.static}
                 </option>
@@ -167,6 +170,7 @@ const OrderEditModal: FC = () => {
               </select>
               <label>Course type</label>
               <select className={css.formInput} {...register("course_type")}>
+                <option value={undefined} />
                 <option value={ECourseType.pro}>{ECourseType.pro}</option>
                 <option value={ECourseType.minimal}>
                   {ECourseType.minimal}
@@ -186,9 +190,9 @@ const OrderEditModal: FC = () => {
           </div>
         </form>
         <Button
-          className={css.formButton}
           variant="contained"
           color="success"
+          sx={{ marginLeft: "600px" }}
           onClick={() => dispatch(orderModalActions.closeOrderEditModal())}
         >
           CLOSE

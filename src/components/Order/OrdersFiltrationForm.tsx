@@ -64,7 +64,7 @@ const OrdersFiltrationForm: FC = () => {
       const id = me?.id;
       dispatch(orderActions.setParams({ managerId: id }));
       setSearchParams((params) => {
-        params.set("managerId", id.toString());
+        params.set("managerId", id?.toString());
         return params;
       });
     } else {

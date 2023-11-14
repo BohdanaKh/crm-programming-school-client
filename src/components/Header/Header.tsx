@@ -1,15 +1,27 @@
 import { faRightFromBracket, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { useAppSelector } from "../../hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { authActions } from "../../redux";
 import { authService } from "../../services";
 import css from "./Header.module.css";
 
 const Header = () => {
   const { me } = useAppSelector((state) => state.authReducer);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  // const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (!me) {
+      dispatch(
+        authActions.setMe(JSON.parse(window.localStorage.getItem("me"))),
+      );
+    }
+  }, [me, dispatch]);
+
+  console.log(me);
 
   return (
     <div className={css.Header}>

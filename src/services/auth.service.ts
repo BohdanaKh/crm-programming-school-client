@@ -7,6 +7,7 @@ import { axiosService } from "./axios.service";
 class AuthService {
   private readonly accessKey = "access";
   private readonly refreshKey = "refresh";
+  private readonly me = "me";
 
   async login(user: IAuth): Promise<IUser> {
     const { data }: AxiosResponse<ILoginRes> = await axiosService.post(
@@ -17,6 +18,7 @@ class AuthService {
       accessToken: data.token.accessToken,
       refreshToken: data.token.refreshToken,
     });
+    localStorage.setItem(this.me, JSON.stringify(data.user));
     return data.user;
   }
 
@@ -57,6 +59,7 @@ class AuthService {
   deleteTokens(): void {
     localStorage.removeItem(this.accessKey);
     localStorage.removeItem(this.refreshKey);
+    localStorage.removeItem(this.me);
   }
 }
 

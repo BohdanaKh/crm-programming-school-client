@@ -4,5 +4,4 @@ export enum EStatus {
   Aggre = "Aggre",
   Disaggre = "Disaggre",
   Dubbing = "Dubbing",
-  empty = "",
 }

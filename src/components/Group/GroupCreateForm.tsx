@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import { useAppDispatch } from "../../hooks";
 import { groupActions } from "../../redux";
 
-const Groups: FC = () => {
+const GroupCreateForm: FC = () => {
   const dispatch = useAppDispatch();
   const [groupName, setGroupName] = useState<string>();
 
@@ -30,6 +30,13 @@ const Groups: FC = () => {
         }}
       />
       <Button
+        variant="contained"
+        size="small"
+        sx={{
+          width: "49%",
+          maxHeight: "20px",
+          backgroundColor: "green",
+        }}
         onClick={async () => {
           await createGroup(groupName);
         }}
@@ -40,4 +47,4 @@ const Groups: FC = () => {
   );
 };
 
-export { Groups };
+export { GroupCreateForm };

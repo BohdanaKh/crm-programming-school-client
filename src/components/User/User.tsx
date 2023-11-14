@@ -38,8 +38,18 @@ const User: FC<IProps> = ({ user }) => {
   ).length;
   const { copyToClipboard } = useCopyToClipboard();
 
-  const activate = async (id: number) => {
-    await dispatch(userActions.activateUser({ id }));
+  useEffect(() => {
+    if (showText) {
+      const timeoutId = setTimeout(() => {
+        setShowText(false);
+      }, 1000); // Hide the message after 1 second
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [showText]);
+
+  const activate = (id: number) => {
+    dispatch(userActions.activateUser({ id }));
     if (activationToken) {
       const activationUrl = `localhost:3000/activate/${activationToken}`;
       copyToClipboard(activationUrl);
@@ -47,22 +57,14 @@ const User: FC<IProps> = ({ user }) => {
     }
   };
 
-  const recovery = async (id: number) => {
-    await dispatch(userActions.recovery({ id }));
-    if (recoveryToken) {
-      const recoveryUrl = `localhost:3000/recovery/${recoveryToken}`;
-      copyToClipboard(recoveryUrl);
-      setShowText(true);
-    }
+  const recovery = (id: number) => {
+    dispatch(userActions.recovery({ id }));
+    // if (recoveryToken) {
+    // `localhost:3000/recovery/${recoveryToken}`;
+    copyToClipboard(`localhost:3000/recovery/${recoveryToken}`);
+    setShowText(true);
+    // }
   };
-
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      setShowText(false);
-    }, 1000); // Hide the message after 1 second
-
-    return () => clearTimeout(timeoutId);
-  }, [showText]);
 
   return (
     <Card className={css.userBlock}>

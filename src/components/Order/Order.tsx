@@ -18,8 +18,7 @@ interface IProps {
 
 const Order: FC<IProps> = ({ order }) => {
   const [open, setOpen] = useState<boolean>(false);
-
-  const { comment } = useAppSelector((state) => state.commentReducer);
+  const { comments } = order;
 
   const { me } = useAppSelector((state) => state.authReducer);
   const dispatch = useAppDispatch();
@@ -30,6 +29,7 @@ const Order: FC<IProps> = ({ order }) => {
     reset();
   };
 
+  const visibleComments = comments.slice(-3);
   const handleEdit = (order: IOrder) => {
     dispatch(orderActions.setOrderForUpdate(order));
     dispatch(orderModalActions.openOrderEditModal());
@@ -64,7 +64,7 @@ const Order: FC<IProps> = ({ order }) => {
         <StyledTableCell align="left">{order.manager}</StyledTableCell>
       </TableRow>
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={15}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box className={css.detailsBlock} sx={{ margin: 1 }}>
               <div className={css.message}>
@@ -76,7 +76,9 @@ const Order: FC<IProps> = ({ order }) => {
                 {order.utm && <div>{order.utm} </div>}
               </div>
               <div className={css.comment}>
-                {comment && <Comment />}
+                {visibleComments?.map((comment) => (
+                  <Comment key={comment.id} item={comment} />
+                ))}
                 <form onSubmit={handleSubmit(createComment)}>
                   <input
                     type="text"
@@ -87,7 +89,7 @@ const Order: FC<IProps> = ({ order }) => {
                     type={"submit"}
                     variant="contained"
                     color="success"
-                    disabled={order.manager && order.managerId !== me?.id}
+                    disabled={!!order.manager && order.managerId !== me?.id}
                   >
                     Submit
                   </Button>
@@ -96,7 +98,7 @@ const Order: FC<IProps> = ({ order }) => {
               <Button
                 variant="contained"
                 color="success"
-                disabled={order.manager && order.managerId !== me?.id}
+                disabled={!!order.manager && order.managerId !== me?.id}
                 onClick={() => {
                   handleEdit(order);
                 }}

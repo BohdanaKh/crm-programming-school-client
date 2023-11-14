@@ -46,7 +46,11 @@ const refresh = createAsyncThunk<IUser, void>(
 const slice = createSlice({
   name: "authSlice",
   initialState,
-  reducers: {},
+  reducers: {
+    setMe: (state, action) => {
+      state.me = action.payload;
+    },
+  },
   extraReducers: (builder) =>
     builder
       .addCase(login.fulfilled, (state, action) => {

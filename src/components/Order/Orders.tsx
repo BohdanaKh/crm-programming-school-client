@@ -126,13 +126,13 @@ const Orders: FC = () => {
     (state) => state.orderModalReducer,
   );
 
-  useEffect(() => {
-    setSearchParams((prev: URLSearchParams) => ({ ...prev, page: "1" }));
-  }, []);
+  // useEffect(() => {
+  //   setSearchParams((prev: URLSearchParams) => ({ ...prev, page: "1" }));
+  // }, []);
 
   useEffect(() => {
     dispatch(groupActions.getAll());
-  }, [dispatch, trigger]);
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(
@@ -161,12 +161,12 @@ const Orders: FC = () => {
 
   return (
     <>
+      {errors && <p>{errors.message}</p>}
       <TableContainer component={Paper}>
         <OrdersFiltrationForm />
         <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
           <EnhancedTableHead onRequestSort={handleHeaderCellClick} />
           <TableBody>
-            {errors && <p>Error: {errors.message}</p>}
             {orders?.map((order) => <Order key={order.id} order={order} />)}
           </TableBody>
         </Table>
