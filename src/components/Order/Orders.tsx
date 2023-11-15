@@ -112,9 +112,8 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     </TableHead>
   );
 }
-
 const Orders: FC = () => {
-  const { orders, trigger, params, errors } = useAppSelector(
+  const { orders, trigger, errors } = useAppSelector(
     (state) => state.orderReducer,
   );
 
@@ -130,33 +129,54 @@ const Orders: FC = () => {
   //   setSearchParams((prev: URLSearchParams) => ({ ...prev, page: "1" }));
   // }, []);
 
+  // const currentParams = Object.fromEntries(searchParams);
+  // console.log(currentParams);
+
   useEffect(() => {
     dispatch(groupActions.getAll());
   }, [dispatch]);
 
   useEffect(() => {
     dispatch(
-      orderActions.getAll({ page: +searchParams.get("page"), ...params }),
+      orderActions.getAll(
+        // page: +searchParams.get("page"),
+        Object.fromEntries(searchParams),
+      ),
     );
-  }, [dispatch, searchParams.get("page"), params, trigger]);
+    // }, [dispatch, searchParams.get("page"), searchParams, trigger]);
+  }, [dispatch, searchParams, trigger]);
 
   const handleHeaderCellClick = (
     event: React.MouseEvent<unknown, MouseEvent>,
     property: keyof IOrder,
   ) => {
-    setSearchParams((prev) => {
-      prev.set("sort", property);
-      return prev;
-    });
-    dispatch(orderActions.setParams({ sort: property }));
-    if (params) {
-      const newSort = params.sort === property ? `-${property}` : property;
-      dispatch(orderActions.setParams({ sort: newSort }));
-      setSearchParams((params) => {
-        params.set("sort", newSort);
-        return params;
+    if (
+      !searchParams.get("sort") ||
+      searchParams.get("sort").startsWith("-") ||
+      searchParams.get("sort") !== property
+    ) {
+      setSearchParams((prev) => {
+        prev.set("sort", property);
+        return prev;
+      });
+    } else {
+      setSearchParams((prev) => {
+        prev.set("sort", `-${property}`);
+        return prev;
       });
     }
+    // const newProperty =
+    //   searchParams.get("sort") === property ? `-${property}` : property;
+
+    // dispatch(orderActions.setParams({ sort: property }));
+    // if (params) {
+    //   const newSort = params.sort === property ? `-${property}` : property;
+    //   dispatch(orderActions.setParams({ sort: newSort }));
+    // setSearchParams((params) => {
+    //   params.set("sort", newProperty);
+    //   return params;
+    // });
+    // }
   };
 
   return (

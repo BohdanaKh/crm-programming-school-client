@@ -1,4 +1,4 @@
-import { Button, Modal } from "@mui/material";
+import { Modal } from "@mui/material";
 import type { FC } from "react";
 import React, { useEffect, useState } from "react";
 import type { SubmitHandler } from "react-hook-form";
@@ -20,6 +20,8 @@ const OrderEditModal: FC = () => {
     (state) => state.orderModalReducer,
   );
   const [isInputVisible, setInputVisible] = useState(false);
+  const [groupName, setGroupName] = useState<string>();
+  const [filteredGroups, setFilteredGroups] = useState([]);
 
   useEffect(() => {
     if (orderForUpdate) {
@@ -42,6 +44,25 @@ const OrderEditModal: FC = () => {
     dispatch(groupActions.getAll());
   }, [dispatch, trigger1]);
 
+  useEffect(() => {
+    const filtered = groups?.filter(
+      (group) => group?.title.includes(groupName),
+    );
+    setFilteredGroups(filtered);
+    if (groupName === "") {
+      setFilteredGroups([]);
+    }
+  }, [groupName, groups]);
+
+  const createGroup = async (groupName: string) => {
+    const {
+      meta: { requestStatus },
+    } = await dispatch(groupActions.create({ group: { title: groupName } }));
+    if (requestStatus === "fulfilled") {
+      setValue("group", groupName);
+    }
+  };
+
   const update: SubmitHandler<IOrder> = async (order) => {
     await dispatch(orderActions.update({ id: orderForUpdate.id, order }));
     dispatch(orderModalActions.closeOrderEditModal());
@@ -62,7 +83,22 @@ const OrderEditModal: FC = () => {
               <div className={css.groupsBlock}>
                 <label>Group</label>
                 {isInputVisible ? (
-                  <GroupCreateForm />
+                  <>
+                    <input
+                      className={css.formInput}
+                      placeholder={"enter new group name"}
+                      value={groupName}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        setGroupName(e.target.value);
+                      }}
+                    />
+                    <div
+                      className={css.filteredGroups}
+                      hidden={!filteredGroups.length}
+                    >
+                      <GroupCreateForm filteredGroups={filteredGroups} />
+                    </div>
+                  </>
                 ) : (
                   <select className={css.formInput} {...register("group")}>
                     <option value={undefined} />
@@ -74,20 +110,25 @@ const OrderEditModal: FC = () => {
                   </select>
                 )}
 
-                <Button
-                  variant="contained"
-                  size="small"
-                  sx={{
-                    width: "49%",
-                    maxHeight: "20px",
-                    backgroundColor: "green",
-                  }}
+                <button
+                  type={"button"}
+                  className={css.groupsButton}
                   onClick={() => {
                     setInputVisible(!isInputVisible);
                   }}
                 >
                   {isInputVisible ? "SELECT" : "ADD GROUP"}
-                </Button>
+                </button>
+                <button
+                  type={"button"}
+                  className={css.groupsButton}
+                  onClick={async () => {
+                    await createGroup(groupName);
+                  }}
+                  hidden={!isInputVisible}
+                >
+                  ADD GROUP
+                </button>
               </div>
               <label>Name</label>
               <input
@@ -183,20 +224,18 @@ const OrderEditModal: FC = () => {
                 </option>
                 <option value={ECourseType.vip}>{ECourseType.vip}</option>
               </select>
-              <Button type={"submit"} variant="contained" color="success">
+              <button type={"submit"} className={css.editButton}>
                 SUBMIT
-              </Button>
+              </button>
             </div>
           </div>
         </form>
-        <Button
-          variant="contained"
-          color="success"
-          sx={{ marginLeft: "600px" }}
+        <button
+          className={css.closeButton1}
           onClick={() => dispatch(orderModalActions.closeOrderEditModal())}
         >
           CLOSE
-        </Button>
+        </button>
       </div>
     </Modal>
   );

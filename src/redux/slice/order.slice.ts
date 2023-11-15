@@ -6,7 +6,7 @@ import {
 } from "@reduxjs/toolkit";
 import type { AxiosError } from "axios";
 
-import type { IError, IFilter, IOrder, IPagination } from "../../interfaces";
+import type { IError, IOrder, IPagination } from "../../interfaces";
 import { orderService } from "../../services";
 
 interface IState {
@@ -18,7 +18,8 @@ interface IState {
   trigger: boolean;
   orderForUpdate: IOrder;
   sort: string;
-  params: IFilter;
+  params: any;
+  // params: IFilter;
 }
 
 const initialState: IState = {
@@ -35,9 +36,9 @@ const initialState: IState = {
 
 const getAll = createAsyncThunk<IPagination<IOrder[]>, any>(
   "orderSlice/getAllWithFilters",
-  async ({ page, ...params }, { rejectWithValue }) => {
+  async ({ ...params }, { rejectWithValue }) => {
     try {
-      const { data } = await orderService.getAll({ page, ...params });
+      const { data } = await orderService.getAll({ ...params });
       return data;
     } catch (e) {
       const err = e as AxiosError;
@@ -45,6 +46,19 @@ const getAll = createAsyncThunk<IPagination<IOrder[]>, any>(
     }
   },
 );
+
+// const getAll = createAsyncThunk<IPagination<IOrder[]>, any>(
+//   "orderSlice/getAllWithFilters",
+//   async ({ page, ...params }, { rejectWithValue }) => {
+//     try {
+//       const { data } = await orderService.getAll({ page, ...params });
+//       return data;
+//     } catch (e) {
+//       const err = e as AxiosError;
+//       return rejectWithValue(err.response.data);
+//     }
+//   },
+// );
 
 const update = createAsyncThunk<void, { order: IOrder; id: number }>(
   "orderSlice/update",

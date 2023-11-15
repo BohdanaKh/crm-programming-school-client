@@ -24,28 +24,23 @@ const LoginForm = () => {
     // resolver: joiResolver(authValidator)
   });
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchor(anchor ? null : event.currentTarget);
-  };
-
   const open = Boolean(anchor);
   const id = open ? "simple-popper" : undefined;
-  const login: SubmitHandler<IAuth> = async (data) => {
-    try {
-      const {
-        meta: { requestStatus },
-      } = await dispatch(authActions.login(data));
-
-      if (requestStatus === "fulfilled") {
-        navigate("/orders");
-      }
-    } catch (error) {
-      setAnchor(anchor ? null : document.getElementById("login-button"));
-    }
-  };
-
   const handleClose = () => {
     setAnchor(null);
+  };
+  const login: SubmitHandler<IAuth> = async (data) => {
+    const {
+      meta: { requestStatus },
+    } = await dispatch(authActions.login(data));
+
+    if (requestStatus === "fulfilled") {
+      navigate("/orders");
+      handleClose();
+    }
+    if (requestStatus === "rejected") {
+      setAnchor(document.getElementById("login-button"));
+    }
   };
 
   return (
@@ -94,7 +89,6 @@ const LoginForm = () => {
           color="success"
           sx={{ marginTop: "30px" }}
           disabled={!isValid}
-          onClick={handleClick}
         >
           LOGIN
         </Button>

@@ -8,7 +8,7 @@ import { useSearchParams } from "react-router-dom";
 import { useDebounce } from "use-debounce";
 
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import type { IFilter, IOrder } from "../../interfaces";
+import type { IOrder } from "../../interfaces";
 import { ECourse, ECourseFormat, ECourseType, EStatus } from "../../interfaces";
 import { orderActions } from "../../redux";
 import { ordersValidator } from "../../validators";
@@ -20,55 +20,59 @@ const OrdersFiltrationForm: FC = () => {
   const { params } = useAppSelector((state) => state.orderReducer);
   const { groups } = useAppSelector((state) => state.groupReducer);
   const dispatch = useAppDispatch();
-  const [searchTerm, setSearchTerm] = useState<IFilter>();
   const [isChecked, setIsChecked] = useState(false);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [, setSearchParams] = useSearchParams();
   const { reset, register } = useForm<IOrder>({
     mode: "all",
     resolver: joiResolver(ordersValidator),
   });
 
-  const [debouncedText] = useDebounce(searchTerm, 3000, { leading: true });
+  const [debouncedText] = useDebounce(params, 3000);
+  //
+  // console.log([debouncedText]);
 
   useEffect(() => {
     if (debouncedText) {
-      dispatch(orderActions.setParams(debouncedText));
+      for (const paramKey in debouncedText) {
+        setSearchParams((prev) => {
+          prev.set(paramKey, debouncedText[paramKey]);
+          return prev;
+        });
+      }
     }
   }, [debouncedText]);
-
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
-    const { name, value } = event.target;
-    setSearchParams((params) => {
-      params.set(name, value);
-      return params;
-    });
+    // const { name, value } = event.target;
+    // setSearchParams((params) => {
+    //   params.set(name, value);
+    //   return params;
+    // });
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    const currentParams = Object.fromEntries([...searchParams]);
-    setSearchTerm(currentParams);
+    dispatch(
+      orderActions.setParams({ [event.target.name]: event.target.value }),
+    );
   };
 
   const clearFilterForm = () => {
     dispatch(orderActions.setNullParams());
-    dispatch(orderActions.setPage(1));
-    reset();
+    // dispatch(orderActions.setPage(1));
     setSearchParams((prev) => ({ ...prev, page: 1 }));
+    reset();
   };
 
   const filterMy = () => {
     setIsChecked(!isChecked);
     if (!isChecked) {
       const id = me?.id;
-      dispatch(orderActions.setParams({ managerId: id }));
+      // dispatch(orderActions.setParams({ managerId: id }));
       setSearchParams((params) => {
         params.set("managerId", id?.toString());
         return params;
       });
     } else {
-      dispatch(orderActions.setParams({ ...params, managerId: null }));
+      // dispatch(orderActions.setParams({ ...params, managerId: null }));
       // dispatch(orderActions.setPage(1));
       reset();
       setSearchParams((params) => {

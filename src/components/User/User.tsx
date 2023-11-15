@@ -39,6 +39,28 @@ const User: FC<IProps> = ({ user }) => {
   const { copyToClipboard } = useCopyToClipboard();
 
   useEffect(() => {
+    if (activationToken) {
+      copyToClipboard(`localhost:3000/activation/${activationToken}`);
+    }
+  }, [activationToken]);
+
+  useEffect(() => {
+    if (recoveryToken) {
+      copyToClipboard(`localhost:3000/recovery/${recoveryToken}`);
+    }
+  }, [recoveryToken]);
+
+  const activate = (id: number) => {
+    dispatch(userActions.activateUser({ id }));
+    setShowText(true);
+  };
+
+  const recovery = (id: number) => {
+    dispatch(userActions.recovery({ id }));
+    setShowText(true);
+  };
+
+  useEffect(() => {
     if (showText) {
       const timeoutId = setTimeout(() => {
         setShowText(false);
@@ -47,24 +69,6 @@ const User: FC<IProps> = ({ user }) => {
       return () => clearTimeout(timeoutId);
     }
   }, [showText]);
-
-  const activate = (id: number) => {
-    dispatch(userActions.activateUser({ id }));
-    if (activationToken) {
-      const activationUrl = `localhost:3000/activate/${activationToken}`;
-      copyToClipboard(activationUrl);
-      setShowText(true);
-    }
-  };
-
-  const recovery = (id: number) => {
-    dispatch(userActions.recovery({ id }));
-    // if (recoveryToken) {
-    // `localhost:3000/recovery/${recoveryToken}`;
-    copyToClipboard(`localhost:3000/recovery/${recoveryToken}`);
-    setShowText(true);
-    // }
-  };
 
   return (
     <Card className={css.userBlock}>

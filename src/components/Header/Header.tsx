@@ -19,9 +19,7 @@ const Header = () => {
         authActions.setMe(JSON.parse(window.localStorage.getItem("me"))),
       );
     }
-  }, [me, dispatch]);
-
-  console.log(me);
+  }, [me]);
 
   return (
     <div className={css.Header}>

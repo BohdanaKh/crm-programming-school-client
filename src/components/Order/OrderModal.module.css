@@ -16,6 +16,7 @@
     border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     max-width: 800px;
+    position: relative;
 }
 
 .formContainer {
@@ -23,14 +24,33 @@
     flex-wrap: wrap;
     justify-content: space-between;
     gap: 20px;
+    position: relative;
+
 }
 
 .formColumn {
     width: 48%;
+    position: relative;
+
 }
 
 .groupsBlock{
+    width: 100%;
     margin-bottom: 5px;
+}
+.groupCreateBlock {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+}
+.groupsButton {
+    background-color: green;
+    color: white;
+    width: 49%;
+    height: 20px;
+    border-radius: 5px;
+
 }
 .formInput {
     width: 100%;
@@ -39,4 +59,46 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 16px;
+}
+
+.editButton {
+    position: absolute;
+    z-index: 1;
+    background-color: green;
+    right: 90px;
+    bottom: 0;
+    color: white;
+    width: 80px;
+    height: 30px;
+    border-radius: 5px;
+    border: none;
+
+}
+.editButton:hover {
+    background-color: darkgreen;
+}
+
+.closeButton1 {
+    position: absolute;
+    z-index: 1;
+    background-color: green;
+    right: 20px;
+    bottom: 20px;
+    color: white;
+    width: 80px;
+    height: 30px;
+    border-radius: 5px;
+    border: none;
+}
+button:hover {
+    background-color: darkgreen;
+}
+
+.filteredGroups {
+    position: absolute;
+    z-index: 2;
+    background-color: lightgrey;
+    font-size: 10px;
+    width: 100%;
+    padding: 1px 0;
 }
