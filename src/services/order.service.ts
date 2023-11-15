@@ -9,11 +9,6 @@ const orderService = {
     ...params
   }: any): Promise<AxiosResponse<IPagination<IOrder[]>>> =>
     await axiosService.get(urls.orders.orders, { params: { ...params } }),
-  // getAll: async ({
-  //   page,
-  //   ...params
-  // }: any): Promise<AxiosResponse<IPagination<IOrder[]>>> =>
-  //   await axiosService.get(urls.orders.orders, { params: { page, ...params } }),
   updateById: async (
     id: number,
     order: IOrder,

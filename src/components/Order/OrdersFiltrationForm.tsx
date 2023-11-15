@@ -28,8 +28,6 @@ const OrdersFiltrationForm: FC = () => {
   });
 
   const [debouncedText] = useDebounce(params, 3000);
-  //
-  // console.log([debouncedText]);
 
   useEffect(() => {
     if (debouncedText) {
@@ -44,12 +42,6 @@ const OrdersFiltrationForm: FC = () => {
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
-    // const { name, value } = event.target;
-    // setSearchParams((params) => {
-    //   params.set(name, value);
-    //   return params;
-    // });
-
     dispatch(
       orderActions.setParams({ [event.target.name]: event.target.value }),
     );
@@ -57,7 +49,6 @@ const OrdersFiltrationForm: FC = () => {
 
   const clearFilterForm = () => {
     dispatch(orderActions.setNullParams());
-    // dispatch(orderActions.setPage(1));
     setSearchParams((prev) => ({ ...prev, page: 1 }));
     reset();
   };
@@ -66,14 +57,11 @@ const OrdersFiltrationForm: FC = () => {
     setIsChecked(!isChecked);
     if (!isChecked) {
       const id = me?.id;
-      // dispatch(orderActions.setParams({ managerId: id }));
       setSearchParams((params) => {
         params.set("managerId", id?.toString());
         return params;
       });
     } else {
-      // dispatch(orderActions.setParams({ ...params, managerId: null }));
-      // dispatch(orderActions.setPage(1));
       reset();
       setSearchParams((params) => {
         params.delete("managerId");

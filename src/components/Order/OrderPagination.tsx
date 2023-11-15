@@ -37,13 +37,6 @@ const OrderPagination: FC = () => {
               boundaryCount={1}
               hidePrevButton={+searchParams.get("page") === 1}
               hideNextButton={+searchParams.get("page") === pages}
-              // renderItem={(item) => (
-              //   <PaginationItem
-              //     component={Link}
-              //     to={`/orders?page=${item.page}`}
-              //     {...item}
-              //   />
-              // )}
             />
           )}
         </Box>

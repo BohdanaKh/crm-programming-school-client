@@ -46,6 +46,7 @@ font-size: medium;
     background-color: green;
     border: none;
     transition: transform 0.3s ease;
+    color: lightgrey;
 }
 .Header .user:hover {
     transform: scale(1.2);

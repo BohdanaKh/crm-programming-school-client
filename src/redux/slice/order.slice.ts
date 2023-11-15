@@ -19,7 +19,6 @@ interface IState {
   orderForUpdate: IOrder;
   sort: string;
   params: any;
-  // params: IFilter;
 }
 
 const initialState: IState = {
@@ -46,19 +45,6 @@ const getAll = createAsyncThunk<IPagination<IOrder[]>, any>(
     }
   },
 );
-
-// const getAll = createAsyncThunk<IPagination<IOrder[]>, any>(
-//   "orderSlice/getAllWithFilters",
-//   async ({ page, ...params }, { rejectWithValue }) => {
-//     try {
-//       const { data } = await orderService.getAll({ page, ...params });
-//       return data;
-//     } catch (e) {
-//       const err = e as AxiosError;
-//       return rejectWithValue(err.response.data);
-//     }
-//   },
-// );
 
 const update = createAsyncThunk<void, { order: IOrder; id: number }>(
   "orderSlice/update",

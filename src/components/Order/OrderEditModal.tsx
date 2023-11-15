@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks";
 import type { IOrder } from "../../interfaces";
 import { ECourse, ECourseFormat, ECourseType, EStatus } from "../../interfaces";
 import { groupActions, orderActions, orderModalActions } from "../../redux";
-import { GroupCreateForm } from "../Group/GroupCreateForm";
+import { Groups } from "../Group/Groups";
 import css from "./OrderModal.module.css";
 
 const OrderEditModal: FC = () => {
@@ -96,7 +96,7 @@ const OrderEditModal: FC = () => {
                       className={css.filteredGroups}
                       hidden={!filteredGroups.length}
                     >
-                      <GroupCreateForm filteredGroups={filteredGroups} />
+                      <Groups filteredGroups={filteredGroups} />
                     </div>
                   </>
                 ) : (

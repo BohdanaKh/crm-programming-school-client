@@ -40,7 +40,7 @@ const User: FC<IProps> = ({ user }) => {
 
   useEffect(() => {
     if (activationToken) {
-      copyToClipboard(`localhost:3000/activation/${activationToken}`);
+      copyToClipboard(`localhost:3000/activate/${activationToken}`);
     }
   }, [activationToken]);
 

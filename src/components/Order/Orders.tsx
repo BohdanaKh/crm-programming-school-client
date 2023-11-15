@@ -125,13 +125,6 @@ const Orders: FC = () => {
     (state) => state.orderModalReducer,
   );
 
-  // useEffect(() => {
-  //   setSearchParams((prev: URLSearchParams) => ({ ...prev, page: "1" }));
-  // }, []);
-
-  // const currentParams = Object.fromEntries(searchParams);
-  // console.log(currentParams);
-
   useEffect(() => {
     dispatch(groupActions.getAll());
   }, [dispatch]);
@@ -143,7 +136,6 @@ const Orders: FC = () => {
         Object.fromEntries(searchParams),
       ),
     );
-    // }, [dispatch, searchParams.get("page"), searchParams, trigger]);
   }, [dispatch, searchParams, trigger]);
 
   const handleHeaderCellClick = (
@@ -165,18 +157,6 @@ const Orders: FC = () => {
         return prev;
       });
     }
-    // const newProperty =
-    //   searchParams.get("sort") === property ? `-${property}` : property;
-
-    // dispatch(orderActions.setParams({ sort: property }));
-    // if (params) {
-    //   const newSort = params.sort === property ? `-${property}` : property;
-    //   dispatch(orderActions.setParams({ sort: newSort }));
-    // setSearchParams((params) => {
-    //   params.set("sort", newProperty);
-    //   return params;
-    // });
-    // }
   };
 
   return (

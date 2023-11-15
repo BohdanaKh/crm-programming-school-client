@@ -34,10 +34,11 @@ const Header = () => {
 
       <div className={css.buttonsWrapper}>
         <div className={css.admin}>
-          {me?.role === "admin" && <Link to={"adminPanel"}>Admin</Link>}
+          {me?.role === "admin" && <Link to={"adminPanel"}>Admin board</Link>}
         </div>
         <Link to={`users/${me?.id}`}>
           <button className={css.user}>
+            {me?.name}
             <FontAwesomeIcon
               icon={faUser}
               size="lg"

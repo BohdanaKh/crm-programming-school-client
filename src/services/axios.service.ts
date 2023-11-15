@@ -8,7 +8,6 @@ import { authService } from "./auth.service";
 const axiosService = axios.create({ baseURL });
 let isRefreshing = false;
 const waitList: IWaitList[] = [];
-// const history = createBrowserHistory({window});
 
 axiosService.interceptors.request.use((config) => {
   const access = authService.getAccessToken();
@@ -35,7 +34,6 @@ axiosService.interceptors.response.use(
         } catch (e) {
           authService.deleteTokens();
           isRefreshing = false;
-          // history.replace('/login?expSession=true')
           return Promise.reject(error);
         }
       }
@@ -48,10 +46,6 @@ axiosService.interceptors.response.use(
         subscribeToWaitList(() => {
           resolve(axiosService(originalRequest));
         });
-        // const myFunc = ()=>{
-        //     resolve(axiosService(originalRequest))
-        // }
-        // subscribeToWaitList(myFunc)
       });
     }
     return Promise.reject(error);
@@ -70,7 +64,4 @@ const afterRefresh = () => {
   }
 };
 
-export {
-  axiosService,
-  // history
-};
+export { axiosService };

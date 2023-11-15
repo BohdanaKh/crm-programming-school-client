@@ -22,7 +22,14 @@ const Order: FC<IProps> = ({ order }) => {
 
   const { me } = useAppSelector((state) => state.authReducer);
   const dispatch = useAppDispatch();
-  const { reset, handleSubmit, register } = useForm<IComment>();
+  const {
+    reset,
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm<IComment>({
+    mode: "all",
+  });
   const createComment: SubmitHandler<IComment> = async (comment: IComment) => {
     await dispatch(commentActions.create({ orderId: order.id, comment }));
     dispatch(orderActions.setTrigger());
@@ -83,8 +90,15 @@ const Order: FC<IProps> = ({ order }) => {
                   <input
                     type="text"
                     placeholder={"comment"}
-                    {...register("comment")}
+                    {...register("comment", {
+                      minLength: 1,
+                      required: {
+                        value: true,
+                        message: "Comment must be not empty",
+                      },
+                    })}
                   />
+                  {errors.comment && <span>{errors.comment.message}</span>}
                   <Button
                     type={"submit"}
                     variant="contained"
