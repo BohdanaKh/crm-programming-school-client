@@ -6,11 +6,10 @@
 
 
 .MuiPagination li {
-    background-color: lightgreen;
-    text-decoration-color: white;
+    background: lightgreen;
     border-radius: 50%;
-    width: 38px;
-    height: 38px;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -18,7 +17,33 @@
     transition: background-color 0.3s;
 }
 
-
-.MuiPagination li:hover {
-    background-color: green;
+.MuiPagination button {
+    margin: 0;
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: white;
+    background: green;
 }
+.MuiPagination button:hover {
+    background-color: lightgreen;
+}
+.MuiPagination li div {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    color: white;
+    background-color: green;
+    display: flex;
+    flex-direction: column;
+    justify-content: inherit;
+
+}
+.MuiPagination button:current {
+background: none;
+}
+
+

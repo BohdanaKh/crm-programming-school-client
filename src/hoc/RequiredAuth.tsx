@@ -5,16 +5,21 @@ import { authService } from "../services";
 
 interface IProps {
   children: ReactElement;
+  roles: string[];
 }
 
-const RequiredAuth: FC<IProps> = ({ children }) => {
+const RequiredAuth: FC<IProps> = ({ children, roles }) => {
   const accessToken = authService.getAccessToken();
-
+  const me = JSON.parse(localStorage.getItem("me"));
+  const canAccess = roles.includes(me?.role);
   if (!accessToken) {
     return <Navigate to={"/login"} />;
   }
-
-  return children;
+  if (!canAccess) {
+    return <div>You do not have roles to access this route</div>;
+  } else {
+    return children;
+  }
 };
 
 export { RequiredAuth };

@@ -1,3 +1,4 @@
+import { joiResolver } from "@hookform/resolvers/joi";
 import { Modal } from "@mui/material";
 import type { FC } from "react";
 import React, { useEffect, useState } from "react";
@@ -8,11 +9,20 @@ import { useAppDispatch, useAppSelector } from "../../hooks";
 import type { IOrder } from "../../interfaces";
 import { ECourse, ECourseFormat, ECourseType, EStatus } from "../../interfaces";
 import { groupActions, orderActions, orderModalActions } from "../../redux";
+import { ordersValidator } from "../../validators";
 import { Groups } from "../Group/Groups";
 import css from "./OrderModal.module.css";
 
 const OrderEditModal: FC = () => {
-  const { handleSubmit, register, setValue } = useForm();
+  const {
+    handleSubmit,
+    register,
+    setValue,
+    formState: { errors, isValid },
+  } = useForm<IOrder>({
+    mode: "all",
+    resolver: joiResolver(ordersValidator),
+  });
   const dispatch = useAppDispatch();
   const { orderForUpdate } = useAppSelector((state) => state.orderReducer);
   const { groups, trigger1 } = useAppSelector((state) => state.groupReducer);
@@ -25,18 +35,30 @@ const OrderEditModal: FC = () => {
 
   useEffect(() => {
     if (orderForUpdate) {
-      setValue("group", orderForUpdate.group);
-      setValue("name", orderForUpdate.name);
-      setValue("surname", orderForUpdate.surname);
-      setValue("email", orderForUpdate.email);
-      setValue("phone", orderForUpdate.phone);
-      setValue("age", orderForUpdate.age);
-      setValue("status", orderForUpdate.status);
-      setValue("sum", orderForUpdate.sum);
-      setValue("alreadyPaid", orderForUpdate.alreadyPaid);
-      setValue("course", orderForUpdate.course);
-      setValue("course_format", orderForUpdate.course_format);
-      setValue("course_type", orderForUpdate.course_type);
+      setValue("group", orderForUpdate.group, { shouldValidate: true });
+      setValue("name", orderForUpdate.name, { shouldValidate: true });
+      setValue("surname", orderForUpdate.surname, { shouldValidate: true });
+      setValue("email", orderForUpdate.email, { shouldValidate: true });
+      setValue("phone", orderForUpdate.phone, { shouldValidate: true });
+      setValue("age", orderForUpdate.age, { shouldValidate: true });
+      setValue(
+        "status",
+        orderForUpdate.status === EStatus.New || orderForUpdate.status === null
+          ? EStatus.In_work
+          : orderForUpdate.status,
+        { shouldValidate: true },
+      );
+      setValue("sum", orderForUpdate.sum, { shouldValidate: true });
+      setValue("alreadyPaid", orderForUpdate.alreadyPaid, {
+        shouldValidate: true,
+      });
+      setValue("course", orderForUpdate.course, { shouldValidate: true });
+      setValue("course_format", orderForUpdate.course_format, {
+        shouldValidate: true,
+      });
+      setValue("course_type", orderForUpdate.course_type, {
+        shouldValidate: true,
+      });
     }
   }, [orderForUpdate, setValue]);
 
@@ -82,6 +104,8 @@ const OrderEditModal: FC = () => {
             <div className={css.formColumn}>
               <div className={css.groupsBlock}>
                 <label>Group</label>
+                {errors.group && <span>{errors.group.message}</span>}
+
                 {isInputVisible ? (
                   <>
                     <input
@@ -126,6 +150,7 @@ const OrderEditModal: FC = () => {
                     await createGroup(groupName);
                   }}
                   hidden={!isInputVisible}
+                  disabled={!isValid}
                 >
                   ADD GROUP
                 </button>
@@ -136,6 +161,7 @@ const OrderEditModal: FC = () => {
                 type="text"
                 {...register("name")}
               />
+              {errors.name && <span>{errors.name.message}</span>}
 
               <label>Surname</label>
               <input
@@ -143,18 +169,24 @@ const OrderEditModal: FC = () => {
                 type="text"
                 {...register("surname")}
               />
+              {errors.surname && <span>{errors.surname.message}</span>}
+
               <label>Email</label>
               <input
                 className={css.formInput}
                 type="text"
                 {...register("email")}
               />
+              {errors.email && <span>{errors.email.message}</span>}
+
               <label>Phone</label>
               <input
                 className={css.formInput}
                 type="text"
                 {...register("phone")}
               />
+              {errors.phone && <span>{errors.phone.message}</span>}
+
               <label>Age</label>
               <input
                 className={css.formInput}
@@ -162,6 +194,7 @@ const OrderEditModal: FC = () => {
                   valueAsNumber: true,
                 })}
               />
+              {errors.age && <span>{errors.age.message}</span>}
             </div>
             <div className={css.formColumn}>
               <label>Status</label>
@@ -173,6 +206,7 @@ const OrderEditModal: FC = () => {
                 <option value={EStatus.Disaggre}>{EStatus.Disaggre}</option>
                 <option value={EStatus.Dubbing}>{EStatus.Dubbing}</option>
               </select>
+              {errors.status && <span>{errors.status.message}</span>}
               <label>Sum</label>
               <input
                 className={css.formInput}
@@ -181,6 +215,8 @@ const OrderEditModal: FC = () => {
                   valueAsNumber: true,
                 })}
               />
+              {errors.sum && <span>{errors.sum.message}</span>}
+
               <label>Already paid</label>
               <input
                 className={css.formInput}
@@ -189,6 +225,8 @@ const OrderEditModal: FC = () => {
                   valueAsNumber: true,
                 })}
               />
+              {errors.alreadyPaid && <span>{errors.alreadyPaid.message}</span>}
+
               <label>Course</label>
               <select className={css.formInput} {...register("course")}>
                 <option value={undefined} />
@@ -199,6 +237,8 @@ const OrderEditModal: FC = () => {
                 <option value={ECourse.FE}>{ECourse.FE}</option>
                 <option value={ECourse.PCX}>{ECourse.PCX}</option>
               </select>
+              {errors.course && <span>{errors.course.message}</span>}
+
               <label>Course format</label>
               <select className={css.formInput} {...register("course_format")}>
                 <option value={undefined} />
@@ -209,6 +249,10 @@ const OrderEditModal: FC = () => {
                   {ECourseFormat.online}
                 </option>
               </select>
+              {errors.course_format && (
+                <span>{errors.course_format.message}</span>
+              )}
+
               <label>Course type</label>
               <select className={css.formInput} {...register("course_type")}>
                 <option value={undefined} />
@@ -224,6 +268,8 @@ const OrderEditModal: FC = () => {
                 </option>
                 <option value={ECourseType.vip}>{ECourseType.vip}</option>
               </select>
+              {errors.course_type && <span>{errors.course_type.message}</span>}
+
               <button type={"submit"} className={css.editButton}>
                 SUBMIT
               </button>

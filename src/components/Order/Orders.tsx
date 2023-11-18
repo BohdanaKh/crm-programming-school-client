@@ -148,11 +148,13 @@ const Orders: FC = () => {
       searchParams.get("sort") !== property
     ) {
       setSearchParams((prev) => {
+        prev.set("page", "1");
         prev.set("sort", property);
         return prev;
       });
     } else {
       setSearchParams((prev) => {
+        prev.set("page", "1");
         prev.set("sort", `-${property}`);
         return prev;
       });
@@ -161,7 +163,9 @@ const Orders: FC = () => {
 
   return (
     <>
-      {errors && <p>{errors.message}</p>}
+      {errors && (
+        <p style={{ fontSize: "12px", color: "coral" }}>{errors.message}</p>
+      )}
       <TableContainer component={Paper}>
         <OrdersFiltrationForm />
         <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">

@@ -1,6 +1,7 @@
 import { joiResolver } from "@hookform/resolvers/joi";
 import { Button, TextField } from "@mui/material";
 import type { FC } from "react";
+import React from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
@@ -15,10 +16,9 @@ const CreatePasswordForm: FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const params = useParams<string>();
-  // const { activationToken } = params;
   const {
     handleSubmit,
-    formState: { isValid },
+    formState: { errors, isValid },
     control,
   } = useForm<IPass>({
     mode: "all",
@@ -59,14 +59,16 @@ const CreatePasswordForm: FC = () => {
           defaultValue=""
           render={({ field }) => (
             <TextField
+              // error
+              id="outlined-error-helper-text"
+              helperText={errors.password && `${errors.password.message}`}
               margin="normal"
               required
               fullWidth
-              id="password"
               label="Password"
-              name="password"
-              autoComplete="password"
-              autoFocus
+              variant="outlined"
+              type="password"
+              color={isValid ? "success" : "warning"}
               {...field}
             />
           )}
@@ -77,12 +79,18 @@ const CreatePasswordForm: FC = () => {
           defaultValue=""
           render={({ field }) => (
             <TextField
+              // error
+              id="outlined-helperText"
+              helperText={
+                errors.confirm_password && `${errors.confirm_password.message}`
+              }
               margin="normal"
               required
               fullWidth
               label="Confirm Password"
               variant="outlined"
               type="password"
+              color={isValid ? "success" : "warning"}
               {...field}
             />
           )}

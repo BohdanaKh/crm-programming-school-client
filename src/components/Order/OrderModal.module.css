@@ -102,3 +102,9 @@ button:hover {
     width: 100%;
     padding: 1px 0;
 }
+.errorsBlock {
+    font-size: 10px;
+    margin-bottom: 2px;
+    color: grey;
+
+}

@@ -22,23 +22,28 @@ const OrdersFiltrationForm: FC = () => {
   const dispatch = useAppDispatch();
   const [isChecked, setIsChecked] = useState(false);
   const [, setSearchParams] = useSearchParams();
-  const { reset, register } = useForm<IOrder>({
+  const {
+    reset,
+    register,
+    formState: { errors },
+  } = useForm<IOrder>({
     mode: "all",
     resolver: joiResolver(ordersValidator),
   });
-
-  const [debouncedText] = useDebounce(params, 3000);
+  const [debouncedText] = useDebounce(params, 300);
 
   useEffect(() => {
     if (debouncedText) {
       for (const paramKey in debouncedText) {
         setSearchParams((prev) => {
+          prev.set("page", "1");
           prev.set(paramKey, debouncedText[paramKey]);
           return prev;
         });
       }
     }
   }, [debouncedText]);
+
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
@@ -58,6 +63,7 @@ const OrdersFiltrationForm: FC = () => {
     if (!isChecked) {
       const id = me?.id;
       setSearchParams((params) => {
+        params.set("page", "1");
         params.set("managerId", id?.toString());
         return params;
       });
@@ -73,6 +79,9 @@ const OrdersFiltrationForm: FC = () => {
     <div className={css.Filters}>
       <form>
         <div className={css.formInputs}>
+          {errors.name && (
+            <div className={css.errorsBlock}>{errors.name.message}</div>
+          )}
           <input
             className={css.formInput}
             type={"text"}
@@ -87,6 +96,9 @@ const OrdersFiltrationForm: FC = () => {
             {...register("surname")}
             onChange={handleInputChange}
           />
+          {errors.surname && (
+            <span className={css.errorsBlock}>{errors.surname.message}</span>
+          )}
           <input
             className={css.formInput}
             type="text"
@@ -94,7 +106,9 @@ const OrdersFiltrationForm: FC = () => {
             {...register("email")}
             onChange={handleInputChange}
           />
-
+          {errors.email && (
+            <span className={css.errorsBlock}>{errors.email.message}</span>
+          )}
           <input
             className={css.formInput}
             type="text"
@@ -102,7 +116,9 @@ const OrdersFiltrationForm: FC = () => {
             {...register("phone")}
             onChange={handleInputChange}
           />
-
+          {errors.phone && (
+            <span className={css.errorsBlock}>{errors.phone.message}</span>
+          )}
           <input
             className={css.formInput}
             type="text"
@@ -110,7 +126,9 @@ const OrdersFiltrationForm: FC = () => {
             {...register("age")}
             onChange={handleInputChange}
           />
-
+          {errors.age && (
+            <span className={css.errorsBlock}>{errors.age.message}</span>
+          )}
           <select
             className={css.formInput}
             {...register("course")}
@@ -126,6 +144,9 @@ const OrdersFiltrationForm: FC = () => {
             <option value={ECourse.FE}>{ECourse.FE}</option>
             <option value={ECourse.PCX}>{ECourse.PCX}</option>
           </select>
+          {errors.course && (
+            <span className={css.errorsBlock}>{errors.course.message}</span>
+          )}
           <select
             className={css.formInput}
             {...register("course_format")}
@@ -137,7 +158,11 @@ const OrdersFiltrationForm: FC = () => {
             <option value={ECourseFormat.static}>{ECourseFormat.static}</option>
             <option value={ECourseFormat.online}>{ECourseFormat.online}</option>
           </select>
-
+          {errors.course_format && (
+            <span className={css.errorsBlock}>
+              {errors.course_format.message}
+            </span>
+          )}
           <select
             className={css.formInput}
             {...register("course_type")}
@@ -154,7 +179,11 @@ const OrdersFiltrationForm: FC = () => {
             </option>
             <option value={ECourseType.vip}>{ECourseType.vip}</option>
           </select>
-
+          {errors.course_type && (
+            <span className={css.errorsBlock}>
+              {errors.course_type.message}
+            </span>
+          )}
           <select
             className={css.formInput}
             {...register("status")}
@@ -169,7 +198,9 @@ const OrdersFiltrationForm: FC = () => {
             <option value={EStatus.Disaggre}>{EStatus.Disaggre}</option>
             <option value={EStatus.Dubbing}>{EStatus.Dubbing}</option>
           </select>
-
+          {errors.status && (
+            <span className={css.errorsBlock}>{errors.status.message}</span>
+          )}
           <select
             className={css.formInput}
             {...register("group")}
@@ -184,6 +215,9 @@ const OrdersFiltrationForm: FC = () => {
               </option>
             ))}
           </select>
+          {errors.group && (
+            <span className={css.errorsBlock}>{errors.group.message}</span>
+          )}
           <input
             className={css.formInput}
             type="text"

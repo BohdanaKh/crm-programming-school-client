@@ -46,7 +46,7 @@ const Header = () => {
             />
           </button>
         </Link>
-        <Link to={"logout"}>
+        <Link to={"/login"}>
           <button
             className={css.logout}
             onClick={async () => {

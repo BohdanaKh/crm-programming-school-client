@@ -2,14 +2,14 @@ import "./App.css";
 
 import { Navigate, Route, Routes } from "react-router-dom";
 
-import { RequiredAuth } from "./hoc";
+import { IsAuth, RequiredAuth } from "./hoc";
 import { MainLayout } from "./layouts";
 import {
   AccountActivationPage,
   AdminPage,
   HomePage,
   LoginPage,
-  LogoutPage,
+  NotFoundPage,
   OrdersPage,
   RecoveryPasswordPage,
   UserPage,
@@ -20,7 +20,10 @@ const App = () => (
   <Routes>
     <Route path={"/"} element={<MainLayout />}>
       <Route index element={<Navigate to={"login"} />} />
-      <Route path="/login" element={<LoginPage />} />
+      <Route
+        path="/login"
+        element={IsAuth ? <Navigate to={"/orders"} /> : <LoginPage />}
+      />
       <Route
         path={"activate/:activationToken"}
         element={<AccountActivationPage />}
@@ -29,18 +32,11 @@ const App = () => (
         path={"recovery/:recoveryToken"}
         element={<RecoveryPasswordPage />}
       />
-      <Route
-        path={"logout"}
-        element={
-          <RequiredAuth>
-            <LogoutPage />
-          </RequiredAuth>
-        }
-      />
+      <Route path="*" element={<NotFoundPage />} />
       <Route
         path={"/"}
         element={
-          <RequiredAuth>
+          <RequiredAuth roles={["admin", "manager"]}>
             <HomePage />
           </RequiredAuth>
         }
@@ -49,7 +45,7 @@ const App = () => (
         <Route
           path={"orders"}
           element={
-            <RequiredAuth>
+            <RequiredAuth roles={["admin", "manager"]}>
               <OrdersPage />
             </RequiredAuth>
           }
@@ -58,7 +54,7 @@ const App = () => (
         <Route
           path={"users/:id"}
           element={
-            <RequiredAuth>
+            <RequiredAuth roles={["admin", "manager"]}>
               <UserPage />
             </RequiredAuth>
           }
@@ -67,20 +63,19 @@ const App = () => (
         <Route
           path={"adminPanel"}
           element={
-            <RequiredAuth>
+            <RequiredAuth roles={["admin"]}>
               <AdminPage />
             </RequiredAuth>
           }
-        >
-          <Route
-            path={"users"}
-            element={
-              <RequiredAuth>
-                <UsersPage />
-              </RequiredAuth>
-            }
-          />
-        </Route>
+        />
+        <Route
+          path={"users"}
+          element={
+            <RequiredAuth roles={["admin"]}>
+              <UsersPage />
+            </RequiredAuth>
+          }
+        />
       </Route>
     </Route>
   </Routes>
