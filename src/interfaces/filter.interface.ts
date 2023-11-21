@@ -1,8 +1,6 @@
-import type { IComment } from "./comment.interface";
 import type { ECourse, ECourseFormat, ECourseType, EStatus } from "./enums";
 
-export interface IOrder {
-  id: number;
+export interface IFilter {
   name: string;
   surname: string;
   email: string;
@@ -12,14 +10,5 @@ export interface IOrder {
   course_format: ECourseFormat;
   course_type: ECourseType;
   status: EStatus;
-  sum: number;
-  alreadyPaid: number;
   group: string;
-  groupId: number;
-  created_at: Date;
-  manager: string;
-  managerId: number;
-  utm: string;
-  msg: string;
-  comments: IComment[];
 }

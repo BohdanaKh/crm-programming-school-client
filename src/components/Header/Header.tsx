@@ -46,20 +46,19 @@ const Header = () => {
             />
           </button>
         </Link>
-        <Link to={"/login"}>
-          <button
-            className={css.logout}
-            onClick={async () => {
-              await authService.logout();
-            }}
-          >
-            <FontAwesomeIcon
-              icon={faRightFromBracket}
-              size="lg"
-              style={{ color: "#f1f2f3" }}
-            />
-          </button>
-        </Link>
+        <button
+          className={css.logout}
+          onClick={async () => {
+            await authService.logout();
+            navigate("login");
+          }}
+        >
+          <FontAwesomeIcon
+            icon={faRightFromBracket}
+            size="lg"
+            style={{ color: "#f1f2f3" }}
+          />
+        </button>
       </div>
     </div>
   );

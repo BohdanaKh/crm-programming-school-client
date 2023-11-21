@@ -15,7 +15,7 @@
     padding: 20px;
     border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    max-width: 800px;
+    width: 800px;
     position: relative;
 }
 
@@ -30,6 +30,9 @@
 
 .formColumn {
     width: 48%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     position: relative;
 
 }
@@ -55,18 +58,15 @@
 .formInput {
     width: 100%;
     padding: 10px;
-    margin: 5px 0 15px 0;
+    margin: 3px 0 2px 0;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 16px;
 }
 
 .editButton {
-    position: absolute;
-    z-index: 1;
     background-color: green;
-    right: 90px;
-    bottom: 0;
+    margin: 20px 90px 0 40%;
     color: white;
     width: 80px;
     height: 30px;
@@ -103,8 +103,14 @@ button:hover {
     padding: 1px 0;
 }
 .errorsBlock {
-    font-size: 10px;
+    width: 100%;
+    font-size: 12px;
     margin-bottom: 2px;
-    color: grey;
+    color: red;
 
+}
+.inputLabel {
+    width: 100%;
+    font-size: 14px;
+    margin: 2px 0;
 }

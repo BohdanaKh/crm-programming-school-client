@@ -52,7 +52,7 @@ class AuthService {
     return localStorage.getItem(this.accessKey);
   }
 
-  private getRefreshToken() {
+  getRefreshToken() {
     return localStorage.getItem(this.refreshKey);
   }
 

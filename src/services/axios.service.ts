@@ -1,7 +1,6 @@
 import type { AxiosError } from "axios";
 import axios from "axios";
 
-// import {createBrowserHistory} from 'history';
 import { baseURL, urls } from "../constants";
 import { authService } from "./auth.service";
 

@@ -2,7 +2,7 @@ import "./App.css";
 
 import { Navigate, Route, Routes } from "react-router-dom";
 
-import { IsAuth, RequiredAuth } from "./hoc";
+import { ProtectedRoute, RequiredAuth } from "./hoc";
 import { MainLayout } from "./layouts";
 import {
   AccountActivationPage,
@@ -22,7 +22,11 @@ const App = () => (
       <Route index element={<Navigate to={"login"} />} />
       <Route
         path="/login"
-        element={IsAuth ? <Navigate to={"/orders"} /> : <LoginPage />}
+        element={
+          <ProtectedRoute>
+            <LoginPage />
+          </ProtectedRoute>
+        }
       />
       <Route
         path={"activate/:activationToken"}
@@ -31,6 +35,14 @@ const App = () => (
       <Route
         path={"recovery/:recoveryToken"}
         element={<RecoveryPasswordPage />}
+      />
+      <Route
+        path={"logout"}
+        element={
+          <RequiredAuth roles={["admin", "manager"]}>
+            <LoginPage />
+          </RequiredAuth>
+        }
       />
       <Route path="*" element={<NotFoundPage />} />
       <Route

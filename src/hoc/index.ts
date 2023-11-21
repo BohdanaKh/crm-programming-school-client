@@ -1,2 +1,2 @@
 export * from "./RequiredAuth";
-export * from "./IsAuth";
+export * from "./ProtectedRoute";

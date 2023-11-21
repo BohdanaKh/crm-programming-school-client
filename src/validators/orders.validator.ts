@@ -4,11 +4,11 @@ import { ECourse, ECourseFormat, ECourseType, EStatus } from "../interfaces";
 
 export const ordersValidator = Joi.object({
   group_create: Joi.string()
-    .allow(null)
+    .allow("")
     .regex(/^[a-zA-Z-а-яА-Я0-9]+(?:-[a-zA-Z-а-яА-Я0-9]+)?$/)
     .messages({
       "string.pattern.base":
-        "Group name may consist of uppercase and lowercase Latin letters (A-Za-z), uppercase and lowercase Cyrillic letters (А-Яа-я), digits and '-'.",
+        "Group name may consist of uppercase and lowercase Latin letters or Cyrillic letters, digits and '-'.",
     }),
   group: Joi.string().allow(null).messages({
     "string.base": "Group must be one of the defined values or null",
@@ -25,7 +25,7 @@ export const ordersValidator = Joi.object({
     .regex(/^[A-Za-zА-Яа-я\s]+$/)
     .messages({
       "string.pattern.base":
-        "Surname may consist of uppercase and lowercase Latin letters (A-Za-z), uppercase and lowercase Cyrillic letters (А-Яа-я),and whitespace characters.",
+        "Allowed uppercase and lowercase Latin letters, Cyrillic letters and whitespace characters.",
     }),
   email: Joi.string()
     .allow("")
@@ -34,21 +34,23 @@ export const ordersValidator = Joi.object({
     )
     .messages({
       "string.pattern.base":
-        "Email may start of any combination of A-Z (both upper and lowercase) and numbers, and allowing a few specific special characters, followed by the “@” symbol, and then allowing for a standard domain name and TLD after this",
+        "Email may start of any combination of A-Z (both upper and lowercase) and numbers, and allowing a few specific special characters, followed by the “@” symbol, and then standard domain name and TLD after this",
     }),
   phone: Joi.string()
     .allow("")
     .regex(/^\+\d{1,3}(\s|\(|\)|-)?\d+$/)
     .messages({
       "string.pattern.base":
-        "The phone number must start with a plus sign (+) followed by one to three numeric digits representing the country code, allows for zero or one occurrence of a space, an opening parenthesis, a closing parenthesis, or a hyphen, and must end with one or more numeric digits.",
+        "The phone number must start with a plus sign (+) followed by the country code, end with numeric digits.",
     }),
-  age: Joi.number().allow("").min(16).max(55).messages({
-    "number.base": "Age only consists of numeric characters, min 16 max 55",
-  }),
-
+  age: Joi.string()
+    .allow("")
+    .regex(/^(0|[1-9][0-9]?|100)$/)
+    .messages({
+      "string.pattern.base": "Only numbers, min 0 max 100.",
+    }),
   status: Joi.string()
-    .allow(null)
+    .allow("")
     .valid(...Object.values(EStatus))
     .messages({
       "number.base": "Status must be one of the defined values or null",
@@ -61,19 +63,19 @@ export const ordersValidator = Joi.object({
     "string.base": "This field must consist of numeric characters",
   }),
   course: Joi.string()
-    .allow(null)
+    .allow("")
     .valid(...Object.values(ECourse))
     .messages({
       "string.base": "Course must be one of the defined values or null",
     }),
   course_format: Joi.string()
-    .allow(null)
+    .allow("")
     .valid(...Object.values(ECourseFormat))
     .messages({
       "string.base": "Course format must be one of the defined values or null",
     }),
   course_type: Joi.string()
-    .allow(null)
+    .allow("")
     .valid(...Object.values(ECourseType))
     .messages({
       "string.base": "Course type must be one of the defined values or null",

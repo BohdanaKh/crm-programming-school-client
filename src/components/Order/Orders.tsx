@@ -164,7 +164,9 @@ const Orders: FC = () => {
   return (
     <>
       {errors && (
-        <p style={{ fontSize: "12px", color: "coral" }}>{errors.message}</p>
+        <p style={{ fontSize: "18px", color: "coral", textAlign: "center" }}>
+          {errors.message}
+        </p>
       )}
       <TableContainer component={Paper}>
         <OrdersFiltrationForm />
