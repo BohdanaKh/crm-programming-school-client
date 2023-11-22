@@ -7,12 +7,15 @@
 }
 
 .Filters form{
-    width: 91%;
+    width: 92%;
     height: 100%;
     margin: 2px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 .Filters .formInputs {
-    width: 98%;
+    width: 97%;
     height: 100%;
     display: flex;
     flex-direction: row;
@@ -22,7 +25,7 @@
     gap: 5px;
 }
 .Filters .formInputWrapper {
-    width: 15%;
+    width: 16%;
     height: 47%;
     display: flex;
     flex-direction: column;
@@ -48,24 +51,23 @@
 }
 .Filters .formInputNotValid {
     width: 100%;
-    height: 70%;
+    height: 60%;
     border-radius: 10px;
     background-color: lightgrey;
     border: none;
 }
 
 .Filters .formActions {
-    width: 6%;
+    width: 8%;
     height: 100%;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: space-around;
+    justify-content: left;
     align-items: center;
 }
 
-.Filters .formAction {
-
+.Filters .formClear {
 
 }
 

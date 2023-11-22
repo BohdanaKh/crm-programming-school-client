@@ -3,29 +3,35 @@ import Joi from "joi";
 import { ECourse, ECourseFormat, ECourseType, EStatus } from "../interfaces";
 
 export const ordersValidator = Joi.object({
-  group_create: Joi.string()
+  // group: Joi.string()
+  //   .allow("")
+  //   .regex(
+  //     /^[a-zA-Zа-щА-ЩЬьЮюЯяЇїІіЄєҐґ0-9']+(?:-[a-zA-Zа-щА-ЩЬьЮюЯяЇїІіЄєҐґ0-9']+)?$/,
+  //   )
+  //   .messages({
+  //     "string.pattern.base":
+  //       "Group name may consist of uppercase and lowercase Latin letters or Ukrainian letters, digits and hyphen.",
+  //   }),
+  group: Joi.string()
     .allow("")
-    .regex(/^[a-zA-Z-а-яА-Я0-9]+(?:-[a-zA-Z-а-яА-Я0-9]+)?$/)
+    .regex(/^[a-zA-Zа-щА-ЩЬьЮюЯяЇїІіЄєҐґ0-9'\s-]+$/)
     .messages({
       "string.pattern.base":
-        "Group name may consist of uppercase and lowercase Latin letters or Cyrillic letters, digits and '-'.",
+        "Allowed Latin letters, Ukrainian letters,digits, hyphen, apostrophe and whitespace.",
     }),
-  group: Joi.string().allow(null).messages({
-    "string.base": "Group must be one of the defined values or null",
-  }),
   name: Joi.string()
     .allow("")
-    .regex(/^[A-Za-zА-Яа-я\s]+$/)
+    .regex(/^[a-zA-Zа-щА-ЩЬьЮюЯяЇїІіЄєҐґ'\s-]+$/)
     .messages({
       "string.pattern.base":
-        "Allowed Latin letters, Cyrillic letters and whitespace characters.",
+        "Allowed Latin letters, Ukrainian letters, hyphen, apostrophe and whitespace.",
     }),
   surname: Joi.string()
     .allow("")
-    .regex(/^[A-Za-zА-Яа-я\s]+$/)
+    .regex(/^[a-zA-Zа-щА-ЩЬьЮюЯяЇїІіЄєҐґ'\s-]+$/)
     .messages({
       "string.pattern.base":
-        "Allowed uppercase and lowercase Latin letters, Cyrillic letters and whitespace characters.",
+        "Allowed Latin letters, Ukrainian letters, hyphen, apostrophe and whitespace.",
     }),
   email: Joi.string()
     .allow("")
@@ -34,14 +40,15 @@ export const ordersValidator = Joi.object({
     )
     .messages({
       "string.pattern.base":
-        "Email may start of any combination of A-Z (both upper and lowercase) and numbers, and allowing a few specific special characters, followed by the “@” symbol, and then standard domain name and TLD after this",
+        "Email may start of any combination of letters and numbers, a few specific special characters, followed by the “@” symbol, and then standard domain name and TLD",
     }),
   phone: Joi.string()
     .allow("")
-    .regex(/^\+\d{1,3}(\s|\(|\)|-)?\d+$/)
+    .regex(
+      /^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$/,
+    )
     .messages({
-      "string.pattern.base":
-        "The phone number must start with a plus sign (+) followed by the country code, end with numeric digits.",
+      "string.pattern.base": "Only numeric digits, phone specific symbols.",
     }),
   age: Joi.string()
     .allow("")

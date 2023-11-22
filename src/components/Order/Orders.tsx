@@ -116,7 +116,7 @@ const Orders: FC = () => {
   const { orders, trigger, errors } = useAppSelector(
     (state) => state.orderReducer,
   );
-
+  const { trigger1 } = useAppSelector((state) => state.groupReducer);
   const dispatch = useAppDispatch();
 
   const [searchParams, setSearchParams] = useSearchParams({ page: "1" });
@@ -127,7 +127,7 @@ const Orders: FC = () => {
 
   useEffect(() => {
     dispatch(groupActions.getAll());
-  }, [dispatch]);
+  }, [dispatch, trigger1]);
 
   useEffect(() => {
     dispatch(

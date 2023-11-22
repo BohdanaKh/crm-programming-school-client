@@ -45,3 +45,8 @@
 .formButton:hover {
     background-color: #45a049; /* Slightly darker shade when hovered */
 }
+
+.errorsBlock {
+    font-size: 12px;
+    color: coral;
+}

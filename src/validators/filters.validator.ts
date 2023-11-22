@@ -5,21 +5,23 @@ import { ECourse, ECourseFormat, ECourseType, EStatus } from "../interfaces";
 export const filtersValidator = Joi.object({
   group: Joi.string()
     .allow("")
-    .regex(/^[a-z0-9-]+$/)
+    .regex(/^[a-zA-Zа-щА-ЩЬьЮюЯяЇїІіЄєҐґ0-9'-]+$/)
     .messages({
       "string.pattern.base": "Allowed letters and numbers, - symbol",
     }),
   name: Joi.string()
     .allow("")
-    .regex(/^[A-Za-zА-Яа-я\s]+$/)
+    .regex(/^[a-zA-Zа-щА-ЩЬьЮюЯяЇїІіЄєҐґ'\s-]+$/)
     .messages({
-      "string.pattern.base": "Allowed letters and whitespace.",
+      "string.pattern.base":
+        "Allowed letters, hyphen, apostrophe and whitespace.",
     }),
   surname: Joi.string()
     .allow("")
-    .regex(/^[A-Za-zА-Яа-я\s]+$/)
+    .regex(/^[a-zA-Zа-щА-ЩЬьЮюЯяЇїІіЄєҐґ'\s-]+$/)
     .messages({
-      "string.pattern.base": "Allowed letters and whitespace.",
+      "string.pattern.base":
+        "Allowed letters, hyphen, apostrophe and whitespace.",
     }),
   email: Joi.string()
     .allow("")
@@ -29,9 +31,11 @@ export const filtersValidator = Joi.object({
     }),
   phone: Joi.string()
     .allow("")
-    .regex(/^\+\d{1,3}(\s|\(|\)|-)?\d+$/)
+    .regex(
+      /^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$/,
+    )
     .messages({
-      "string.pattern.base": "Allowed plus sign (+), numeric digits.",
+      "string.pattern.base": "Only numeric digits, phone specific symbols.",
     }),
   age: Joi.string()
     .allow("")

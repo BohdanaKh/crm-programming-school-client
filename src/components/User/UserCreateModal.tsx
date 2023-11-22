@@ -1,13 +1,17 @@
+import { joiResolver } from "@hookform/resolvers/joi";
 import { Modal } from "@mui/material";
+import type { FC } from "react";
+import React from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import type { IUser } from "../../interfaces";
 import { adminActions, userActions, userModalActions } from "../../redux";
+import { userValidator } from "../../validators";
 import css from "./UserModal.module.css";
 
-const UserCreateModal = () => {
+const UserCreateModal: FC = () => {
   const dispatch = useAppDispatch();
   const { isUserCreateModalOpen } = useAppSelector(
     (state) => state.userModalReducer,
@@ -18,8 +22,8 @@ const UserCreateModal = () => {
     handleSubmit,
     formState: { errors, isValid },
   } = useForm<IUser>({
-    // mode: "all",
-    // resolver: joiResolver(authValidator)
+    mode: "all",
+    resolver: joiResolver(userValidator),
   });
 
   const createUser: SubmitHandler<IUser> = async (user) => {
@@ -50,6 +54,9 @@ const UserCreateModal = () => {
               placeholder={"Email"}
               {...register("email")}
             />
+            {errors.email && (
+              <span className={css.errorsBlock}>{errors.email.message}</span>
+            )}
           </div>
           <div>
             <label className={css.formLabel}>Name</label>
@@ -59,6 +66,9 @@ const UserCreateModal = () => {
               placeholder={"Name"}
               {...register("name")}
             />
+            {errors.name && (
+              <span className={css.errorsBlock}>{errors.name.message}</span>
+            )}
           </div>
           <div>
             <label className={css.formLabel}>Surname</label>
@@ -68,6 +78,9 @@ const UserCreateModal = () => {
               placeholder={"Surname"}
               {...register("surname")}
             />
+            {errors.surname && (
+              <span className={css.errorsBlock}>{errors.surname.message}</span>
+            )}
           </div>
 
           <button className={css.formButton} disabled={!isValid}>

@@ -18,19 +18,19 @@ const OrderEditModal: FC = () => {
     handleSubmit,
     register,
     setValue,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm<IOrder>({
     mode: "all",
     resolver: joiResolver(ordersValidator),
   });
   const dispatch = useAppDispatch();
   const { orderForUpdate } = useAppSelector((state) => state.orderReducer);
-  const { groups, trigger1 } = useAppSelector((state) => state.groupReducer);
+  const { groups } = useAppSelector((state) => state.groupReducer);
   const { isOrderEditModalOpen } = useAppSelector(
     (state) => state.orderModalReducer,
   );
   const [isInputVisible, setInputVisible] = useState(false);
-  const [groupName, setGroupName] = useState<string>();
+  const [groupName, setGroupName] = useState<string>("");
   const [filteredGroups, setFilteredGroups] = useState([]);
 
   useEffect(() => {
@@ -62,9 +62,9 @@ const OrderEditModal: FC = () => {
     }
   }, [orderForUpdate, setValue]);
 
-  useEffect(() => {
-    dispatch(groupActions.getAll());
-  }, [dispatch, trigger1]);
+  // useEffect(() => {
+  //   dispatch(groupActions.getAll());
+  // }, [dispatch, trigger1]);
 
   useEffect(() => {
     const filtered = groups?.filter(
@@ -104,16 +104,11 @@ const OrderEditModal: FC = () => {
             <div className={css.formColumn}>
               <div className={css.groupsBlock}>
                 <label className={css.inputLabel}>Group</label>
-                {errors.group && (
-                  <span className={css.errorsBlock}>
-                    {errors.group.message}
-                  </span>
-                )}
-
                 {isInputVisible ? (
                   <>
                     <input
                       className={css.formInput}
+                      type={"text"}
                       placeholder={"enter new group name"}
                       value={groupName}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -154,7 +149,6 @@ const OrderEditModal: FC = () => {
                     await createGroup(groupName);
                   }}
                   hidden={!isInputVisible}
-                  disabled={!isValid}
                 >
                   ADD GROUP
                 </button>
@@ -165,7 +159,7 @@ const OrderEditModal: FC = () => {
                 type="text"
                 {...register("name")}
               />
-              {errors.name && (
+              {errors?.name && (
                 <span className={css.errorsBlock}>{errors.name.message}</span>
               )}
 

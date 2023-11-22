@@ -22,7 +22,7 @@ const OrdersFiltrationForm: FC = () => {
     handleSubmit,
     reset,
     register,
-    formState: { errors, isValid },
+    formState: { errors },
     setValue,
   } = useForm<IOrder>({
     mode: "all",
@@ -140,7 +140,9 @@ const OrdersFiltrationForm: FC = () => {
               <div className={css.errorsBlock}>{errors.name.message}</div>
             )}
             <input
-              className={isValid ? css.formInputValid : css.formInputNotValid}
+              className={
+                !errors.name ? css.formInputValid : css.formInputNotValid
+              }
               type={"text"}
               placeholder={"name"}
               {...register("name")}
@@ -152,7 +154,9 @@ const OrdersFiltrationForm: FC = () => {
               <span className={css.errorsBlock}>{errors.surname.message}</span>
             )}
             <input
-              className={isValid ? css.formInputValid : css.formInputNotValid}
+              className={
+                !errors.surname ? css.formInputValid : css.formInputNotValid
+              }
               type={"text"}
               placeholder={"surname"}
               {...register("surname")}
@@ -164,7 +168,9 @@ const OrdersFiltrationForm: FC = () => {
               <span className={css.errorsBlock}>{errors.email.message}</span>
             )}
             <input
-              className={isValid ? css.formInputValid : css.formInputNotValid}
+              className={
+                !errors.email ? css.formInputValid : css.formInputNotValid
+              }
               type="text"
               placeholder={"email"}
               {...register("email")}
@@ -176,7 +182,9 @@ const OrdersFiltrationForm: FC = () => {
               <span className={css.errorsBlock}>{errors.phone.message}</span>
             )}
             <input
-              className={isValid ? css.formInputValid : css.formInputNotValid}
+              className={
+                !errors.phone ? css.formInputValid : css.formInputNotValid
+              }
               type="text"
               placeholder={"phone"}
               {...register("phone")}
@@ -188,7 +196,9 @@ const OrdersFiltrationForm: FC = () => {
               <span className={css.errorsBlock}>{errors.age.message}</span>
             )}
             <input
-              className={isValid ? css.formInputValid : css.formInputNotValid}
+              className={
+                !errors.age ? css.formInputValid : css.formInputNotValid
+              }
               type="text"
               placeholder={"age"}
               {...register("age")}
@@ -200,7 +210,9 @@ const OrdersFiltrationForm: FC = () => {
               <span className={css.errorsBlock}>{errors.course.message}</span>
             )}
             <select
-              className={isValid ? css.formInputValid : css.formInputNotValid}
+              className={
+                !errors.course ? css.formInputValid : css.formInputNotValid
+              }
               {...register("course")}
               onChange={handleInputChange}
             >
@@ -220,7 +232,11 @@ const OrdersFiltrationForm: FC = () => {
               </span>
             )}
             <select
-              className={isValid ? css.formInputValid : css.formInputNotValid}
+              className={
+                !errors.course_format
+                  ? css.formInputValid
+                  : css.formInputNotValid
+              }
               {...register("course_format")}
               onChange={handleInputChange}
             >
@@ -240,7 +256,9 @@ const OrdersFiltrationForm: FC = () => {
               </span>
             )}
             <select
-              className={isValid ? css.formInputValid : css.formInputNotValid}
+              className={
+                !errors.course_type ? css.formInputValid : css.formInputNotValid
+              }
               {...register("course_type")}
               onChange={handleInputChange}
             >
@@ -259,7 +277,9 @@ const OrdersFiltrationForm: FC = () => {
               <span className={css.errorsBlock}>{errors.status.message}</span>
             )}
             <select
-              className={isValid ? css.formInputValid : css.formInputNotValid}
+              className={
+                !errors.status ? css.formInputValid : css.formInputNotValid
+              }
               {...register("status")}
               onChange={handleInputChange}
             >
@@ -276,7 +296,9 @@ const OrdersFiltrationForm: FC = () => {
               <span className={css.errorsBlock}>{errors.group.message}</span>
             )}
             <select
-              className={isValid ? css.formInputValid : css.formInputNotValid}
+              className={
+                !errors.group ? css.formInputValid : css.formInputNotValid
+              }
               {...register("group")}
               onChange={handleInputChange}
             >
@@ -290,30 +312,27 @@ const OrdersFiltrationForm: FC = () => {
           </div>
           <div className={css.formInputWrapper}>
             <input
-              className={isValid ? css.formInputValid : css.formInputNotValid}
+              className={css.formInputValid}
               type="text"
               placeholder={"Start date"}
             />
           </div>
           <div className={css.formInputWrapper}>
             <input
-              className={isValid ? css.formInputValid : css.formInputNotValid}
+              className={css.formInputValid}
               type="text"
               placeholder={"End date"}
             />
           </div>
-          <button
-            className={css.formAction}
-            type={"button"}
-            onClick={clearFilterForm}
-            style={{ backgroundColor: "green" }}
-          >
-            <FontAwesomeIcon
-              icon={faRotateRight}
-              style={{ color: "#fafafa" }}
-            />
-          </button>
         </div>
+        <button
+          className={css.formClear}
+          type={"button"}
+          onClick={clearFilterForm}
+          style={{ backgroundColor: "green" }}
+        >
+          <FontAwesomeIcon icon={faRotateRight} style={{ color: "#fafafa" }} />
+        </button>
       </form>
       <div className={css.formActions}>
         <label className={css.formAction}>My</label>
@@ -324,7 +343,7 @@ const OrdersFiltrationForm: FC = () => {
           value={"My"}
           checked={isChecked}
           onChange={filterMy}
-          style={{ marginLeft: "1px" }}
+          style={{ marginLeft: "1px", marginRight: "20px" }}
         />
 
         <DownloadExcel />
