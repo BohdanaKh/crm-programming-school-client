@@ -130,14 +130,8 @@ const Orders: FC = () => {
   }, [dispatch, trigger1]);
 
   useEffect(() => {
-    dispatch(
-      orderActions.getAll(
-        // page: +searchParams.get("page"),
-        Object.fromEntries(searchParams),
-      ),
-    );
+    dispatch(orderActions.getAll(Object.fromEntries(searchParams)));
   }, [dispatch, searchParams, trigger]);
-
   const handleHeaderCellClick = (
     event: React.MouseEvent<unknown, MouseEvent>,
     property: keyof IOrder,
@@ -160,15 +154,14 @@ const Orders: FC = () => {
       });
     }
   };
-
   return (
     <>
-      {errors && (
-        <p style={{ fontSize: "18px", color: "coral", textAlign: "center" }}>
-          {errors.message}
-        </p>
-      )}
       <TableContainer component={Paper}>
+        {errors && (
+          <p style={{ fontSize: "18px", color: "coral", textAlign: "center" }}>
+            {errors?.message}
+          </p>
+        )}
         <OrdersFiltrationForm />
         <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
           <EnhancedTableHead onRequestSort={handleHeaderCellClick} />

@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
 
 import { useAppSelector } from "../../hooks";
-import type { IOrder } from "../../interfaces";
+import type { IGroup, IOrder } from "../../interfaces";
 import { ECourse, ECourseFormat, ECourseType, EStatus } from "../../interfaces";
 import { filtersValidator } from "../../validators";
 import { DownloadExcel } from "./DownloadExcel";
@@ -29,22 +29,77 @@ const OrdersFiltrationForm: FC = () => {
     resolver: joiResolver(filtersValidator),
   });
 
+  const statuses = Object.values(EStatus);
+  const courses = Object.values(ECourse);
+  const courseFormats = Object.values(ECourseFormat);
+  const courseTypes = Object.values(ECourseType);
   useEffect(() => {
-    if (searchParams) {
-      setValue("name", searchParams.get("name") || "", {
+    if (searchParams.get("name")) {
+      setValue("name", searchParams.get("name"), {
         shouldValidate: true,
       });
-      setValue("surname", searchParams.get("surname") || "", {
+    }
+    if (searchParams.get("surname")) {
+      setValue("surname", searchParams.get("surname"), {
         shouldValidate: true,
       });
+    }
+    if (searchParams.get("email")) {
       setValue("email", searchParams.get("email") || "", {
         shouldValidate: true,
       });
+    }
+    if (searchParams.get("phone")) {
       setValue("phone", searchParams.get("phone") || "", {
         shouldValidate: true,
       });
+    }
+    if (searchParams.get("age")) {
       setValue("age", searchParams.get("age") || "", { shouldValidate: true });
-      setValue("group", searchParams.get("group" || ""));
+    }
+    if (searchParams.get("course")) {
+      const existCourse = courses?.find(
+        (course) => course === searchParams.get("course")?.toUpperCase(),
+      );
+      if (existCourse) {
+        setValue("course", ECourse[existCourse], { shouldValidate: true });
+      }
+    }
+    if (searchParams.get("course_format")) {
+      const existCourseFormat = courseFormats?.find(
+        (course_format) => course_format === searchParams.get("course_format"),
+      );
+      if (existCourseFormat) {
+        setValue("course_format", ECourseFormat[existCourseFormat], {
+          shouldValidate: true,
+        });
+      }
+    }
+    if (searchParams.get("course_type")) {
+      const existingCourseType = courseTypes?.find(
+        (courseType) => courseType === searchParams.get("course_type"),
+      );
+      if (existingCourseType) {
+        setValue("course_type", ECourseType[existingCourseType], {
+          shouldValidate: true,
+        });
+      }
+    }
+    if (searchParams.get("group")) {
+      const existingGroup: IGroup = groups?.find((group) =>
+        group.title.includes(searchParams.get("group")),
+      );
+      if (existingGroup) {
+        setValue("group", existingGroup.title, { shouldValidate: true });
+      }
+    }
+    if (searchParams.get("status")) {
+      const existingStatus = statuses?.find(
+        (status) => status === searchParams.get("status"),
+      );
+      if (existingStatus) {
+        setValue("status", EStatus[existingStatus], { shouldValidate: true });
+      }
     }
   }, [searchParams]);
 
@@ -55,8 +110,8 @@ const OrdersFiltrationForm: FC = () => {
     timerRef.current = setTimeout(() => {
       if (event.target.value) {
         setSearchParams((prev) => {
-          prev.set(event.target.name, event.target.value);
           prev.set("page", "1");
+          prev.set(event.target.name, event.target.value);
           return prev;
         });
       } else {
@@ -65,7 +120,7 @@ const OrdersFiltrationForm: FC = () => {
           return prev;
         });
       }
-    }, 300);
+    }, 500);
   };
 
   useEffect(() => () => clearTimeout(timerRef.current), []);
@@ -206,13 +261,8 @@ const OrdersFiltrationForm: FC = () => {
             />
           </div>
           <div className={css.formInputWrapper}>
-            {errors.course && (
-              <span className={css.errorsBlock}>{errors.course.message}</span>
-            )}
             <select
-              className={
-                !errors.course ? css.formInputValid : css.formInputNotValid
-              }
+              className={css.formInputValid}
               {...register("course")}
               onChange={handleInputChange}
             >
@@ -226,17 +276,8 @@ const OrdersFiltrationForm: FC = () => {
             </select>
           </div>
           <div className={css.formInputWrapper}>
-            {errors.course_format && (
-              <span className={css.errorsBlock}>
-                {errors.course_format.message}
-              </span>
-            )}
             <select
-              className={
-                !errors.course_format
-                  ? css.formInputValid
-                  : css.formInputNotValid
-              }
+              className={css.formInputValid}
               {...register("course_format")}
               onChange={handleInputChange}
             >
@@ -250,15 +291,8 @@ const OrdersFiltrationForm: FC = () => {
             </select>
           </div>
           <div className={css.formInputWrapper}>
-            {errors.course_type && (
-              <span className={css.errorsBlock}>
-                {errors.course_type.message}
-              </span>
-            )}
             <select
-              className={
-                !errors.course_type ? css.formInputValid : css.formInputNotValid
-              }
+              className={css.formInputValid}
               {...register("course_type")}
               onChange={handleInputChange}
             >
@@ -273,13 +307,8 @@ const OrdersFiltrationForm: FC = () => {
             </select>
           </div>
           <div className={css.formInputWrapper}>
-            {errors.status && (
-              <span className={css.errorsBlock}>{errors.status.message}</span>
-            )}
             <select
-              className={
-                !errors.status ? css.formInputValid : css.formInputNotValid
-              }
+              className={css.formInputValid}
               {...register("status")}
               onChange={handleInputChange}
             >
@@ -292,13 +321,8 @@ const OrdersFiltrationForm: FC = () => {
             </select>
           </div>
           <div className={css.formInputWrapper}>
-            {errors.group && (
-              <span className={css.errorsBlock}>{errors.group.message}</span>
-            )}
             <select
-              className={
-                !errors.group ? css.formInputValid : css.formInputNotValid
-              }
+              className={css.formInputValid}
               {...register("group")}
               onChange={handleInputChange}
             >
@@ -331,7 +355,10 @@ const OrdersFiltrationForm: FC = () => {
           onClick={clearFilterForm}
           style={{ backgroundColor: "green" }}
         >
-          <FontAwesomeIcon icon={faRotateRight} style={{ color: "#fafafa" }} />
+          <FontAwesomeIcon
+            icon={faRotateRight}
+            style={{ color: "#fafafa", marginRight: "3px" }}
+          />
         </button>
       </form>
       <div className={css.formActions}>

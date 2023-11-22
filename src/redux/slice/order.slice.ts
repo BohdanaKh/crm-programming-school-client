@@ -106,7 +106,7 @@ const slice = createSlice({
       .addCase(update.fulfilled, (state) => {
         state.orderForUpdate = null;
       })
-      .addMatcher(isFulfilled(), (state) => {
+      .addMatcher(isFulfilled(getAll, update, deleteOrder), (state) => {
         state.errors = null;
       })
       .addMatcher(isFulfilled(update, deleteOrder), (state) => {
