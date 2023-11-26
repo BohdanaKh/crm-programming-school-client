@@ -6,11 +6,16 @@ import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
 
-import { useAppSelector } from "../../hooks";
-import type { IGroup, IOrder } from "../../interfaces";
-import { ECourse, ECourseFormat, ECourseType, EStatus } from "../../interfaces";
-import { filtersValidator } from "../../validators";
-import { DownloadExcel } from "./DownloadExcel";
+import { useAppSelector } from "../../../hooks";
+import type { IGroup, IOrder } from "../../../interfaces";
+import {
+  ECourse,
+  ECourseFormat,
+  ECourseType,
+  EStatus,
+} from "../../../interfaces";
+import { filtersValidator } from "../../../validators";
+import { DownloadExcel } from "../DownloadExcel";
 import css from "./Filters.module.css";
 
 const OrdersFiltrationForm: FC = () => {
@@ -28,7 +33,6 @@ const OrdersFiltrationForm: FC = () => {
     mode: "all",
     resolver: joiResolver(filtersValidator),
   });
-
   const statuses = Object.values(EStatus);
   const courses = Object.values(ECourse);
   const courseFormats = Object.values(ECourseFormat);
@@ -89,9 +93,7 @@ const OrdersFiltrationForm: FC = () => {
       const existingGroup: IGroup = groups?.find((group) =>
         group.title.includes(searchParams.get("group")),
       );
-      if (existingGroup) {
-        setValue("group", existingGroup.title, { shouldValidate: true });
-      }
+      existingGroup && setValue("group", existingGroup.title);
     }
     if (searchParams.get("status")) {
       const existingStatus = statuses?.find(
@@ -101,7 +103,7 @@ const OrdersFiltrationForm: FC = () => {
         setValue("status", EStatus[existingStatus], { shouldValidate: true });
       }
     }
-  }, [searchParams]);
+  }, [searchParams, groups]);
 
   const timerRef = useRef(null);
   const handleInputChange = (
@@ -117,6 +119,7 @@ const OrdersFiltrationForm: FC = () => {
       } else {
         setSearchParams((prev) => {
           prev.delete(event.target.name);
+          prev.set("page", "1");
           return prev;
         });
       }
@@ -353,7 +356,7 @@ const OrdersFiltrationForm: FC = () => {
           className={css.formClear}
           type={"button"}
           onClick={clearFilterForm}
-          style={{ backgroundColor: "green" }}
+          style={{ backgroundColor: "green", border: "none" }}
         >
           <FontAwesomeIcon
             icon={faRotateRight}

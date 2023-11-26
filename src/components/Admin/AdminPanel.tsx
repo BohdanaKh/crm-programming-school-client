@@ -3,7 +3,7 @@ import { useEffect } from "react";
 
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { adminActions, userModalActions } from "../../redux";
-import { UserCreateModal } from "../User/UserCreateModal";
+import { UserCreateModal } from "../User/CreateUserModal/UserCreateModal";
 import { Users } from "../User/Users";
 import css from "./AdminPanel.module.css";
 

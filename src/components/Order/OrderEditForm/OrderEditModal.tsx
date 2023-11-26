@@ -5,12 +5,17 @@ import React, { useEffect, useState } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 
-import { useAppDispatch, useAppSelector } from "../../hooks";
-import type { IOrder } from "../../interfaces";
-import { ECourse, ECourseFormat, ECourseType, EStatus } from "../../interfaces";
-import { groupActions, orderActions, orderModalActions } from "../../redux";
-import { ordersValidator } from "../../validators";
-import { Groups } from "../Group/Groups";
+import { useAppDispatch, useAppSelector } from "../../../hooks";
+import type { IOrder } from "../../../interfaces";
+import {
+  ECourse,
+  ECourseFormat,
+  ECourseType,
+  EStatus,
+} from "../../../interfaces";
+import { groupActions, orderActions, orderModalActions } from "../../../redux";
+import { ordersValidator } from "../../../validators";
+import { Groups } from "../../Group/Groups";
 import css from "./OrderModal.module.css";
 
 const OrderEditModal: FC = () => {

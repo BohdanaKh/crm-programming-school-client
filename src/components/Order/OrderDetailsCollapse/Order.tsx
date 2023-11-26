@@ -5,12 +5,16 @@ import React, { useState } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 
-import { useAppDispatch, useAppSelector } from "../../hooks";
-import type { IComment, IOrder } from "../../interfaces";
-import { commentActions, orderActions, orderModalActions } from "../../redux";
-import { Comment } from "../Comment/Comment";
+import { useAppDispatch, useAppSelector } from "../../../hooks";
+import type { IComment, IOrder } from "../../../interfaces";
+import {
+  commentActions,
+  orderActions,
+  orderModalActions,
+} from "../../../redux";
+import { Comment } from "../../Comment/Comment";
+import { StyledTableCell } from "../Orders";
 import css from "./Details.module.css";
-import { StyledTableCell } from "./Orders";
 
 interface IProps {
   order: IOrder;

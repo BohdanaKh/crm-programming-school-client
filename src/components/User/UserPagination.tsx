@@ -4,7 +4,7 @@ import type { FC } from "react";
 
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { userActions } from "../../redux";
-import css from "../Pagination/Pagination.module.css";
+import css from "../PaginationStyles/Pagination.module.css";
 
 const UserPagination: FC = () => {
   const { page, pages } = useAppSelector((state) => state.userReducer);

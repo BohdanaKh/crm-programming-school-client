@@ -31,9 +31,7 @@ export const filtersValidator = Joi.object({
     }),
   phone: Joi.string()
     .allow("")
-    .regex(
-      /^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$/,
-    )
+    .regex(/^[0-9,()+\s-]+$/)
     .messages({
       "string.pattern.base": "Only numeric digits, phone specific symbols.",
     }),

@@ -3,15 +3,6 @@ import Joi from "joi";
 import { ECourse, ECourseFormat, ECourseType, EStatus } from "../interfaces";
 
 export const ordersValidator = Joi.object({
-  // group: Joi.string()
-  //   .allow("")
-  //   .regex(
-  //     /^[a-zA-Zа-щА-ЩЬьЮюЯяЇїІіЄєҐґ0-9']+(?:-[a-zA-Zа-щА-ЩЬьЮюЯяЇїІіЄєҐґ0-9']+)?$/,
-  //   )
-  //   .messages({
-  //     "string.pattern.base":
-  //       "Group name may consist of uppercase and lowercase Latin letters or Ukrainian letters, digits and hyphen.",
-  //   }),
   group: Joi.string()
     .allow("")
     .regex(/^[a-zA-Zа-щА-ЩЬьЮюЯяЇїІіЄєҐґ0-9'\s-]+$/)

@@ -52,7 +52,10 @@ const DownloadExcel: FC = () => {
     XLSX.writeFile(workbook, "Orders.xlsx", { compression: true });
   };
   return (
-    <button onClick={handleDownload} style={{ backgroundColor: "green" }}>
+    <button
+      onClick={handleDownload}
+      style={{ backgroundColor: "green", border: "none" }}
+    >
       <i className="fas fa-file-excel" style={{ color: "white" }} />
     </button>
   );

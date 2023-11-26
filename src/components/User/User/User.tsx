@@ -12,10 +12,10 @@ import {
   useAppDispatch,
   useAppSelector,
   useCopyToClipboard,
-} from "../../hooks";
-import type { IUser } from "../../interfaces";
-import { EStatus } from "../../interfaces";
-import { userActions } from "../../redux";
+} from "../../../hooks";
+import type { IUser } from "../../../interfaces";
+import { EStatus } from "../../../interfaces";
+import { userActions } from "../../../redux";
 import css from "./Users.module.css";
 
 interface IProps {

@@ -16,10 +16,10 @@ import { useSearchParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import type { IOrder } from "../../interfaces";
 import { groupActions, orderActions } from "../../redux";
-import { Order } from "./Order";
-import { OrderEditModal } from "./OrderEditModal";
+import { Order } from "./OrderDetailsCollapse/Order";
+import { OrderEditModal } from "./OrderEditForm/OrderEditModal";
 import { OrderPagination } from "./OrderPagination";
-import { OrdersFiltrationForm } from "./OrdersFiltrationForm";
+import { OrdersFiltrationForm } from "./OrdersFiltersForm/OrdersFiltrationForm";
 
 export const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {

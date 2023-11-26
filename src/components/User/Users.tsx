@@ -3,9 +3,9 @@ import { useEffect } from "react";
 
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { userActions } from "../../redux";
-import { User } from "./User";
+import { User } from "./User/User";
+import css from "./User/Users.module.css";
 import { UserPagination } from "./UserPagination";
-import css from "./Users.module.css";
 
 const Users: FC = () => {
   const { users, trigger, page } = useAppSelector((state) => state.userReducer);

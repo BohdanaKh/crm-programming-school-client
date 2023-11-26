@@ -4,7 +4,7 @@ import type { FC } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import { useAppSelector } from "../../hooks";
-import css from "../Pagination/Pagination.module.css";
+import css from "../PaginationStyles/Pagination.module.css";
 
 const OrderPagination: FC = () => {
   const [searchParams, setSearchParams] = useSearchParams({ page: "1" });

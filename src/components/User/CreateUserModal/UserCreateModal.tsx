@@ -5,10 +5,10 @@ import React from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 
-import { useAppDispatch, useAppSelector } from "../../hooks";
-import type { IUser } from "../../interfaces";
-import { adminActions, userActions, userModalActions } from "../../redux";
-import { userValidator } from "../../validators";
+import { useAppDispatch, useAppSelector } from "../../../hooks";
+import type { IUser } from "../../../interfaces";
+import { adminActions, userActions, userModalActions } from "../../../redux";
+import { userValidator } from "../../../validators";
 import css from "./UserModal.module.css";
 
 const UserCreateModal: FC = () => {
