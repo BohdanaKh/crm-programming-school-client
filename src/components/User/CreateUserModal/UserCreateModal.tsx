@@ -1,5 +1,5 @@
 import { joiResolver } from "@hookform/resolvers/joi";
-import { Modal } from "@mui/material";
+import { Modal, Popover, Typography } from "@mui/material";
 import type { FC } from "react";
 import React from "react";
 import type { SubmitHandler } from "react-hook-form";
@@ -12,10 +12,12 @@ import { userValidator } from "../../../validators";
 import css from "./UserModal.module.css";
 
 const UserCreateModal: FC = () => {
+  const { error } = useAppSelector((state) => state.userReducer);
   const dispatch = useAppDispatch();
   const { isUserCreateModalOpen } = useAppSelector(
     (state) => state.userModalReducer,
   );
+  const [anchor, setAnchor] = React.useState<null | HTMLElement>(null);
 
   const {
     register,
@@ -25,6 +27,11 @@ const UserCreateModal: FC = () => {
     mode: "all",
     resolver: joiResolver(userValidator),
   });
+  const open = Boolean(anchor);
+  const id = open ? "simple-popper" : undefined;
+  const handleClose = () => {
+    setAnchor(null);
+  };
 
   const createUser: SubmitHandler<IUser> = async (user) => {
     const {
@@ -33,6 +40,10 @@ const UserCreateModal: FC = () => {
     if (requestStatus === "fulfilled") {
       dispatch(userModalActions.closeUserCreateModal());
       dispatch(adminActions.setShowUsers());
+      handleClose();
+    }
+    if (requestStatus === "rejected") {
+      setAnchor(document.getElementById("create-button"));
     }
   };
 
@@ -82,13 +93,16 @@ const UserCreateModal: FC = () => {
               <span className={css.errorsBlock}>{errors.surname.message}</span>
             )}
           </div>
-
-          <button className={css.formButton} disabled={!isValid}>
+          <button
+            id={"create-button"}
+            className={css.formButton}
+            disabled={!isValid}
+          >
             CREATE
           </button>
-          {Object.keys(errors).length > 0 && (
-            <div>{Object.values(errors)[0].message}</div>
-          )}
+          {/* {Object.keys(errors).length > 0 && ( */}
+          {/*  <div>{Object.values(errors)[0].message}</div> */}
+          {/* )} */}
           <button
             className={css.formButton}
             type={"button"}
@@ -96,6 +110,18 @@ const UserCreateModal: FC = () => {
           >
             CANCEL
           </button>
+          <Popover
+            id={id}
+            open={open}
+            anchorEl={anchor}
+            onClose={handleClose}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "left",
+            }}
+          >
+            <Typography sx={{ p: 2 }}>{error?.message}</Typography>
+          </Popover>
         </form>
       </div>
     </Modal>

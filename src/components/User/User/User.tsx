@@ -36,6 +36,9 @@ const User: FC<IProps> = ({ user }) => {
   const ordersAgreed = orders.filter(
     (order) => order.status === EStatus.Aggre,
   ).length;
+  const ordersDisagreed = orders.filter(
+    (order) => order.status === EStatus.Disaggre,
+  ).length;
   const { copyToClipboard } = useCopyToClipboard();
 
   useEffect(() => {
@@ -100,12 +103,21 @@ const User: FC<IProps> = ({ user }) => {
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           total: {orders.length}
         </Typography>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          in work: {ordersInWork}
-        </Typography>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          agree: {ordersAgreed}
-        </Typography>
+        {ordersInWork > 0 && (
+          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+            in work: {ordersInWork}
+          </Typography>
+        )}
+        {ordersAgreed > 0 && (
+          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+            agree: {ordersAgreed}
+          </Typography>
+        )}
+        {ordersDisagreed > 0 && (
+          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+            disagree: {ordersDisagreed}
+          </Typography>
+        )}
       </CardContent>
       <CardActions className={css.userActions}>
         <div className={css.userButtons}>

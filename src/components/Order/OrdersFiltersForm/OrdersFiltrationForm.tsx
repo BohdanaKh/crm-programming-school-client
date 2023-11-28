@@ -1,6 +1,10 @@
 import { faRotateRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { joiResolver } from "@hookform/resolvers/joi";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import type { FC } from "react";
 import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -59,7 +63,9 @@ const OrdersFiltrationForm: FC = () => {
       });
     }
     if (searchParams.get("age")) {
-      setValue("age", searchParams.get("age") || "", { shouldValidate: true });
+      setValue("age", +searchParams.get("age") || null, {
+        shouldValidate: true,
+      });
     }
     if (searchParams.get("course")) {
       const existCourse = courses?.find(
@@ -103,6 +109,10 @@ const OrdersFiltrationForm: FC = () => {
         setValue("status", EStatus[existingStatus], { shouldValidate: true });
       }
     }
+    // if (searchParams.get("managerId")) {
+    //   setIsChecked(!isChecked);
+    //   console.log(isChecked);
+    // }
   }, [searchParams, groups]);
 
   const timerRef = useRef(null);
@@ -158,6 +168,9 @@ const OrdersFiltrationForm: FC = () => {
   // );
   const clearFilterForm = () => {
     reset();
+    if (isChecked) {
+      setIsChecked(!isChecked);
+    }
     searchParams.delete("name");
     searchParams.delete("surname");
     searchParams.delete("email");
@@ -168,6 +181,8 @@ const OrdersFiltrationForm: FC = () => {
     searchParams.delete("course_type");
     searchParams.delete("status");
     searchParams.delete("group");
+    searchParams.delete("manager");
+    searchParams.delete("managerId");
     setSearchParams((prev) => prev);
   };
   const filterMy = () => {
@@ -257,7 +272,7 @@ const OrdersFiltrationForm: FC = () => {
               className={
                 !errors.age ? css.formInputValid : css.formInputNotValid
               }
-              type="text"
+              type="number"
               placeholder={"age"}
               {...register("age")}
               onChange={handleInputChange}
@@ -338,18 +353,18 @@ const OrdersFiltrationForm: FC = () => {
             </select>
           </div>
           <div className={css.formInputWrapper}>
-            <input
-              className={css.formInputValid}
-              type="text"
-              placeholder={"Start date"}
-            />
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DemoContainer components={["DatePicker"]}>
+                <DatePicker className={css.datePicker} label="Start date" />
+              </DemoContainer>
+            </LocalizationProvider>
           </div>
           <div className={css.formInputWrapper}>
-            <input
-              className={css.formInputValid}
-              type="text"
-              placeholder={"End date"}
-            />
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DemoContainer components={["DatePicker"]}>
+                <DatePicker className={css.datePicker} label="End date" />
+              </DemoContainer>
+            </LocalizationProvider>
           </div>
         </div>
         <button
@@ -367,11 +382,12 @@ const OrdersFiltrationForm: FC = () => {
       <div className={css.formActions}>
         <label className={css.formAction}>My</label>
         <input
+          id={"myOrders"}
           className={css.formAction}
           type={"checkbox"}
           name={"My"}
           value={"My"}
-          checked={isChecked}
+          checked={isChecked || !!searchParams.get("managerId")}
           onChange={filterMy}
           style={{ marginLeft: "1px", marginRight: "20px" }}
         />

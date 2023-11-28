@@ -45,7 +45,7 @@ const OrderEditModal: FC = () => {
       setValue("surname", orderForUpdate.surname, { shouldValidate: true });
       setValue("email", orderForUpdate.email, { shouldValidate: true });
       setValue("phone", orderForUpdate.phone, { shouldValidate: true });
-      setValue("age", orderForUpdate.age?.toString(), { shouldValidate: true });
+      setValue("age", orderForUpdate.age, { shouldValidate: true });
       setValue(
         "status",
         orderForUpdate.status === EStatus.New || orderForUpdate.status === null
@@ -67,10 +67,6 @@ const OrderEditModal: FC = () => {
     }
   }, [orderForUpdate, setValue]);
 
-  // useEffect(() => {
-  //   dispatch(groupActions.getAll());
-  // }, [dispatch, trigger1]);
-
   useEffect(() => {
     const filtered = groups?.filter(
       (group) => group?.title.includes(groupName),
@@ -91,8 +87,12 @@ const OrderEditModal: FC = () => {
   };
 
   const update: SubmitHandler<IOrder> = async (order) => {
-    await dispatch(orderActions.update({ id: orderForUpdate.id, order }));
-    dispatch(orderModalActions.closeOrderEditModal());
+    const {
+      meta: { requestStatus },
+    } = await dispatch(orderActions.update({ id: orderForUpdate.id, order }));
+    if (requestStatus === "fulfilled") {
+      dispatch(orderModalActions.closeOrderEditModal());
+    }
   };
 
   return (
@@ -201,7 +201,11 @@ const OrderEditModal: FC = () => {
               )}
 
               <label className={css.inputLabel}>Age</label>
-              <input className={css.formInput} {...register("age")} />
+              <input
+                className={css.formInput}
+                type={"number"}
+                {...register("age")}
+              />
               {errors.age && (
                 <span className={css.errorsBlock}>{errors.age.message}</span>
               )}
@@ -222,10 +226,8 @@ const OrderEditModal: FC = () => {
               <label className={css.inputLabel}>Sum</label>
               <input
                 className={css.formInput}
-                type="text"
-                {...register("sum", {
-                  valueAsNumber: true,
-                })}
+                type="number"
+                {...register("sum")}
               />
               {errors.sum && (
                 <span className={css.errorsBlock}>{errors.sum.message}</span>
@@ -234,10 +236,8 @@ const OrderEditModal: FC = () => {
               <label className={css.inputLabel}>Already paid</label>
               <input
                 className={css.formInput}
-                type="text"
-                {...register("alreadyPaid", {
-                  valueAsNumber: true,
-                })}
+                type="number"
+                {...register("alreadyPaid")}
               />
               {errors.alreadyPaid && (
                 <span className={css.errorsBlock}>
@@ -247,7 +247,7 @@ const OrderEditModal: FC = () => {
 
               <label className={css.inputLabel}>Course</label>
               <select className={css.formInput} {...register("course")}>
-                <option value={undefined} />
+                <option value={null} />
                 <option value={ECourse.FS}>{ECourse.FS}</option>
                 <option value={ECourse.QACX}>{ECourse.QACX}</option>
                 <option value={ECourse.JCX}>{ECourse.JCX}</option>

@@ -67,7 +67,12 @@
     align-items: center;
 }
 
-.Filters .formClear {
-
+.Filters .datePicker {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    background-color: lightgrey;
+    border: none;
+    font-size: 12px;
 }
 

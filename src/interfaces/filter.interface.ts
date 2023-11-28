@@ -5,7 +5,7 @@ export interface IFilter {
   surname: string;
   email: string;
   phone: string;
-  age: number | string;
+  age: number;
   course: ECourse;
   course_format: ECourseFormat;
   course_type: ECourseType;

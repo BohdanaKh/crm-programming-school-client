@@ -35,25 +35,24 @@ export const filtersValidator = Joi.object({
     .messages({
       "string.pattern.base": "Only numeric digits, phone specific symbols.",
     }),
-  age: Joi.string()
+  // age: Joi.string()
+  //   .allow("")
+  //   .regex(/^(0|[1-9][0-9]?|100)$/)
+  //   .messages({
+  //     "string.pattern.base": "Only numbers, min 0 max 100.",
+  //   }),
+  age: Joi.number()
     .allow("")
-    .regex(/^(0|[1-9][0-9]?|100)$/)
-    .messages({
-      "string.pattern.base": "Only numbers, min 0 max 100.",
-    }),
+    .integer()
+    .positive()
+    .max(100)
+    .messages({ "number.base": "min 1, max 100" }),
   status: Joi.string()
     .allow("")
     .valid(...Object.values(EStatus))
     .messages({
       "number.base": " defined values or null",
     }),
-  sum: Joi.number()
-    .allow(null)
-    .min(0)
-    .messages({ "number.base": "numeric characters" }),
-  alreadyPaid: Joi.number().allow(null).min(0).messages({
-    "string.base": "numeric characters",
-  }),
   course: Joi.string()
     .allow("")
     .valid(...Object.values(ECourse))

@@ -5,6 +5,10 @@ import type { IOrder, IPagination } from "../interfaces";
 import { axiosService } from "./axios.service";
 
 const orderService = {
+  // getAllNotPaginated: async ({
+  //   ...params
+  // }: any): Promise<AxiosResponse<IOrder[]>> =>
+  //   await axiosService.get(urls.orders.orders, { params: { ...params } }),
   getAll: async ({
     ...params
   }: any): Promise<AxiosResponse<IPagination<IOrder[]>>> =>
