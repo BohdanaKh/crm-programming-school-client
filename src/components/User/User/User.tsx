@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
   Card,
   CardActions,
@@ -157,7 +158,7 @@ const User: FC<IProps> = ({ user }) => {
             UNBAN
           </Button>
         </div>
-        {showText && <p className={css.text}>Link copied to clipboard</p>}
+        {showText && <Alert severity="success">Link copied to clipboard</Alert>}
       </CardActions>
     </Card>
   );

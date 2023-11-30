@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import type { FC } from "react";
 import React, { useEffect, useRef, useState } from "react";
@@ -354,16 +353,28 @@ const OrdersFiltrationForm: FC = () => {
           </div>
           <div className={css.formInputWrapper}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DemoContainer components={["DatePicker"]}>
-                <DatePicker className={css.datePicker} label="Start date" />
-              </DemoContainer>
+              <DatePicker
+                className={css.muiDatepicker}
+                label="Start date"
+                slotProps={{
+                  textField: {
+                    variant: "filled",
+                  },
+                }}
+              />
             </LocalizationProvider>
           </div>
           <div className={css.formInputWrapper}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DemoContainer components={["DatePicker"]}>
-                <DatePicker className={css.datePicker} label="End date" />
-              </DemoContainer>
+              <DatePicker
+                label="End date"
+                className={css.muiDatepicker}
+                slotProps={{
+                  textField: {
+                    variant: "filled",
+                  },
+                }}
+              />
             </LocalizationProvider>
           </div>
         </div>

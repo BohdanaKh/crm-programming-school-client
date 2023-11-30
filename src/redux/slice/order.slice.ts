@@ -33,19 +33,6 @@ const initialState: IState = {
   params: null,
 };
 
-// const getAllWithoutPagination = createAsyncThunk<IOrder[], any>(
-//   "orderSlice/getAllWithFiltersNotPaginated",
-//   async ({ ...params }, { rejectWithValue }) => {
-//     try {
-//       const { data } = await orderService.getAllNotPaginated({ ...params });
-//       return data;
-//     } catch (e) {
-//       const err = e as AxiosError;
-//       return rejectWithValue(err.response.data);
-//     }
-//   },
-// );
-
 const getAll = createAsyncThunk<IPagination<IOrder[]>, any>(
   "orderSlice/getAllWithFilters",
   async ({ ...params }, { rejectWithValue }) => {
@@ -135,7 +122,6 @@ const { actions, reducer: orderReducer } = slice;
 
 const orderActions = {
   ...actions,
-  // getAllWithoutPagination,
   getAll,
   update,
   deleteOrder,
