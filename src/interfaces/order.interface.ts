@@ -21,5 +21,7 @@ export interface IOrder {
   managerId?: number;
   utm?: string;
   msg?: string;
+  start_date?: string;
+  end_date?: string;
   comments?: IComment[];
 }

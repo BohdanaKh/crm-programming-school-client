@@ -35,12 +35,6 @@ export const filtersValidator = Joi.object({
     .messages({
       "string.pattern.base": "Only numeric digits, phone specific symbols.",
     }),
-  // age: Joi.string()
-  //   .allow("")
-  //   .regex(/^(0|[1-9][0-9]?|100)$/)
-  //   .messages({
-  //     "string.pattern.base": "Only numbers, min 0 max 100.",
-  //   }),
   age: Joi.number()
     .allow("")
     .integer()
@@ -51,24 +45,32 @@ export const filtersValidator = Joi.object({
     .allow("")
     .valid(...Object.values(EStatus))
     .messages({
-      "number.base": " defined values or null",
+      "number.base": "defined values or null",
     }),
   course: Joi.string()
     .allow("")
     .valid(...Object.values(ECourse))
     .messages({
-      "string.base": " defined values or null",
+      "string.base": "defined values or null",
     }),
   course_format: Joi.string()
     .allow("")
     .valid(...Object.values(ECourseFormat))
     .messages({
-      "string.base": " defined values or null",
+      "string.base": "defined values or null",
     }),
   course_type: Joi.string()
     .allow("")
     .valid(...Object.values(ECourseType))
     .messages({
-      "string.base": " defined values or null",
+      "string.base": "defined values or null",
     }),
+  start_date: Joi.date().min("01-01-2017").iso().messages({
+    "date.format": `Date format is YYYY-MM-DD`,
+    "date.min": `Min start date is 01.01.2017`,
+  }),
+  end_date: Joi.date().min("01-01-2018").iso().messages({
+    "date.format": `Date format is YYYY-MM-DD`,
+    "date.min": `Min end date is 01.01.2017`,
+  }),
 });

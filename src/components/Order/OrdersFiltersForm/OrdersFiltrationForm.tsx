@@ -1,9 +1,6 @@
 import { faRotateRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { joiResolver } from "@hookform/resolvers/joi";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import type { FC } from "react";
 import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -108,15 +105,33 @@ const OrdersFiltrationForm: FC = () => {
         setValue("status", EStatus[existingStatus], { shouldValidate: true });
       }
     }
-    // if (searchParams.get("managerId")) {
-    //   setIsChecked(!isChecked);
-    //   console.log(isChecked);
-    // }
+    if (searchParams.has("start_date")) {
+      setValue(
+        "start_date",
+        new Date(searchParams.get("start_date"))
+          .toLocaleDateString()
+          .slice(0, 10) || null,
+        {
+          shouldValidate: true,
+        },
+      );
+    }
+    if (searchParams.has("end_date")) {
+      setValue(
+        "end_date",
+        new Date(searchParams.get("end_date"))
+          .toLocaleDateString()
+          .slice(0, 10) || "",
+        {
+          shouldValidate: true,
+        },
+      );
+    }
   }, [searchParams, groups]);
 
   const timerRef = useRef(null);
   const handleInputChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | any>,
   ) => {
     timerRef.current = setTimeout(() => {
       if (event.target.value) {
@@ -182,6 +197,8 @@ const OrdersFiltrationForm: FC = () => {
     searchParams.delete("group");
     searchParams.delete("manager");
     searchParams.delete("managerId");
+    searchParams.delete("start_date");
+    searchParams.delete("end_date");
     setSearchParams((prev) => prev);
   };
   const filterMy = () => {
@@ -352,30 +369,34 @@ const OrdersFiltrationForm: FC = () => {
             </select>
           </div>
           <div className={css.formInputWrapper}>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DatePicker
-                className={css.muiDatepicker}
-                label="Start date"
-                slotProps={{
-                  textField: {
-                    variant: "filled",
-                  },
-                }}
-              />
-            </LocalizationProvider>
+            {errors.start_date && (
+              <span className={css.errorsBlock}>
+                {errors.start_date.message}
+              </span>
+            )}
+            <input
+              className={css.datepickerInput}
+              type="text"
+              placeholder="Start date"
+              {...register("start_date")}
+              onChange={handleInputChange}
+              onFocus={(e) => (e.target.type = "date")}
+              onBlur={(e) => (e.target.type = "text")}
+            />
           </div>
           <div className={css.formInputWrapper}>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DatePicker
-                label="End date"
-                className={css.muiDatepicker}
-                slotProps={{
-                  textField: {
-                    variant: "filled",
-                  },
-                }}
-              />
-            </LocalizationProvider>
+            {errors.end_date && (
+              <span className={css.errorsBlock}>{errors.end_date.message}</span>
+            )}
+            <input
+              className={css.datepickerInput}
+              type="text"
+              placeholder="End date"
+              {...register("end_date")}
+              onChange={handleInputChange}
+              onFocus={(e) => (e.target.type = "date")}
+              onBlur={(e) => (e.target.type = "text")}
+            />
           </div>
         </div>
         <button
