@@ -108,9 +108,8 @@ const OrdersFiltrationForm: FC = () => {
     if (searchParams.has("start_date")) {
       setValue(
         "start_date",
-        new Date(searchParams.get("start_date"))
-          .toLocaleDateString()
-          .slice(0, 10) || null,
+        new Date(searchParams.get("start_date")).toISOString().slice(0, 10) ||
+          null,
         {
           shouldValidate: true,
         },
@@ -119,9 +118,7 @@ const OrdersFiltrationForm: FC = () => {
     if (searchParams.has("end_date")) {
       setValue(
         "end_date",
-        new Date(searchParams.get("end_date"))
-          .toLocaleDateString()
-          .slice(0, 10) || "",
+        new Date(searchParams.get("end_date")).toISOString().slice(0, 10) || "",
         {
           shouldValidate: true,
         },
