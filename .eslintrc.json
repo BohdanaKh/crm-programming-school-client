@@ -60,7 +60,10 @@
                 "none", "all", "multiple", "single"
             ],
             "allowSeparatedGroups": false
-            }]
+            }],
+      "prettier/prettier": ["error",{
+        "endOfLine": "auto"}
+      ]
     },
      "ignorePatterns": [".eslintrc.json"]
 }
