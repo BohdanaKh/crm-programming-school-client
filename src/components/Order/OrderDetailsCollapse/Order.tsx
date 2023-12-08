@@ -1,5 +1,5 @@
 import { Box, Button, Collapse, TableCell, TableRow } from "@mui/material";
-import { format } from "date-fns";
+import { addMinutes, format } from "date-fns";
 import type { FC } from "react";
 import React, { useState } from "react";
 import type { SubmitHandler } from "react-hook-form";
@@ -45,6 +45,8 @@ const Order: FC<IProps> = ({ order }) => {
     dispatch(orderActions.setOrderForUpdate(order));
     dispatch(orderModalActions.openOrderEditModal());
   };
+  // const date = new Date(order.created_at);
+  // const newDate = addMinutes(new Date(order.created_at), new Date(order.created_at).getTimezoneOffset());
 
   return (
     <React.Fragment>
@@ -70,7 +72,14 @@ const Order: FC<IProps> = ({ order }) => {
         <StyledTableCell align="left">{order.alreadyPaid}</StyledTableCell>
         <StyledTableCell align="left">{order.group}</StyledTableCell>
         <StyledTableCell align="left">
-          {format(new Date(order.created_at), "MMMM dd, yyyy")}
+          {/* {format(new Date(order.created_at), "MMMM dd, yyyy")} */}
+          {format(
+            addMinutes(
+              new Date(order.created_at),
+              new Date(order.created_at).getTimezoneOffset(),
+            ),
+            "MMMM dd, yyyy",
+          )}
         </StyledTableCell>
         <StyledTableCell align="left">{order.manager}</StyledTableCell>
       </TableRow>
