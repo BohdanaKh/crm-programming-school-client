@@ -24,7 +24,6 @@ const OrdersFiltrationForm: FC = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const {
-    handleSubmit,
     reset,
     register,
     formState: { errors },
@@ -219,7 +218,7 @@ const OrdersFiltrationForm: FC = () => {
 
   return (
     <div className={css.Filters}>
-      <form onSubmit={handleSubmit(handleInputChange)}>
+      <form>
         <div className={css.formInputs}>
           <div className={css.formInputWrapper}>
             {errors.name && (
